@@ -28,7 +28,7 @@ npm run build
 npm run preview
 ```
 
-Production preview: `http://127.0.0.1:4173/`. Deployable files: **`dist/nerve-ending/browser/`**. Do not open `index.html` with `file://`; use an HTTP server. Stop a local server with `Ctrl+C`.
+Production preview: `http://127.0.0.1:4173/`. Deployable files: **`dist/client/`**. Do not open `index.html` with `file://`; use an HTTP server. Stop a local server with `Ctrl+C`.
 
 ## Controls
 

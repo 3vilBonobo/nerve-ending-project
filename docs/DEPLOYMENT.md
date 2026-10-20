@@ -11,12 +11,12 @@ npm run build
 npm run preview
 ```
 
-Build output: **`dist/nerve-ending/browser`**. Serve it at a site's root over HTTPS. The local production preview is `http://127.0.0.1:4173/`; its server supplies SPA navigation fallback. `npm start` is development only and does not activate the service worker.
+Build output: **`dist/client`**. Serve it at a site's root over HTTPS. The local production preview is `http://127.0.0.1:4173/`; its server supplies SPA navigation fallback. `npm start` is development only and does not activate the service worker.
 
 ## Cloudflare Pages
 
 1. Put the project source into your chosen Git repository and connect it in Cloudflare Pages, or upload the production directory using Pages Direct Upload.
-2. Set build command to `npm run build`, build output directory to `dist/nerve-ending/browser`, and repository root to this project folder. Use a supported Node runtime, for example Node 22.22.3 or newer in its compatible line; `NODE_VERSION` controls the Pages build image runtime. The Angular packages are locked in `package-lock.json`.
+2. Set build command to `npm run build`, build output directory to `dist/client`, and repository root to this project folder. Use a supported Node runtime, for example Node 22.22.3 or newer in its compatible line; `NODE_VERSION` controls the Pages build image runtime. The Angular packages are locked in `package-lock.json`.
 3. Publish using the platform's generated `pages.dev` domain and verify the setup page, a completed investigation, reload/resume, icons, and manifest. HTTPS is supplied by the host.
 4. Keep Pages' default SPA behavior. This app has no top-level `404.html`, so navigation requests can fall back to `index.html`. Do not redirect JS, CSS, icon, manifest, or service-worker files to HTML.
 

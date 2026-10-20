@@ -1,6 +1,7 @@
 {
   "project_id": "appgprj_6ad73b2891348191b9d34171206b192e",
   "static": {
-    "directory": "dist/nerve-ending/browser"
+    "directory": "dist/client",
+    "not_found_handling": "single-page-application"
   }
 }
