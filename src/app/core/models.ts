@@ -1,8 +1,8 @@
-export const EVIDENCE = ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED', 'EV_TRANSFER_MISSING', 'EV_REPAIR_REFERENCE', 'EV_AUTHORIZATION', 'EV_RECOVERED_FRAGMENT'] as const;
+export const EVIDENCE = ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED', 'EV_TRANSFER_MISSING', 'EV_CALL_PENDING', 'EV_DESK_CLOSED', 'EV_AUTHORIZATION', 'EV_RECOVERED_FRAGMENT'] as const;
 export type EvidenceId = typeof EVIDENCE[number];
-export type Capability = 'KN_RECOVERY_REFERENCE' | 'CAP_ARCHIVE_RECOVERY';
+export type Capability = 'CAP_ARCHIVE_RECOVERY';
 export type TerminalMode = 'maximized' | 'restored' | 'minimized';
-export const INTENTS = ['ask_service_status', 'ask_retirement', 'ask_transfer', 'ask_archive_location', 'ask_recovery_process', 'ask_authorization', 'ask_company', 'ask_identity', 'request_file', 'request_search', 'ask_clarification', 'unknown'] as const;
+export const INTENTS = ['ask_service_status', 'ask_retirement', 'ask_transfer', 'ask_archive_location', 'ask_recovery_process', 'ask_authorization', 'ask_company', 'ask_identity', 'ask_calls', 'ask_recipient', 'ask_office', 'request_backup', 'request_stop', 'request_file', 'request_search', 'ask_clarification', 'unknown'] as const;
 export type QueryIntent = typeof INTENTS[number];
 export interface Interpretation {
   intent: QueryIntent;
@@ -27,6 +27,8 @@ export interface ArchiveFile {
   readonly body: string;
   readonly evidence: readonly EvidenceId[];
   readonly locked?: boolean;
+  readonly references?: readonly string[];
+  readonly backupAvailable?: boolean;
 }
 export interface FileLink { fileId: string; label: string }
 export interface TerminalOutput {
@@ -37,7 +39,7 @@ export interface TerminalOutput {
 }
 export interface TerminalEntry extends TerminalOutput { input: string }
 export interface GameState {
-  schemaVersion: 2;
+  schemaVersion: 3;
   sessionId: string;
   startedAt: string;
   currentDirectory: string;

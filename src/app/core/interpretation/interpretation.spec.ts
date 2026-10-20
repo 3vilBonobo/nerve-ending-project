@@ -3,46 +3,46 @@ import { classify } from './fallback';
 import { BrowserAIInterpreter, interpretSafely, validateInterpretation } from './providers';
 import { IntentInterpreter, QueryIntent } from '../models';
 
-describe('authored offline question vocabulary', () => {
+describe('ordinary questions about the records', () => {
   const questions: [string, QueryIntent][] = [
-    ['Why is 006 active?', 'ask_service_status'], ['What keeps that service running?', 'ask_service_status'],
-    ['Is service six online?', 'ask_service_status'], ['Why is service six still running?', 'ask_service_status'],
-    ['I thought it was retired', 'ask_retirement'], ['When was it decommissioned?', 'ask_retirement'],
-    ["Wasn't it retired?", 'ask_retirement'], ['Was the service ever discontinued?', 'ask_retirement'],
-    ["Where's the archive for 006?", 'ask_archive_location'], ['Where are its records?', 'ask_archive_location'],
-    ['Did the files get transferred?', 'ask_transfer'], ['What happened to the transfer?', 'ask_transfer'],
-    ['Is there a missing receipt?', 'ask_transfer'], ['Where is the manifest?', 'ask_transfer'],
-    ['What do I need to restore it?', 'ask_recovery_process'], ['How do I repair the index?', 'ask_recovery_process'],
-    ['How can I recover it?', 'ask_recovery_process'], ['Can the entry be rebuilt?', 'ask_recovery_process'],
-    ['Who approved that?', 'ask_authorization'], ['Who signed the approval?', 'ask_authorization'],
-    ['Can I see the register?', 'request_file'], ['Show me the retirement record', 'request_file'],
-    ['Read the transfer ledger', 'request_file'], ['Can I view the repair notes?', 'request_file'],
     ['What is Meridian Systems?', 'ask_company'], ['Tell me about the company', 'ask_company'],
-    ['Who am I talking to?', 'ask_identity'], ['Who are you?', 'ask_identity'],
-    ['What do you mean?', 'ask_clarification'], ['Explain that', 'ask_clarification'],
-    ['Find continuity', 'request_search'],
-    ['Why was 006 not stopped?', 'ask_retirement'], ['Was 006 turned off?', 'ask_retirement'],
-    ['Who gave permission to stop 006?', 'ask_authorization'],
-    ['How do I find the missing file?', 'ask_recovery_process'],
-    ['Show me the File move log', 'request_file'], ['Can I open the Service list?', 'request_file'],
-    ['Show me About Meridian', 'request_file'],
+    ['Who are you?', 'ask_identity'], ['Is this an automatic system?', 'ask_identity'],
+    ['Who is calling?', 'ask_calls'], ['Why is the phone ringing?', 'ask_calls'],
+    ['What is going on?', 'ask_calls'], ['Why does it keep calling?', 'ask_calls'],
+    ['Who is supposed to answer?', 'ask_recipient'], ['Where is the phone?', 'ask_recipient'],
+    ['Who works at the night desk?', 'ask_recipient'], ['Who gets the call?', 'ask_recipient'],
+    ['Is anyone there?', 'ask_office'], ['Is the office still open?', 'ask_office'],
+    ['What happened here?', 'ask_office'], ['Are there any staff?', 'ask_office'],
+    ['What is 006?', 'ask_service_status'], ['Why is service six still running?', 'ask_service_status'],
+    ['Why did it restart?', 'ask_service_status'], ['What is 005?', 'ask_service_status'],
+    ['Wasnt it closed?', 'ask_retirement'], ['Was 006 turned off?', 'ask_retirement'],
+    ['Where is its archive?', 'ask_archive_location'], ['Where are the files?', 'ask_archive_location'],
+    ['Did the files get transferred?', 'ask_transfer'], ['Is there a receipt?', 'ask_transfer'],
+    ['Is there a backup?', 'ask_recovery_process'], ['How can I recover it?', 'ask_recovery_process'],
+    ['Read the backup', 'request_backup'], ['Can I read the backup copy?', 'request_backup'],
+    ['Show me the backup', 'request_backup'], ['Open backup', 'request_backup'],
+    ['Stop 006', 'request_stop'], ['Can I turn it off?', 'request_stop'],
+    ['Who approved that?', 'ask_authorization'], ['Who is 0417?', 'ask_authorization'],
+    ['Show me the office notice', 'request_file'], ['Read the receipt', 'request_file'],
+    ['Show me the service register', 'request_file'], ['Read the last shift', 'request_file'],
+    ['Read the restart log', 'request_file'], ['Show me 006', 'request_file'],
+    ['Find night desk', 'request_search'], ['What do you mean?', 'ask_clarification'],
   ];
   it.each(questions)('%s → %s', (question, intent) => {
-    expect(classify(question, { lastTopic: 'service-006', lastIntent: 'ask_transfer' }).intent).toBe(intent);
+    expect(classify(question, { lastTopic: 'service-006', lastIntent: 'ask_calls' }).intent).toBe(intent);
   });
-  it('requests context for ungrounded pronouns and does not invent other service stories', () => {
+  it('asks for missing context instead of assigning an ungrounded pronoun a story', () => {
     expect(classify('Who approved that?').needsClarification).toBe(true);
     expect(classify('When was it decommissioned?').needsClarification).toBe(true);
-    expect(classify('Why is service 005 active?').needsClarification).toBe(true);
-    expect(classify('When was it decommissioned?', { lastTopic: 'service-006' }).entityId).toBe('service-006');
     expect(classify('What do you mean?').needsClarification).toBe(true);
+    expect(classify('What is 005?').entityId).toBe('service-005');
   });
-  it('understands the opening suggestion without earlier conversation', () => {
-    expect(classify('What is still running?')).toMatchObject({ intent: 'ask_service_status', entityId: 'service-006', needsClarification: false });
-    expect(classify('How do I find the missing file?')).toMatchObject({ intent: 'ask_recovery_process', needsClarification: false });
+  it('distinguishes asking about a backup from choosing to read it', () => {
+    expect(classify('Is there a backup?').intent).toBe('ask_recovery_process');
+    expect(classify('How can I read the backup?').intent).toBe('ask_recovery_process');
+    expect(classify('Please read the backup').intent).toBe('request_backup');
   });
 });
-
 describe('untrusted classifier boundary', () => {
   it('rejects arbitrary labels, invented entities, locked files and missing request fields', () => {
     for (const value of [null, 'text', { intent: 'run_recovery', needsClarification: false }, { intent: 'ask_transfer', needsClarification: 'no' }, { intent: 'ask_transfer', entityId: 'secret-site', needsClarification: false }, { intent: 'request_file', fileId: 'fragment', needsClarification: false }, { intent: 'request_file', needsClarification: false }]) {

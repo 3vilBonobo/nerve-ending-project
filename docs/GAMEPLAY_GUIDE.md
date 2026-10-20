@@ -1,69 +1,45 @@
 # Developer gameplay guide — spoilers
 
-This guide reveals the entire first-act route and recovered identifier.
+The player enters an unattended records terminal. A switchboard notice shows an unanswered call to the night desk. The office notice dates the end of telephone reception to 18 September 2001; the call was retried in November 2003.
 
-## What the player deduces
+## Source records
 
-Service 006 remains active despite retirement approval dated 2001-09-18. A normal transfer receipt is absent. The transfer ledger preserves prefix **MX-91**. The independent repair notes preserve destination slot **006-R**. Together they reconstruct **MX-91/006-R**. Recovery restores a receipt whose closure was withheld and reveals partial authorization **0417**. The restored record also lists a legacy communications dependency; no later-act explanation is supplied.
+- Unanswered call: current call status, original date, an unlisted confirmation source, and an attachment reference.
+- Office notice: a closure announcement explaining why the records remain online.
+- Last shift: an employee message about a removed phone and unwanted calls to their home.
+- Service 006: current monitor data, without administrative conclusions.
+- Closure list: the old office record marking the service closed.
+- Restart log: an unattended restart because the handover remained open.
+- Handover receipt: metadata for an unavailable original, with an ordinary local-backup action.
+- Receipt — backup copy: an accepted transfer, a confirmation from COMMS/BRIDGE-02 rather than the night desk, partial authorisation 0417, and a preservation hold.
 
-## Terminal route
+The records do not explain the later story. No full staff identity can be recovered in this preview. There is no deliberate communication from the hidden later-act character.
 
-```text
-HELP
-STATUS
-RECOVER ARCHIVE 006
-DIR
-CD OPERATIONS
-OPEN "SERVICE_REGISTER.DAT"
-SEARCH 006
-OPEN /ARCHIVE/TRANSFER_LEDGER_2001.LOG
-OPEN /ARCHIVE/INDEX_REPAIR_NOTES.TXT
-HELP RECOVER
-RECOVER ARCHIVE 006
-OPEN /ARCHIVE/RECOVERED_006.FRAG
-```
+## Interaction routes
 
-The first recovery attempt should deny authorization with useful missing-source references. Read the fragment, then select **END OF PROTOTYPE / SESSION REPORT** inside it. **REVIEW RECORDS** leaves the session usable. A second recovery command reports that recovery has already occurred and adds no operational side effects.
+Mouse: open Unanswered call, follow its attached Handover receipt, and select READ BACKUP COPY. Other records can be read before or after. Opening the backup first is permitted; the software does not test what the reader has inspected.
 
-## Mouse route
+Questions: Who is calling? Who is supposed to answer? Is anyone there? What is 006? Where is the receipt? These return factual answers and source links. An explicit Read the backup loads it; asking whether a copy exists does not.
 
-Restore the terminal using its title-bar control. Click **OPERATIONS** on the desktop, then the register. Open **FILE INDEX**, return to the root directory, then browse **ARCHIVE**. Inspect the ledger and repair notes. Use the terminal to enter `RECOVER ARCHIVE 006` and open the new fragment. Open-document tabs let you compare records. Window title bars expose focusable controls, and close buttons remove only the window, not the discovery.
+Commands: OPEN Unanswered call, OPEN Handover receipt, OPEN backup. RECOVER ARCHIVE 006 remains a compatibility alias for the same read operation. General help never teaches this exact command.
 
-## Question-led route
+Each record opens once in a document window. Attached-record links and the backup control remain outside the scrolling body. There is no duplicate body in the terminal.
 
-Ask **“Why is service six still running?”**, then **“Wasn't it retired?”** and **“Where is its archive?”**. Follow the document pointers, or ask **“Show me the transfer ledger”** and **“Can I see the repair notes?”**. Ask **“How can I recover it?”**; the authored response describes any missing corroboration, or shows the command when ready. Execute the command deliberately and inspect the recovered record. No question triggers the recovery automatically.
+## Consequences
 
-Questions such as **“Who approved that?”** resolve only with clear service context; without it they request clarification. A request for unrelated topics returns supported query suggestions.
+Reading the backup makes the receipt available and registers its legacy references once. It does not stop the service, complete the handover, create a real network connection, or resolve the later story. Repeated reads do not duplicate effects. Reading the receipt marks this slice complete; the reader chooses when to open SESSION STATUS.
 
-## Evidence and prerequisites
+Evidence IDs are observations for continuity, not prerequisites. The old independent-prefix and slot rules are removed. No progression requirement depends on exact phrasing, command counts or a reading sequence.
 
-| Stable ID | Legitimate discovery routes |
-| --- | --- |
-| `EV_SERVICE_ACTIVE` | `STATUS`, register, status journal, authored service-status answer |
-| `EV_RETIREMENT_APPROVED` | Register, administrative approval, authored retirement/status answer |
-| `EV_TRANSFER_MISSING` | Inspect transfer ledger; includes prefix MX-91 |
-| `EV_REPAIR_REFERENCE` | Inspect index repair notes; includes slot 006-R |
-| `EV_AUTHORIZATION` | Inspect administrative authorization; supplemental evidence |
-| `EV_RECOVERED_FRAGMENT` | Inspect the fragment after successful recovery |
-| `KN_RECOVERY_REFERENCE` | Derived from transfer ledger plus independent repair evidence |
-| `CAP_ARCHIVE_RECOVERY` | Derived from reconstructed reference, active-service evidence, and approved retirement |
+## Human playtest questions
 
-All four required evidence facts can be discovered in any order. Administrative signatory evidence and reading the recovery help file are useful but not mandatory gates. Search snippets do not count as inspecting the original independent sources.
+Watch a fresh reader without supplying the investigation:
 
-## Human playtest checklist
+- What do they think is happening after the first screen?
+- Do they choose a source or ask a question without prompting?
+- What missing detail do they care about, and why?
+- Does reading the backup feel like a normal computer operation?
+- Can they distinguish the office record, live monitor and saved confirmation?
+- Where do they lose interest, miss a control, or repeat a question?
 
-- Start in a fresh profile without an AI download. Confirm no later-act names appear.
-- Skip and also try the normal connection sequence on separate sessions.
-- Run `HELP`, `STATUS`, and **“Why is service six still running?”**.
-- Attempt recovery early and inspect the denial.
-- Explore both desktop icons and terminal paths, including `CD ..` and quoted filenames.
-- Find the retirement approval and absent receipt, then reconstruct the two-part reference.
-- Complete recovery and inspect 0417. Open and dismiss the session report.
-- Repeat recovery; verify no duplicate effects.
-- Reload, choose **RESUME SESSION**, and verify documents, evidence, recovery, and completion.
-- Clear the scrollback; progress should remain.
-- Reset with confirmation, then replay in a different discovery order.
-- Repeat at a narrow viewport using all three workspace tabs and open-record tabs.
-- Test reduced motion, CRT disabled, font scaling, keyboard history, and dialog Escape behavior.
-- Test production offline after the initial service-worker cache has finished. Browser eviction or private sessions may remove persistence.
-- Browser AI cannot be tested in this build. Ollama needs a real separately running daemon and model.
+An automated route establishes reachability, not interest or tension. Adjust from observed human play rather than adding procedural gates to lengthen the opening.

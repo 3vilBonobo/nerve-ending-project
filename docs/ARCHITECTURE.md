@@ -1,59 +1,37 @@
 # Architecture
 
-Nerve Ending is an Angular 21 standalone application using strict TypeScript, signals, browser storage, and ordinary CSS. It has no application backend. Hosting is static; a local HTTP server is used only to serve the compiled assets during preview.
+Nerve Ending is a static Angular standalone application using strict TypeScript, signals, ordinary CSS, and browser storage. There is no application backend or required model download.
 
-## Data and state flow
+## Records and domain
 
-```text
-Terminal input ── explicit command parser ───────────────┐
-         └────── optional intent provider → validation ─┤
-                      └──── offline fallback ──────────┤
-                                                       ↓
-Mouse / file navigation ─────────────────────────── pure game engine
-                                                       ↓
-                                              immutable next state
-                                                       ↓
-                                     Session signal → UI → local save
-```
+core/content.ts holds immutable authored records with stable IDs, virtual paths, short bodies, observation grants, attachment references, and an optional backup action. Eight records are immediately accessible; one receipt body is available only after a deliberate backup read. References represent source relationships rather than a quest checklist.
 
-`core/models.ts` contains evidence and intent enumerations, world state, archive files, provider contracts, and structured output. `content.ts` holds immutable, authored original records with stable IDs, dated provenance, and evidence grants. Original records never change after a question; displayed interpretations are separate terminal outputs with a `truth` classification. No future-act story graph or secret narrative is sent to interpreters.
+engine/commands.ts parses commands and virtual paths. engine/game.ts handles inspection, search, authored interpretations and idempotent backup reading. Commands, questions and mouse controls share these rules. Search excludes the backup body until it has been loaded.
 
-`engine/commands.ts` parses case-insensitive commands before language interpretation, handles quotes, and normalizes virtual paths. These paths never access the host filesystem. `engine/game.ts` exposes pure functions: `runInput`, `inspectFile`, `recover`, `deriveKnowledge`, and selectors. Terminal `OPEN`, mouse clicks, and question requests all use `inspectFile`. Searches and directory listings use the same accessibility selector, so locked records cannot leak through a second interface.
+The split-prefix and slot reconstruction and evidence prerequisites no longer exist. Backup reading is an ordinary permission. deriveKnowledge retains its compatibility name but normalises this permission instead of unlocking it from reading counts. Evidence records observations only. The archive006Recovered flag tracks the loaded copy and legacy references. No real external connection is created and service 006 is not stopped.
 
-`Session` is the Angular boundary. It owns the single `GameState` signal, saves meaningful state changes, and prevents concurrent terminal submissions. Window focus and close operations alter only UI state. It caps scrollback at 80 entries and document windows at five. All output renders through text interpolation; no `innerHTML` is used.
+## Query boundary
 
-## Three progression tracks
+The deterministic interpreter covers the call, recipient, office, services, records and backup. It understands readable titles, aliases and limited pronouns. Unknown questions can match words in accessible records; no story facts are generated.
 
-1. **Evidence:** stable IDs for inspected original facts and facts explicitly shown in authored query responses.
-2. **Knowledge and capability:** derived from corroborated evidence, never from command count or a supplied password.
-3. **Operational state:** `archive006Recovered` and an idempotent action ledger. Recovery restores the archive and original dependency references once. It does not shut down the service.
+Optional provider results are validated against known intents, services and accessible files. They receive copied context and no mutation API. Even a validated request_backup is checked against the actual user input before restoring the copy. An informational question cannot become a restore because of an incorrect classifier.
 
-The batch prefix and destination slot require independently inspecting the ledger and repair notes. Search excerpts direct the player to sources and do not grant evidence. Natural-language responses can establish the activity/retirement contradiction when those facts are actually displayed, but do not grant a routing source merely by referring to it.
+Browser AI is unavailable. The development-only Ollama adapter uses a selected local daemon. Public play uses the bundled interpreter.
 
-Inspecting the restored fragment marks Act 01 complete. The reader explicitly opens the session report after inspecting the document; no modal interrupts the clue. Completion persists, and records remain usable afterward.
+## Session and presentation
 
-## Interpretation boundary
+Session owns Angular state and persistence. Documents open once without echoing their bodies into the terminal. Mouse backup reads and explicit terminal requests use the same transition.
 
-The offline classifier normalizes text, resolves authored aliases and a last-topic context, and maps questions to a small intent enumeration. Ambiguous pronouns request clarification. Unknown queries offer relevant supported vocabulary. It is intentionally limited to the authored investigation.
+presentation/terminal-playback.ts separates processing and character reveal from saved state. A short minimum pause runs alongside interpretation. Complete replies are saved before printing finishes. Esc or SHOW FULL REPLY skips artificial pacing; an actual pending provider still has to return. Reduced motion receives instant replies. Request tokens prevent late results from changing a reset session.
 
-Optional providers get a small copied `QueryContext`. Provider output must pass `validateInterpretation`; unknown labels, invented entities, inaccessible files, and invalid request fields fail validation. Rejections, malformed output, and timeouts use the offline classifier. A validated intent is still only a request: deterministic engine gates decide its effect. Classifiers have no state mutation interface and cannot issue a recovery command.
+Auto-scroll follows output only near the bottom. The older monochrome appearance and large local VT323 font remain. Records have closer line spacing and persistent attachment controls. Connection is skippable and lasts about 2.4 seconds.
 
-`BrowserAIInterpreter` explicitly reports unavailable. The optional Ollama adapter is selectable only in development, only accepts loopback endpoints, uses a six-second abort signal, and has the same validation. `interpretSafely` bounds all optional providers, including those that ignore cancellation.
+## Save revisions
 
-## Persistence
+Schema 3 uses nerve-ending.save.v3. The previous prototype's nerve-ending.save remains unchanged. Its display preferences are imported, but its old instructions and completed puzzle progress are not replayed into the rewritten opening.
 
-`persistence/saves.ts` stores schema version 2 under `nerve-ending.save`. It supports migration of the supplied version-1 state shape and old `{input, output}` terminal entries. It validates directories, IDs, display settings, last-topic data, history, and accessibility. Derived capabilities are recalculated rather than trusted from storage.
+Current saves preserve observation order, documents, queries, completion and display preferences. Loading validates IDs, paths, bounds and availability. Reset affects the current opening only and preserves the previous key. Restricted storage permits in-memory play with a warning.
 
-Unknown versions, corrupt JSON, restricted storage, and quota errors fail gracefully. Loading does not overwrite an unread save. Starting a new session or taking an action deliberately creates a usable current save. Reset removes only this game's key. All storage calls, including acquisition of `window.localStorage`, occur within guarded calls.
+## Extension
 
-## UI
-
-`features/terminal` manages input, scrollback, auto-scroll when near the bottom, and history. `features/files` uses the engine filesystem. `features/documents` renders scrollable records. The app shell manages setup, the skippable 18-second connection sequence, window positions, document tabs, mobile tabs, display settings, install affordance, and the session report.
-
-Windows use simple fixed positions and focus ordering; they are intentionally not draggable. On ordinary desktop widths, a record and restored terminal share the workspace. Mobile replaces overlapping views with tabs. Native dialogs provide focus trapping, Escape dismissal, and return-to-trigger focus. Inputs and controls have visible focus styles. The terminal announces only a concise latest response, rather than flooding a screen reader with the entire scrollback.
-
-## Add a file or act
-
-Add an authored record with a unique ID, normalized absolute virtual path, provenance, and explicit evidence grants. Add its containing directory to `DIRECTORIES` if needed. Files become searchable automatically; locked files require an appropriate accessibility rule. Add tests proving search cannot reveal their content early.
-
-For another act, introduce explicit evidence IDs, derived capabilities, operational transitions, authored responses, and migration tests. Keep later content gated and original records immutable. Do not add a backend unless a future requirement actually needs one. Extend the domain first, then the UI; do not place narrative rules inside components.
+Add source records and supported questions to the domain before presentation. Keep dated source facts distinct from system interpretation. A missing record should have a plausible availability condition or a native operation; reading unrelated files must not act as authorisation. Future acts can add facts and effects without converting observation IDs into a mandatory sequence.

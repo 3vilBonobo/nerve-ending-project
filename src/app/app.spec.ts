@@ -1,33 +1,48 @@
 import { TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './app';
 import { Session } from './core/session';
 
-describe('Meridian client UI', () => {
+describe('Meridian investigation UI', () => {
   beforeEach(() => { localStorage.clear(); TestBed.configureTestingModule({ imports: [App] }); });
-  it('starts without a model and exposes terminal controls without story spoilers', async () => {
+  it('opens a simple client and surfaces a real queued call without later story names', async () => {
     const fixture = TestBed.createComponent(App); fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    const setup = element.querySelector('.setup-dialog')!;
-    expect(setup.textContent).toContain('Read files and ask questions.');
-    expect(setup.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE|SESSION CONFIGURATION/);
-    expect(element.textContent).not.toMatch(/MOTHER|Anna Voss|Site 6/);
+    expect(element.querySelector('.setup-dialog')!.textContent).toContain('Read files and ask questions.');
+    expect(element.querySelector('.setup-dialog')!.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE/);
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();
-    expect(element.querySelector('[aria-label="Restore terminal"]')).not.toBeNull();
+    expect(element.textContent).toContain('Outgoing call to NIGHT DESK: NO ANSWER');
+    expect(element.textContent).not.toMatch(/MOTHER|Anna Voss|Site 6/);
     const session = TestBed.inject(Session);
     const reply = session.submit('STATUS'); session.playback.skip(); await reply; fixture.detectChanges();
-    expect(element.textContent).toContain('SERVICE 006: RUNNING'); fixture.destroy();
+    expect(element.textContent).toContain('LIVE MONITOR');
+    expect(session.state().discoveredEvidenceIds).toContain('EV_SERVICE_ACTIVE'); fixture.destroy();
   });
-  it('uses one state for file browsing and terminal recovery, with explicit fragment review', async () => {
+  it('follows the attachment and reads its backup with the mouse, without terminal commands', () => {
     const fixture = TestBed.createComponent(App); const app = fixture.componentInstance;
-    app.start(); app.skipConnection();
-    for (const id of ['register', 'ledger', 'repair']) app.openFile(id);
-    const reply = app.session.submit('RECOVER ARCHIVE 006'); app.session.playback.skip(); await reply; app.openFile('fragment'); fixture.detectChanges();
-    expect(app.session.state().act01Complete).toBe(true); expect(app.showEnding()).toBe(false);
-    const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.fragment-finish');
-    expect(button).not.toBeNull(); button!.click(); fixture.detectChanges();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('End of prototype.');
+    const element: HTMLElement = fixture.nativeElement;
+    app.start(); app.skipConnection(); app.openFile('call'); fixture.detectChanges();
+    element.querySelector<HTMLButtonElement>('[data-document="call"] .document-references button')!.click(); fixture.detectChanges();
+    expect(app.session.state().lastFileId).toBe('ledger');
+    const backup = element.querySelector<HTMLButtonElement>('[data-document="ledger"] .read-backup');
+    expect(backup).not.toBeNull(); backup!.click(); fixture.detectChanges();
+    expect(app.session.state().archive006Recovered).toBe(true);
+    expect(app.session.state().act01Complete).toBe(true);
+    expect(app.session.state().lastFileId).toBe('fragment');
+    expect(app.showEnding()).toBe(false);
+    expect(element.querySelector('[data-document="fragment"]')!.textContent).toContain('0417');
+    element.querySelector<HTMLButtonElement>('.fragment-finish')!.click(); fixture.detectChanges();
+    expect(element.textContent).toContain('End of current preview.');
     app.review(); expect(app.showEnding()).toBe(false); fixture.destroy();
+  });
+  it('keeps a storage warning if a new session cannot be saved after reset', () => {
+    const session = TestBed.inject(Session);
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Quota'); });
+    try {
+      session.reset();
+      expect(session.storageWarning()).toContain('unavailable or full');
+      expect(session.state().hasStarted).toBe(false);
+    } finally { write.mockRestore(); }
   });
 });

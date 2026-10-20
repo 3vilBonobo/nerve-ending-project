@@ -13,7 +13,7 @@ import { Session } from '../../core/session';
           <button class="file-row folder-row" (click)="session.directory(path)"><span class="folder-icon" aria-hidden="true"></span><span>{{ path.slice(1) }}<small>{{ descriptions[path] }}</small></span><span class="file-type">DIR</span></button>
         }
         @for (file of files(); track file.id) {
-          <button class="file-row" (click)="opened.emit(file.id)"><span class="page-icon" aria-hidden="true"></span><span>{{ file.title }}<small>{{ file.path.split('/').pop() }}<br>{{ file.modified }}{{ session.state().viewedFileIds.includes(file.id) ? ' / READ' : '' }}</small></span><span class="file-type">{{ file.path.split('.').pop() }}</span></button>
+          <button class="file-row" (click)="opened.emit(file.id)"><span class="page-icon" aria-hidden="true"></span><span>{{ file.title }}<small>{{ file.modified }}{{ session.state().viewedFileIds.includes(file.id) ? ' / READ' : '' }}@if (file.backupAvailable) { <br>Original unavailable / backup held }</small></span><span class="file-type">{{ file.path.split('.').pop() }}</span></button>
         }
       </div>
       <footer class="browser-footer">{{ folders().length + files().length }} ITEMS <span>CANNOT EDIT</span></footer>
@@ -25,7 +25,7 @@ export class FileBrowser {
   readonly opened = output<string>();
   readonly folders = computed(() => this.session.state().currentDirectory === '/' ? DIRECTORIES.filter(path => path !== '/') : []);
   readonly files = computed(() => this.session.files().filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === this.session.state().currentDirectory));
-  readonly descriptions: Record<string, string> = { '/OPERATIONS': 'Running programs & staff notes', '/ARCHIVE': 'Stored files & repair notes', '/ADMIN': 'Approvals & company records', '/SYSTEM': 'Help & instructions' };
+  readonly descriptions: Record<string, string> = { '/OPERATIONS': 'Calls, staff mail & live monitor', '/ARCHIVE': 'Attachments & saved copies', '/ADMIN': 'Office notices & closure records', '/SYSTEM': 'Terminal controls' };
   up(): void {
     const path = this.session.state().currentDirectory;
     this.session.directory(path.slice(0, path.lastIndexOf('/')) || '/');

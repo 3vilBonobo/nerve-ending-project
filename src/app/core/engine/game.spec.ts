@@ -4,142 +4,161 @@ import { GameState } from '../models';
 import { accessibleFiles, inspectFile, newGame, recover, runInput } from './game';
 import { parseCommand, resolvePath } from './commands';
 
-const run = (state: GameState, command: string) => runInput(state, command).state;
-const corroborated = () => ['STATUS', 'OPEN /OPERATIONS/SERVICE_REGISTER.DAT', 'OPEN /ARCHIVE/TRANSFER_LEDGER_2001.LOG', 'OPEN /ARCHIVE/INDEX_REPAIR_NOTES.TXT'].reduce(run, newGame());
+const run = (state: GameState, input: string) => runInput(state, input).state;
 
-describe('command and virtual filesystem contract', () => {
-  it('recognizes explicit commands before questions, aliases, case and whitespace', () => {
-    expect(parseCommand('  oPeN   "SERVICE_REGISTER.DAT"  ')).toEqual({ name: 'OPEN', args: ['SERVICE_REGISTER.DAT'] });
-    expect(parseCommand("search 'missing receipt'")?.args).toEqual(['missing receipt']);
-    expect(parseCommand('ls')?.name).toBe('DIR'); expect(parseCommand('cls')?.name).toBe('CLEAR');
-    expect(parseCommand('open "incomplete')?.error).toContain('Unclosed quote');
-    expect(parseCommand('why is it running?')).toBeUndefined();
-  });
-  it('resolves root, relative paths, parent paths and backslashes', () => {
-    expect(resolvePath('../ARCHIVE/./FILE.TXT', '/OPERATIONS')).toBe('/ARCHIVE/FILE.TXT');
-    expect(resolvePath('../../..', '/')).toBe('/');
+describe('terminal controls and records', () => {
+  it('parses commands and paths without requiring a particular case', () => {
+    expect(parseCommand(' oPeN "Office notice" ')).toEqual({ name: 'OPEN', args: ['Office notice'] });
+    expect(parseCommand("search 'night desk'")?.args).toEqual(['night desk']);
+    expect(parseCommand('ls')?.name).toBe('DIR');
+    expect(parseCommand('cls')?.name).toBe('CLEAR');
+    expect(parseCommand('open "unfinished')?.error).toContain('Unclosed quote');
+    expect(parseCommand('why is the phone ringing?')).toBeUndefined();
+    expect(resolvePath('../ARCHIVE/./FILE.DAT', '/OPERATIONS')).toBe('/ARCHIVE/FILE.DAT');
     expect(resolvePath('\\ARCHIVE\\', '/OPERATIONS')).toBe('/ARCHIVE');
+    expect(resolvePath('../../..', '/')).toBe('/');
   });
-  it('lists, navigates and opens the same authored files', () => {
-    let state = newGame();
-    expect(runInput(state, 'help').output.lines.join('\n')).toContain('You can ask questions in ordinary words.');
-    expect(runInput(state, 'DIR').output.lines.join('\n')).toContain('OPERATIONS');
-    expect(runInput(state, 'DIR /ARCHIVE').output.links.some(link => link.fileId === 'ledger')).toBe(true);
-    state = run(state, 'CD OPERATIONS'); expect(state.currentDirectory).toBe('/OPERATIONS');
-    state = run(state, 'OPEN "SERVICE_REGISTER.DAT"'); expect(state.viewedFileIds).toContain('register');
-    state = run(state, 'CD ..'); expect(state.currentDirectory).toBe('/');
-    state = run(state, 'OPEN /ARCHIVE/TRANSFER_LEDGER_2001.LOG'); expect(state.viewedFileIds).toContain('ledger');
-    expect(runInput(state, 'HELP RECOVER').openFileId).toBe('recovery-help');
+  it('supports folders, full paths and readable names', () => {
+    let state = run(newGame(), 'CD /OPERATIONS');
+    expect(runInput(state, 'DIR').output.links.map(link => link.fileId)).toContain('call');
+    expect(runInput(state, 'OPEN CALL_QUEUE.LOG').openFileId).toBe('call');
+    expect(runInput(state, 'OPEN /ADMIN/COMPANY_PROFILE.TXT').openFileId).toBe('company');
+    state = run(state, 'CD ..');
+    expect(state.currentDirectory).toBe('/');
+    expect(runInput(state, 'OPEN Office notice').openFileId).toBe('company');
+    expect(runInput(state, 'OPEN About Meridian').openFileId).toBe('company');
   });
-  it('rejects bad paths and unknown commands helpfully without losing progress', () => {
-    const state = corroborated();
-    for (const command of ['CD /MISSING', 'OPEN /NOFILE', 'FROBULATE']) {
-      const result = runInput(state, command);
-      expect(result.output.code).toBe('error'); expect(result.state.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
+  it('opens documents without duplicating their whole contents in the terminal', () => {
+    const result = runInput(newGame(), 'OPEN Last shift');
+    expect(result.openFileId).toBe('maintenance');
+    expect(result.output.lines.join('\n')).not.toContain('home number');
+    expect(result.state.viewedFileIds).toContain('maintenance');
+    expect(FILES.find(file => file.id === 'maintenance')!.body).toContain('home number');
+  });
+  it('handles bad input and CLEAR without changing discoveries or authored records', () => {
+    const state = inspectFile(newGame(), 'call').state;
+    const snapshot = JSON.stringify(state);
+    for (const input of ['CD /MISSING', 'OPEN /NOFILE', 'FROBULATE']) {
+      const result = runInput(state, input);
+      expect(result.output.code).toBe('error');
+      expect(result.state.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
     }
-    expect(runInput(state, 'OPEN').output.lines[0]).toContain('file name');
-    expect(runInput(state, 'SEARCH').output.code).toBe('error');
-  });
-  it('clears only scrollback and leaves the input state immutable', () => {
-    const state = corroborated(); const snapshot = JSON.stringify(state);
-    const next = run(state, 'CLEAR');
-    expect(next.terminalHistory).toHaveLength(1); expect(next.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
+    const cleared = runInput(state, 'CLEAR');
+    expect(cleared.state.terminalHistory).toHaveLength(1);
+    expect(cleared.state.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
     expect(JSON.stringify(state)).toBe(snapshot);
   });
-  it('does not leak locked content from listing, search or guessed paths', () => {
+  it('keeps locked backup text out of searches and guessed file names', () => {
     const state = newGame();
+    for (const term of ['0417', 'BRIDGE-02', 'Preservation hold']) expect(runInput(state, `SEARCH ${term}`).output.links).toHaveLength(0);
     expect(accessibleFiles(state).some(file => file.id === 'fragment')).toBe(false);
-    for (const query of ['0417', 'BRIDGE-02', 'RECOVERED_006', 'CLOSURE WITHHELD']) {
-      expect(runInput(state, `SEARCH ${query}`).output.links).toHaveLength(0);
-    }
-    expect(runInput(state, 'OPEN /ARCHIVE/RECOVERED_006.FRAG').openFileId).toBeUndefined();
-    expect(runInput(state, 'OPEN Recovered receipt').openFileId).toBeUndefined();
+    expect(runInput(state, 'OPEN /ARCHIVE/HANDOVER_006.BAK').openFileId).toBeUndefined();
     expect(inspectFile(state, 'fragment').state).toEqual(state);
   });
-  it('keeps general help and default examples free of investigation clues', () => {
+  it('keeps control help and default examples separate from the investigation', () => {
     const state = newGame();
-    const surfaces = [
-      ...state.terminalHistory[0].lines,
+    const help = [
       ...runInput(state, 'HELP').output.lines,
-      ...runInput(state, 'What about the weather?').output.lines,
-      ...runInput(state, 'FROBULATE').output.lines,
-      ...runInput(state, 'SEARCH').output.lines,
       ...runInput(state, 'OPEN').output.lines,
+      ...runInput(state, 'SEARCH').output.lines,
       FILES.find(file => file.id === 'readme')!.body,
     ].join('\n');
-    expect(surfaces).not.toMatch(/0*006|still running|missing file|RECOVER ARCHIVE|shutdown|retirement/i);
+    expect(help).not.toMatch(/006|night desk|0417|BRIDGE|missing file|RECOVER ARCHIVE|shutdown/i);
     expect(runInput(state, 'HELP').output.links.map(link => link.fileId)).toEqual(['readme']);
-    for (const example of ['What is Meridian Systems?', 'Show me About Meridian', 'Who am I talking to?']) {
-      const reply = runInput(state, example);
-      expect(reply.output.code).toBe('ok');
-      expect(reply.state.discoveredEvidenceIds).toHaveLength(0);
+    for (const question of ['What is Meridian Systems?', 'Is this an automatic system?', 'Show me the office notice.']) {
+      expect(runInput(state, question).output.code).toBe('ok');
+      expect(runInput(state, question).state.discoveredEvidenceIds).toHaveLength(0);
     }
   });
 });
 
-describe('Act 01 evidence and consequences', () => {
-  it('preserves the operational and retirement contradiction', () => {
-    expect(runInput(newGame(), 'sTaTuS').output.lines).toContain('SERVICE 006: RUNNING');
-    const register = FILES.find(file => file.id === 'register')!;
-    expect(register.body).toContain('006   Continuity supervision      RUNNING');
-    expect(register.body).toContain('006   STOP APPROVED: 2001-09-18');
-    expect(register.body).toContain('FILE MOVE: NO RECEIPT FOUND');
+describe('the unanswered call investigation', () => {
+  it('starts with an actual system event instead of a suggested solution', () => {
+    const opening = newGame().terminalHistory[0];
+    expect(opening.lines.join(' ')).toContain('NO ANSWER');
+    expect(opening.links.map(link => link.fileId)).toEqual(['call', 'company']);
+    expect(opening.lines.join(' ')).not.toMatch(/Try:|To begin|RECOVER|Read.*first/i);
   });
-  it('denies premature recovery with specific missing sources', () => {
-    const result = runInput(newGame(), 'RECOVER ARCHIVE 006');
-    expect(result.output.code).toBe('denied'); expect(result.state.archive006Recovered).toBe(false);
-    expect(result.output.lines.join(' ')).toContain('STATUS');
-    expect(result.output.links.map(link => link.fileId)).toEqual(['register', 'ledger', 'repair']);
-    const partial = run(newGame(), 'OPEN /OPERATIONS/SERVICE_REGISTER.DAT');
-    expect(runInput(partial, 'RECOVER ARCHIVE 006').output.links.map(link => link.fileId)).not.toContain('register');
-  });
-  it('accepts all independent discovery orders and alternate approval evidence', () => {
-    const sources = ['status-log', 'authorization', 'ledger', 'repair'];
-    function permutations(items: string[]): string[][] { return items.length ? items.flatMap((item, index) => permutations(items.filter((_, i) => i !== index)).map(rest => [item, ...rest])) : [[]]; }
-    for (const order of permutations(sources)) {
-      const state = order.reduce((current, id) => inspectFile(current, id).state, newGame());
-      expect(state.unlockedCapabilities).toContain('CAP_ARCHIVE_RECOVERY');
-      expect(recover(state).state.archive006Recovered).toBe(true);
+  it('has short source records, no split-code puzzle, and valid document references', () => {
+    for (const file of FILES) {
+      expect(file.body.split(/\s+/).length).toBeLessThan(130);
+      expect(file.body).not.toMatch(/first part|second part|BATCH\/SLOT|read both|corroborat|before.*recover/i);
+      for (const id of file.references ?? []) expect(FILES.some(item => item.id === id)).toBe(true);
     }
+    expect(FILES.find(file => file.id === 'ledger')!.backupAvailable).toBe(true);
   });
-  it('requires both routing sources, rather than command count or wording', () => {
-    let state = run(newGame(), 'Why is service 006 active?');
-    for (let count = 0; count < 10; count++) state = run(state, 'How do I recover it?');
-    expect(recover(state).output.code).toBe('denied');
+  it('grounds the contradiction in dates and different record sources', () => {
+    const call = FILES.find(file => file.id === 'call')!;
+    const note = FILES.find(file => file.id === 'maintenance')!;
+    const receipt = FILES.find(file => file.id === 'fragment')!;
+    expect(call.body).toContain('06 Nov 2003');
+    expect(note.body).toContain('phone was removed at 17:00 yesterday');
+    expect(note.modified).toMatch(/^2001-09-19/);
+    expect(receipt.body).toContain('23:59:41');
+    expect(receipt.body).toContain('NIGHT DESK / 214       No answer');
+    expect(receipt.body).toContain('COMMS/BRIDGE-02');
+  });
+  it('allows a normal backup read without proving a reading order', () => {
+    const source = JSON.stringify(FILES);
+    const result = recover(newGame());
+    expect(result.recovered).toBe(true);
+    expect(result.openFileId).toBe('fragment');
+    expect(result.state.archive006Recovered).toBe(true);
+    expect(result.state.act01Complete).toBe(true);
+    expect(JSON.stringify(FILES)).toBe(source);
+  });
+  it('makes repeated backup reads idempotent', () => {
+    const first = recover(newGame());
+    const second = recover(first.state);
+    expect(second.recovered).toBe(false);
+    expect(second.state.completedActions).toEqual(first.state.completedActions);
+    expect(second.state.discoveredEvidenceIds).toEqual(first.state.discoveredEvidenceIds);
+    expect(second.state.openFileIds.filter(id => id === 'fragment')).toHaveLength(1);
+  });
+  it('can be followed entirely by document links and the backup action', () => {
+    let state = inspectFile(newGame(), 'call').state;
+    expect(FILES.find(file => file.id === 'call')!.references).toContain('ledger');
     state = inspectFile(state, 'ledger').state;
-    expect(state.unlockedCapabilities).not.toContain('KN_RECOVERY_REFERENCE');
-    state = inspectFile(state, 'repair').state;
-    expect(state.unlockedCapabilities).toContain('CAP_ARCHIVE_RECOVERY');
+    const result = recover(state);
+    expect(result.openFileId).toBe('fragment');
+    expect(result.state.act01Complete).toBe(true);
   });
-  it('restores once, exposes 0417, and waits for fragment inspection to complete', () => {
-    const before = corroborated(); const transition = runInput(before, 'RECOVER ARCHIVE 006');
-    expect(transition.recovered).toBe(true); expect(transition.state.act01Complete).toBe(false);
-    expect(accessibleFiles(transition.state).find(file => file.id === 'fragment')?.body).toContain('0417');
-    const again = runInput(transition.state, 'RECOVER ARCHIVE 006');
-    expect(again.output.code).toBe('notice'); expect(again.state.completedActions).toEqual(transition.state.completedActions);
-    expect(inspectFile(again.state, 'fragment').state.act01Complete).toBe(true);
-    expect(runInput(transition.state, 'SEARCH 0417').output.links[0].fileId).toBe('fragment');
-  });
-  it('finishes through the question-led route with the model absent', () => {
-    const commands = ['Why is service six still running?', 'Wasnt it retired?', 'Where is its archive?', 'Show me the transfer ledger', 'Can I see the repair notes?', 'How can I recover it?', 'RECOVER ARCHIVE 006', 'OPEN /ARCHIVE/RECOVERED_006.FRAG'];
-    const state = commands.reduce(run, newGame());
-    expect(state.act01Complete).toBe(true); expect(state.discoveredEvidenceIds).toContain('EV_RECOVERED_FRAGMENT');
-  });
-  it('keeps later-act secrets outside all prototype records and initial outputs', () => {
-    expect(FILES.map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
-    expect(newGame().terminalHistory[0].lines.join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6/i);
-  });
-  it('finishes using ordinary questions and readable file names without navigating paths', () => {
+  it('answers ordinary curiosity without telling the player which steps to take', () => {
     let state = newGame();
-    for (const command of ['What is still running?', 'Show me the File move log', 'OPEN File repair notes', 'How do I find the missing file?']) {
-      const result = runInput(state, command);
+    for (const question of ['Who is calling?', 'Who is supposed to answer?', 'Is anyone there?', 'What is 006?', 'Why did it restart?', 'Where is the receipt?']) {
+      const result = runInput(state, question);
       expect(result.output.code).toBe('ok');
+      expect(result.output.lines.join(' ')).not.toMatch(/Type RECOVER|Read .* first|combine|You need to/i);
       state = result.state;
     }
-    expect(state.unlockedCapabilities).toContain('CAP_ARCHIVE_RECOVERY');
-    state = run(state, 'RECOVER ARCHIVE 006');
-    const receipt = runInput(state, 'OPEN Recovered receipt');
-    expect(receipt.openFileId).toBe('fragment');
-    expect(receipt.state.act01Complete).toBe(true);
+    expect(state.archive006Recovered).toBe(false);
+    expect(runInput(state, 'Read the backup').state.act01Complete).toBe(true);
+  });
+  it('answers the question asked instead of repeating the entire call report', () => {
+    const who = runInput(newGame(), 'Who is calling?').output;
+    expect(who.lines.join(' ')).toContain('automatic overnight alarm');
+    expect(who.lines.join(' ')).not.toContain('2001');
+    const when = runInput(newGame(), 'How long has it been calling?').output;
+    expect(when.lines.join(' ')).toContain('18 SEP 2001');
+    expect(when.lines.length).toBeLessThan(5);
+  });
+  it('does not let a classifier turn an informational question into a restore action', () => {
+    const result = runInput(newGame(), 'What is Meridian Systems?', { intent: 'request_backup', provider: 'ollama', needsClarification: false });
+    expect(result.state.archive006Recovered).toBe(false);
+    expect(result.openFileId).toBeUndefined();
+  });
+  it('keeps the backup and later story facts unavailable until a deliberate read', () => {
+    expect(runInput(newGame(), 'Who is 0417?').output.lines.join(' ')).not.toContain('0417');
+    const restored = run(newGame(), 'OPEN backup');
+    expect(runInput(restored, 'Who is 0417?').output.lines.join(' ')).toContain('0417');
+    expect(runInput(restored, 'SEARCH 0417').output.links.some(link => link.fileId === 'fragment')).toBe(true);
+    expect(FILES.map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
+  });
+  it('reports the other known services without inventing a second mystery', () => {
+    expect(runInput(newGame(), 'What is 005?').output.lines.join(' ')).toContain('stopped');
+    expect(runInput(newGame(), 'What is 007?').output.lines.join(' ')).toContain('connection you are using');
+    const result = runInput(newGame(), 'Stop 006');
+    expect(result.output.lines).toContain('CONTROL UNAVAILABLE.');
+    expect(result.state.archive006Recovered).toBe(false);
   });
 });

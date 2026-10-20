@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, computed, inject, isDevMode, signal } from '@angular/core';
-import { accessibleFiles, inspectFile, newGame, runInput } from './engine/game';
+import { accessibleFiles, inspectFile, newGame, recover, runInput } from './engine/game';
 import { parseCommand } from './engine/commands';
 import { IntentInterpreter, TerminalMode } from './models';
 import { loadSave, resetSave, writeSave } from './persistence/saves';
@@ -48,6 +48,7 @@ export class Session implements OnDestroy {
     } finally { if (request === this.requestId) this.playback.cancel(); }
   }
   openFile(id: string): void { this.state.set(inspectFile(this.state(), id).state); this.persist(); }
+  readBackup(): void { this.state.set(recover(this.state()).state); this.persist(); }
   closeFile(id: string): void { this.state.update(state => ({ ...state, openFileIds: state.openFileIds.filter(file => file !== id) })); this.persist(); }
   focusFile(id: string): void { this.state.update(state => ({ ...state, openFileIds: [...state.openFileIds.filter(file => file !== id), id] })); this.persist(); }
   directory(path: string): void { this.state.set(runInput(this.state(), `CD ${path}`).state); this.persist(); }
@@ -57,7 +58,8 @@ export class Session implements OnDestroy {
     this.requestId++; this.playback.cancel();
     const removed = resetSave(this.storage);
     this.state.set(newGame()); this.provider = undefined; this.metrics.set([]);
-    this.storageWarning.set(removed ? '' : 'Browser storage could not be cleared. This new session is running in memory.');
+    if (removed) this.persist();
+    else this.storageWarning.set('Browser storage could not be cleared. This new session is running in memory.');
   }
   ngOnDestroy(): void { this.requestId++; this.playback.cancel(); }
 }

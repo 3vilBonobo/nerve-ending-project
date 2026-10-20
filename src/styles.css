@@ -176,15 +176,20 @@ small { font-size: .85em; }
 .file-row small { display: block; font-size: .9em; color: var(--medium); margin-top: 8px; line-height: 1.5; }
 .file-type { margin-left: auto; align-self: flex-start; font-size: .85em; color: var(--medium); }
 .browser-footer { display: flex; justify-content: space-between; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); font-size: .78em; color: var(--medium); }
-.document-window { display: block; position: absolute; right: 16px; top: calc(12px + var(--window-index) * 6px); width: 44%; height: calc(100% - 70px); }
+.document-window { display: block; position: absolute; right: 16px; top: calc(12px + var(--window-index) * 6px); width: 44%; height: calc(100% - 24px); }
+@media (min-width: 901px) { .desktop:has(.document-tabs) .document-window { height: calc(100% - 70px); } }
 .document-shell { outline-offset: -4px !important; }
 .document-toolbar { display: flex; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: .78em; color: var(--medium); }
 .document-content { flex: 1; min-height: 0; overflow: auto; padding: 22px 20px; scrollbar-width: thin; scrollbar-color: var(--line) var(--panel); }
-.document-content pre { margin: 0; font: inherit; font-size: 1em; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.document-content pre { margin: 0; font: inherit; font-size: 1em; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
 .document-footer { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--line); font-size: .72em; color: var(--medium); }
 .document-footer > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fragment-finish { display: block; width: 100%; margin-top: 28px; padding: 16px 0; border: 0; border-top: 1px solid var(--line); text-align: left; font-size: .9em; }
 .fragment-finish:hover { text-decoration: underline; }
+.backup-reader { display: flex; flex-shrink: 0; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-top: 1px solid var(--line); }
+.backup-reader > span, .document-references > span { color: var(--medium); font-size: .8em; }
+.read-backup { font-size: .9em; }
+.document-references { display: flex; flex-shrink: 0; flex-wrap: wrap; align-items: center; gap: 4px 14px; border-top: 1px solid var(--line); padding: 8px 12px; }
 .document-tabs { display: flex; gap: 6px; position: absolute; right: 16px; bottom: 10px; width: 44%; overflow: auto; z-index: 20; scrollbar-width: thin; }
 .document-tabs button { white-space: nowrap; padding: 7px 10px; background: var(--bg); border: 1px solid var(--line); color: var(--medium); font-size: .78em; }
 .document-tabs button.selected { color: var(--bright); border-color: var(--green); }

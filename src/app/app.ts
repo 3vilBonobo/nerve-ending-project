@@ -46,13 +46,19 @@ export class App implements OnDestroy {
     this.connectionTimer = setInterval(() => {
       if (this.connectionStep() >= 5) this.skipConnection();
       else this.connectionStep.update(step => step + 1);
-    }, 3000);
+    }, 400);
   }
   skipConnection(): void { clearInterval(this.connectionTimer); this.stage.set('desktop'); }
   openFile(id: string): void {
     this.session.openFile(id); this.mobileTab.set('documents'); this.explorer.set(false);
     this.session.terminalMode('restored');
     setTimeout(() => document.querySelector<HTMLElement>(`[data-document="${id}"] .document-shell`)?.focus());
+  }
+  readBackup(): void {
+    this.session.readBackup();
+    this.mobileTab.set('documents'); this.explorer.set(false);
+    this.session.terminalMode('restored');
+    setTimeout(() => document.querySelector<HTMLElement>('[data-document="fragment"] .document-shell')?.focus());
   }
   terminal(): void {
     this.session.terminalMode(this.session.state().ui.terminalMode === 'minimized' ? 'restored' : this.session.state().ui.terminalMode);

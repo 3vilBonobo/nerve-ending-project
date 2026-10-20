@@ -32,7 +32,7 @@ describe('terminal reply playback', () => {
     if (progress?.phase !== 'printing') throw new Error('Expected a partially printed reply');
     expect(progress.visibleText.length).toBeGreaterThan(0);
     expect(progress.visibleText.length).toBeLessThan(full.lines.join('\n').length);
-    expect(element.querySelectorAll('.record-link')).toHaveLength(0);
+    expect(element.querySelectorAll('.terminal-entry:last-of-type .record-link')).toHaveLength(0);
     expect(element.querySelector('.reply-caret')).not.toBeNull();
     expect(decodeSave(localStorage.getItem(SAVE_KEY)).state.terminalHistory.at(-1)).toEqual(full);
     await session.submit('STATUS');
@@ -40,8 +40,8 @@ describe('terminal reply playback', () => {
     element.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await pending; fixture.detectChanges();
     expect(session.busy()).toBe(false);
-    expect(element.textContent).toContain('This is an automatic reply. No person is connected.');
-    expect(element.querySelector('.record-link')?.textContent).toContain('Start here');
+    expect(element.textContent).toContain('No staff terminal is connected.');
+    expect(element.querySelector('.terminal-entry:last-of-type .record-link')?.textContent).toContain('Terminal help');
     fixture.destroy();
   });
 
@@ -100,6 +100,6 @@ describe('terminal reply playback', () => {
     const session = TestBed.inject(Session);
     await session.submit('HELP');
     expect(session.busy()).toBe(false);
-    expect(session.state().terminalHistory.at(-1)!.lines.join('\n')).toContain('HELP / THINGS TO TRY');
+    expect(session.state().terminalHistory.at(-1)!.lines.join('\n')).toContain('TERMINAL HELP');
   });
 });

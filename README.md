@@ -1,6 +1,6 @@
 # Nerve Ending
 
-A playable browser investigation inside **Meridian Systems — Remote Access Client**. Explore a corporate records mirror, question a service that should have stopped, compare original evidence, and reconcile a missing archive. This prototype contains Act 01 only. It is designed for roughly 10–15 minutes of exploration; that duration has not been established by a timed human playtest.
+A browser investigation inside **Meridian Systems — Remote Access Client**. The public office is closed, but its switchboard is still calling the night desk. Read short staff records, question the system, and inspect an attachment missing from the file list. This revised first-act preview has no reading-order or split-code puzzle. Its length and engagement have not been established by an independent human playtest.
 
 The game runs entirely in the browser. No backend, account, API key, or AI download is required. The offline interpreter and authored records ship with the application.
 
@@ -33,14 +33,15 @@ Production preview: `http://127.0.0.1:4173/`. Deployable files: **`dist/client/`
 ## Controls
 
 - Start immediately with **Start session** in the simple connection dialog, and skip the connection sequence if desired. Returning players see **Resume session**.
-- Type `HELP`, `STATUS`, `DIR`, `CD`, `OPEN`, `SEARCH`, `CLEAR`, or `RECOVER ARCHIVE 006`.
-- Ask questions such as **“Why is service six still running?”** or **“Where is its archive?”**.
-- Press Enter to submit and Up/Down for input history. Records and file paths are clickable.
+- Type `HELP`, `STATUS`, `DIR`, `CD`, `OPEN`, `SEARCH`, or `CLEAR`.
+- Questions accept ordinary wording. General HELP uses neutral company and interface examples.
+- Press Enter to submit, Up/Down for input history, or Esc to reveal a reply immediately. Replies otherwise pause briefly and arrive gradually.
+- Record names and attached-record links are clickable. **READ BACKUP COPY** opens a saved attachment; no special command or prior reading list is required.
 - Restore or minimize the terminal to expose desktop folders. On phones, use **TERMINAL / FILES / RECORDS** tabs. Open-record tabs switch between documents.
 - **Settings...** on the opening screen, or **DISPLAY & SETTINGS** in a session, controls CRT effects and font size. Motion follows the device preference.
-- After recovery, read the fragment and select its **END OF PROTOTYPE / SESSION REPORT** control. Review the records or restart.
+- After reading the backup, **SESSION STATUS** opens the preview's end report. Records remain available afterward.
 
-Progress, record windows, and display settings save in this browser. Restricted or full browser storage produces a warning and the game continues in memory. `CLEAR` only clears scrollback. **NEW SESSION → RESTART INVESTIGATION** clears this game's save after confirmation. It also restores display defaults. The save key is `nerve-ending.save`.
+Progress, windows, and display settings save in this browser. Restricted or full storage produces a warning and play continues in memory. `CLEAR` only clears terminal text. **NEW SESSION → RESTART INVESTIGATION** resets the current opening and display settings. The revised opening uses `nerve-ending.save.v3`. Earlier saves remain unchanged under `nerve-ending.save`; their display preferences are imported, while obsolete instructions are kept out of the new opening.
 
 ## Project organization
 
@@ -51,6 +52,7 @@ src/app/core/                 Shared typed domain
   engine/                    Pure commands, filesystem and progression
   interpretation/            Offline classifier and provider boundary
   persistence/               Versioned save validation and migration
+  presentation/              Transient reply timing and text reveal
   session.ts                 Angular state service
 src/app/features/            Terminal, file browser, document windows
 src/app/app.*                Setup, desktop, settings and completion shell
@@ -82,11 +84,9 @@ The outer client resembles an early-2000s connection utility. The retained syste
 Shortest developer walkthrough (**spoilers**):
 
 ```text
-OPEN /OPERATIONS/SERVICE_REGISTER.DAT
-OPEN /ARCHIVE/TRANSFER_LEDGER_2001.LOG
-OPEN /ARCHIVE/INDEX_REPAIR_NOTES.TXT
-RECOVER ARCHIVE 006
-OPEN /ARCHIVE/RECOVERED_006.FRAG
+OPEN Unanswered call
+OPEN Handover receipt
+OPEN backup
 ```
 
-The service register supplies both activity and retirement corroboration. The two archive records supply the independent routing parts. No exact question wording or password is required.
+This is one route, not an unlock sequence. The attachment can also be reached through source links, search, or ordinary questions. Backup reads are ordinary records access and are idempotent. Opening a document does not print a second copy of its body in the terminal.
