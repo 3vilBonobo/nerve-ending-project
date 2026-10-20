@@ -6,7 +6,8 @@ import { build } from 'esbuild';
 import { env, pipeline } from '@huggingface/transformers';
 
 await mkdir('tmp/model-evaluation', { recursive: true });
-const modulePath = resolve('tmp/model-evaluation/recognition.mjs');
+const mode = process.argv.includes('--catalogue') ? 'catalogue' : process.argv.includes('--holdout') ? 'holdout' : process.argv.includes('--write-embeddings') ? 'references' : 'development';
+const modulePath = resolve(`tmp/model-evaluation/recognition-${mode}.mjs`);
 await build({ stdin: { contents: "export * from './src/app/core/interpretation/semantic'; export * from './src/app/core/interpretation/semantic-catalog'; export { classify } from './src/app/core/interpretation/fallback'; export { newGame, runInput } from './src/app/core/engine/game';", resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: modulePath });
 const { SEMANTIC_EXAMPLES, SEMANTIC_CATALOG, CATALOG_VERSION, rankIntents, selectMeaning, recognitionText, classify, newGame, runInput } = await import(pathToFileURL(modulePath).href);
 env.allowRemoteModels = false; env.allowLocalModels = true;
@@ -40,7 +41,8 @@ for (const item of cases) {
   const vector = (await embed(recognitionText(item.input), { pooling: 'mean', normalize: true })).tolist()[0];
   const ranked = rankIntents(vector, vectors);
   const result = selectMeaning(item.input, item.context ?? {}, ranked);
-  const sameMeaning = result.intent === item.intent || result.intent === 'ask_transfer' && item.intent === 'ask_archive_location';
+  const equivalent = [['ask_transfer','ask_archive_location'], ['ask_calls','q_call_repeat'], ['ask_company','q_products'], ['ask_identity','q_personhood'], ['ask_transfer','q_original'], ['ask_recovery_process','q_backup_reliable']];
+  const sameMeaning = result.intent === item.intent || equivalent.some(pair => pair.includes(result.intent) && pair.includes(item.intent));
   const passed = item.clarify ? result.needsClarification : !result.needsClarification && sameMeaning && (!item.fileId || result.fileId === item.fileId);
   const before = runInput({ ...newGame(), ...item.context }, item.input, result).output;
   const after = runInput({ ...newGame(), ...item.context, archive006Recovered: true }, item.input, result).output;

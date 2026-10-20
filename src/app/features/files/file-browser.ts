@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { DIRECTORIES } from '../../core/content';
 import { Session } from '../../core/session';
 
@@ -7,6 +7,7 @@ import { Session } from '../../core/session';
   template: `
     <section class="file-browser" aria-label="Archive file browser">
       <div class="browser-path"><button (click)="session.directory('/')" aria-label="Root directory">⌂</button><span>{{ session.state().currentDirectory }}</span><button [disabled]="session.state().currentDirectory === '/'" (click)="up()" aria-label="Parent directory">↑</button></div>
+      <label class="record-search">FIND RECORD <input #search type="search" [value]="query()" (input)="query.set(search.value)" placeholder="Search available records" aria-label="Search available records"></label>
       <div class="browser-column-head"><span>NAME</span><span>TYPE</span></div>
       <div class="browser-items">
         @for (path of folders(); track path) {
@@ -23,8 +24,9 @@ import { Session } from '../../core/session';
 export class FileBrowser {
   readonly session = inject(Session);
   readonly opened = output<string>();
-  readonly folders = computed(() => this.session.state().currentDirectory === '/' ? DIRECTORIES.filter(path => path !== '/') : []);
-  readonly files = computed(() => this.session.files().filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === this.session.state().currentDirectory));
+  readonly query = signal('');
+  readonly folders = computed(() => !this.query().trim() && this.session.state().currentDirectory === '/' ? DIRECTORIES.filter(path => path !== '/' && this.session.files().some(f => f.path.startsWith(path + '/'))) : []);
+  readonly files = computed(() => this.query().trim() ? this.session.files().filter(f => `${f.title} ${f.path} ${f.body}`.toLowerCase().includes(this.query().trim().toLowerCase())) : this.session.files().filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === this.session.state().currentDirectory));
   readonly descriptions: Record<string, string> = { '/OPERATIONS': 'Calls, staff mail & live monitor', '/ARCHIVE': 'Attachments & saved copies', '/ADMIN': 'Office notices & closure records', '/SYSTEM': 'Terminal controls' };
   up(): void {
     const path = this.session.state().currentDirectory;

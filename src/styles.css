@@ -200,6 +200,22 @@ small { font-size: .85em; }
 .ending-card p { font-size: .95em; color: var(--medium); }
 .ending-card > div:last-child { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .ending-card button { font-size: .85em; }
+.ending-card { max-height: calc(100dvh - 160px); overflow-y: auto; }
+.terminal-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.operations-panel { border-top: 1px solid var(--line); padding: 8px 14px; font-size: .8em; }
+.operations-panel summary { cursor: pointer; min-height: 26px; }
+.operation-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-height: 150px; overflow-y: auto; gap: 4px 12px; padding-top: 8px; }
+.operation-list button { text-align: left; padding: 7px 3px; }
+.operation-list button span { color: var(--medium); }
+.operation-confirmation { border: 2px double var(--green); padding: 12px 14px; max-height: 42%; overflow: auto; font-size: .8em; background: var(--panel); }
+.operation-confirmation p { margin: 8px 0; line-height: 1.35; }
+.operation-confirmation > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.operation-confirmation button { font-size: .85em; }
+.record-provenance { color: var(--medium); border-top: 1px solid var(--line); padding-top: 16px; font-size: .8em; }
+.record-search { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 8px; font-size: .8em; padding: 10px; border-bottom: 1px solid var(--line); }
+.record-search input { width: 100%; min-width: 0; font: inherit; background: var(--bg); color: var(--green); border: 1px solid var(--line); padding: 6px; }
+.terminal-entry[data-output="interpretation"] { border-left: 1px dotted var(--line); padding-left: 10px; }
+button:disabled { cursor: default; opacity: .5; }
 
 /* Browser-side dialogs use the newer access client's classic controls. */
 .settings-dialog, .reset-dialog { width: min(680px, calc(100% - 28px)); max-height: 88dvh; padding: 3px; background: var(--face); color: var(--green); border: 2px solid; border-color: var(--face-light) var(--face-dark) var(--face-dark) var(--face-light); font-size: calc(18px * var(--font-scale, 1)); }

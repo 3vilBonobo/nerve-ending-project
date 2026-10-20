@@ -152,7 +152,7 @@ describe('the unanswered call investigation', () => {
     const restored = run(newGame(), 'OPEN backup');
     expect(runInput(restored, 'Who is 0417?').output.lines.join(' ')).toContain('0417');
     expect(runInput(restored, 'SEARCH 0417').output.links.some(link => link.fileId === 'fragment')).toBe(true);
-    expect(FILES.map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
+    expect(accessibleFiles(restored).map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
   });
   it('reports the other known services without inventing a second mystery', () => {
     expect(runInput(newGame(), 'What is 005?').output.lines.join(' ')).toContain('stopped');

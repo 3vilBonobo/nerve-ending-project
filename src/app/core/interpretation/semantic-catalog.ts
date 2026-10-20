@@ -1,8 +1,9 @@
 import { QueryIntent } from '../models';
+import { DIALOGUE } from './dialogue-catalog';
 
 export interface IntentExamples { intent: QueryIntent; label: string; examples: string[] }
 // Recognition examples only. No hidden record bodies or later story are supplied to the model.
-export const SEMANTIC_CATALOG: IntentExamples[] = [
+const OPENING_CATALOG: IntentExamples[] = [
   { intent: 'ask_calls', label: 'the call', examples: [
     'Who is calling?', 'Where is the call coming from?', 'Why is the phone ringing?', 'Why does it keep dialing?',
     'What is this alarm?', 'Who made this call?', 'How long has this call been waiting?', 'When did the ringing start?',
@@ -116,5 +117,8 @@ export const SEMANTIC_CATALOG: IntentExamples[] = [
   ] },
 ];
 
+const key = (s: string): string => s.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+const newExamples = new Set(DIALOGUE.flatMap(i => i.examples.map(key)));
+export const SEMANTIC_CATALOG: IntentExamples[] = [...OPENING_CATALOG.map(group => ({ ...group, examples: group.examples.filter(text => !newExamples.has(key(text))) })), ...DIALOGUE.map(i => ({ intent: i.id, label: i.label, examples: i.examples }))];
 export const SEMANTIC_EXAMPLES = SEMANTIC_CATALOG.flatMap(group => group.examples.map(text => ({ text, intent: group.intent })));
-export const CATALOG_VERSION = 1;
+export const CATALOG_VERSION = 2;

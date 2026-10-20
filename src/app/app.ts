@@ -1,10 +1,12 @@
-import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, computed, effect, inject, signal } from '@angular/core';
 import { fileById } from './core/content';
 import { Session } from './core/session';
 import { Terminal } from './features/terminal/terminal';
 import { FileBrowser } from './features/files/file-browser';
 import { DocumentWindow } from './features/documents/document';
 import { OllamaInterpreter } from './core/interpretation/providers';
+import { endingText } from './core/engine/continuation';
+import { KNOWLEDGE_LABELS } from './core/engine/dialogue';
 
 interface InstallPromptEvent extends Event { prompt(): Promise<void>; userChoice: Promise<{ outcome: string }> }
 @Component({ selector: 'ne-root', standalone: true, imports: [Terminal, FileBrowser, DocumentWindow], templateUrl: './app.html' })
@@ -16,6 +18,8 @@ export class App implements OnDestroy {
   readonly connectionStep = signal(0);
   readonly showEnding = signal(false);
   readonly endAcknowledged = signal(false);
+  readonly finalText = computed(() => endingText(this.session.state()));
+  readonly findings = computed(() => this.session.state().knowledge.map(k => KNOWLEDGE_LABELS[k]));
   readonly clock = signal('02:14:00');
   readonly online = signal(navigator.onLine);
   readonly cached = signal(false);
@@ -38,6 +42,7 @@ export class App implements OnDestroy {
   private readonly networkListener = (): void => { this.online.set(navigator.onLine); };
 
   constructor() {
+    effect(() => { if (this.session.state().operating.endingId && !this.endAcknowledged()) this.showEnding.set(true); });
     window.addEventListener('beforeinstallprompt', this.installListener);
     window.addEventListener('online', this.networkListener); window.addEventListener('offline', this.networkListener);
     let seconds = 0;

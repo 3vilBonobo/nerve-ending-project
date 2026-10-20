@@ -3,6 +3,9 @@ import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 
 const root = resolve('dist/client');
+const portArg = process.argv.indexOf('--port');
+const port = portArg >= 0 ? Number(process.argv[portArg + 1]) : 4173;
+if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Use --port followed by a local port between 1024 and 65535.');
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.mjs': 'application/javascript', '.wasm': 'application/wasm', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.svg': 'image/svg+xml', '.png': 'image/png' };
 createServer(async (request, response) => {
   try {
@@ -15,4 +18,4 @@ createServer(async (request, response) => {
     response.writeHead(200, { 'Content-Type': types[extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-cache' });
     response.end(body);
   } catch { response.writeHead(500); response.end('Build the application first with npm run build.'); }
-}).listen(4173, '127.0.0.1', () => console.log('Nerve Ending production preview: http://127.0.0.1:4173'));
+}).listen(port, '127.0.0.1', () => console.log(`Nerve Ending production preview: http://127.0.0.1:${port}`));

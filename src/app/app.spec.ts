@@ -33,7 +33,8 @@ describe('Meridian investigation UI', () => {
     expect(app.showEnding()).toBe(false);
     expect(element.querySelector('[data-document="fragment"]')!.textContent).toContain('0417');
     element.querySelector<HTMLButtonElement>('.fragment-finish')!.click(); fixture.detectChanges();
-    expect(element.textContent).toContain('End of current preview.');
+    expect(element.textContent).not.toContain('End of current preview.');
+    expect(element.querySelector('.operations-panel')?.textContent).toContain('VERIFY HANDOVER');
     app.review(); expect(app.showEnding()).toBe(false); fixture.destroy();
   });
   it('keeps a storage warning if a new session cannot be saved after reset', () => {

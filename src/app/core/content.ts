@@ -1,6 +1,7 @@
 import { ArchiveFile } from './models';
+import { STORY_FILES } from './story-records';
 
-export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM'] as const;
+export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM', '/COMMS', '/POLICY', '/FINANCE', '/STAFF', '/PERSONNEL', '/RESEARCH', '/INCIDENT', '/CLINICAL', '/VENDOR', '/CONTROL'] as const;
 export const FILES: readonly ArchiveFile[] = [
   {
     id: 'call', path: '/OPERATIONS/CALL_QUEUE.LOG', title: 'Unanswered call', modified: '2003-11-06 02:13',
@@ -111,7 +112,7 @@ The original file cannot be opened.`,
   },
   {
     id: 'fragment', path: '/ARCHIVE/HANDOVER_006.BAK', title: 'Receipt — backup copy', modified: '2001-09-18 23:59',
-    evidence: ['EV_RECOVERED_FRAGMENT', 'EV_AUTHORIZATION'], locked: true, references: ['call'],
+    evidence: ['EV_RECOVERED_FRAGMENT', 'EV_AUTHORIZATION'], locked: true, references: ['call', 'bridge'], reveals: ['clinicalHoldKnown'],
     body: `MERIDIAN / HANDOVER RECEIPT
 BACKUP COPY / ORIGINAL DATE 18 SEP 2001
 Only part of this record could be read.
@@ -152,6 +153,7 @@ Esc shows a reply without waiting for it to finish.
 
 Original records cannot be edited.`,
   },
+  ...STORY_FILES,
 ];
 export const fileById = (id: string): ArchiveFile | undefined => FILES.find(file => file.id === id);
 export const FILE_ALIASES: Readonly<Record<string, string>> = {

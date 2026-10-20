@@ -33,7 +33,7 @@
           <button class="primary-button start-button" (click)="start()">{{ session.state().hasStarted ? 'Resume session' : 'Start session' }}</button>
         </footer>
       </div>
-      <p class="setup-caption">Nerve Ending / Prototype 0.1</p>
+      <p class="setup-caption">Nerve Ending / Revision 1.0</p>
     </section>
   }
 
@@ -61,7 +61,7 @@
       }
       <div class="documents-area">
         @for (file of documents(); track file.id; let index = $index) {
-          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="showEnding.set(true)" (opened)="openFile($event)" (backupRequested)="readBackup()" />
+          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="terminal()" (opened)="openFile($event)" (backupRequested)="readBackup()" />
         }
         @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Select a file in the terminal or file browser to read it.</small></div> }
         @if (documents().length > 1) { <nav class="document-tabs" aria-label="Open records">@for (file of documents(); track file.id) { <button (click)="session.focusFile(file.id)" [class.selected]="file.id === documents().at(-1)?.id">{{ file.title }}</button> }</nav> }
@@ -73,7 +73,11 @@
   @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
 
   @if (showEnding() && stage() === 'desktop') {
-    <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">BACKUP COPY OPEN</div><h2>THE CALL IS STILL WAITING.</h2><p>Service 006: running. Night desk: no answer.</p><p>End of current preview.<br>You can keep reading the records. This session is saved.</p><div><button class="primary-button" (click)="review()">RETURN TO RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">START AGAIN</button></div></section>
+    <section class="ending-card" aria-label="Session report" role="region" tabindex="-1"><div class="eyebrow">MERIDIAN / INTERVENTION RECORD</div>
+      @if (finalText().length) { <h2>{{ finalText()[0] }}</h2>@for (line of finalText().slice(1); track $index) { <p>{{ line }}</p> } }
+      @else { <h2>SESSION FINDINGS</h2>@for (finding of findings(); track finding) { <p>{{ finding }}</p> }<p>Use available terminal operations to continue the investigation. Records access remains active.</p> }
+      <div><button class="primary-button" (click)="review()">RETURN TO RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">START AGAIN</button></div>
+    </section>
   }
 </main>
 

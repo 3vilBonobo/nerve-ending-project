@@ -6,6 +6,7 @@ import { loadSave, resetSave, writeSave } from './persistence/saves';
 import { InterpretationMetrics, interpretSafely } from './interpretation/providers';
 import { TerminalPlayback } from './presentation/terminal-playback';
 import { LocalLanguage } from './interpretation/local-language';
+import { availableOperations, OPERATION_DEFINITIONS, parseOperation } from './engine/continuation';
 
 @Injectable({ providedIn: 'root' })
 export class Session implements OnDestroy {
@@ -21,6 +22,8 @@ export class Session implements OnDestroy {
   readonly language = inject(LocalLanguage);
   readonly busy = this.playback.busy;
   readonly files = computed(() => accessibleFiles(this.state()));
+  readonly operations = computed(() => availableOperations(this.state()));
+  readonly pending = computed(() => OPERATION_DEFINITIONS.find(o => o.id === this.state().pendingOperation));
   readonly metrics = signal<InterpretationMetrics[]>([]);
   readonly developerMode = isDevMode();
   provider?: IntentInterpreter;
@@ -37,7 +40,7 @@ export class Session implements OnDestroy {
     try {
       const current = this.state();
       const [result] = await Promise.all([
-        parseCommand(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.openFileIds.at(-1) ?? current.lastFileId, lastIntent: current.lastIntent }, this.provider ?? this.language.provider),
+        parseCommand(input) || parseOperation(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.openFileIds.at(-1) ?? current.lastFileId, lastIntent: current.lastIntent }, this.provider ?? this.language.provider),
         pause,
       ]);
       if (request !== this.requestId) return;

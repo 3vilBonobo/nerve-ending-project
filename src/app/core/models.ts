@@ -1,9 +1,10 @@
 export const EVIDENCE = ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED', 'EV_TRANSFER_MISSING', 'EV_CALL_PENDING', 'EV_DESK_CLOSED', 'EV_AUTHORIZATION', 'EV_RECOVERED_FRAGMENT'] as const;
 export type EvidenceId = typeof EVIDENCE[number];
+import type { Knowledge, Permission, StoryState } from './story-state';
 export type Capability = 'CAP_ARCHIVE_RECOVERY';
 export type TerminalMode = 'maximized' | 'restored' | 'minimized';
 export const INTENTS = ['ask_service_status', 'ask_retirement', 'ask_transfer', 'ask_archive_location', 'ask_recovery_process', 'ask_authorization', 'ask_company', 'ask_identity', 'ask_calls', 'ask_recipient', 'ask_office', 'ask_staff', 'ask_access', 'ask_dates', 'ask_record_integrity', 'ask_next', 'request_backup', 'request_stop', 'request_file', 'request_search', 'ask_clarification', 'unknown'] as const;
-export type QueryIntent = typeof INTENTS[number];
+export type QueryIntent = typeof INTENTS[number] | `q_${string}`;
 export interface Interpretation {
   intent: QueryIntent;
   entityId?: string;
@@ -30,6 +31,11 @@ export interface ArchiveFile {
   readonly locked?: boolean;
   readonly references?: readonly string[];
   readonly backupAvailable?: boolean;
+  readonly access?: Permission;
+  readonly requiresKnowledge?: Knowledge;
+  readonly reveals?: readonly Knowledge[];
+  readonly author?: string;
+  readonly provenance?: string;
 }
 export interface FileLink { fileId: string; label: string }
 export interface TerminalOutput {
@@ -39,8 +45,8 @@ export interface TerminalOutput {
   truth: 'record' | 'interpretation' | 'withheld' | 'system';
 }
 export interface TerminalEntry extends TerminalOutput { input: string }
-export interface GameState {
-  schemaVersion: 3;
+export interface GameState extends StoryState {
+  schemaVersion: 4;
   sessionId: string;
   startedAt: string;
   currentDirectory: string;

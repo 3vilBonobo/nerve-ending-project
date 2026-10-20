@@ -8,6 +8,7 @@
     "build": "ng build",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
+    "game:validate": "node scripts/validate-game.mjs",
     "preview": "node scripts/serve.mjs",
     "model:prepare": "node scripts/prepare-language-model.mjs",
     "model:references": "node scripts/evaluate-language-model.mjs --write-embeddings",

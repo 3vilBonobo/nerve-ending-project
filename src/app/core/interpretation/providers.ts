@@ -1,12 +1,13 @@
 import { FILES } from '../content';
 import { INTENTS, Interpretation, IntentInterpreter, QueryContext } from '../models';
 import { classify } from './fallback';
+import { DIALOGUE_IDS } from './dialogue-catalog';
 export { BrowserAIInterpreter } from './browser-ai';
 
 export function validateInterpretation(value: unknown, provider: Interpretation['provider']): Interpretation | undefined {
   if (!value || typeof value !== 'object') return undefined;
   const candidate = value as Record<string, unknown>;
-  if (!INTENTS.includes(candidate['intent'] as Interpretation['intent']) || typeof candidate['needsClarification'] !== 'boolean') return undefined;
+  if ((!INTENTS.includes(candidate['intent'] as typeof INTENTS[number]) && !DIALOGUE_IDS.has(String(candidate['intent']))) || typeof candidate['needsClarification'] !== 'boolean') return undefined;
   if (candidate['entityId'] !== undefined && !['service-004', 'service-005', 'service-006', 'service-007'].includes(candidate['entityId'] as string)) return undefined;
   if (candidate['fileId'] !== undefined && !FILES.some(file => file.id === candidate['fileId'] && !file.locked)) return undefined;
   const intent = candidate['intent'] as Interpretation['intent'];

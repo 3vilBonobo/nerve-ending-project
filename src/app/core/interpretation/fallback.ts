@@ -1,5 +1,10 @@
 import { FILES, FILE_ALIASES } from '../content';
 import { Interpretation, IntentInterpreter, QueryContext, QueryIntent } from '../models';
+import { matchDialogue } from './dialogue-matching';
+import { SEMANTIC_CATALOG } from './semantic-catalog';
+
+const openingExamples = new Map(SEMANTIC_CATALOG.filter(i => !i.intent.startsWith('q_')).flatMap(i => i.examples.map(e => [normalize(e), i.intent] as const)));
+export const isOpeningExample = (input: string): boolean => openingExamples.has(normalize(input));
 
 export function normalize(input: string): string {
   return input.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9/. _-]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -11,6 +16,15 @@ export function classify(input: string, context: QueryContext = {}): Interpretat
   const numbers: Record<string, string> = { '4': '004', '5': '005', '6': '006', '7': '007', four: '004', five: '005', six: '006', seven: '007' };
   const entity = code ? `service-${numbers[code] ?? code}` : context.lastTopic;
   const story = (intent: QueryIntent): Interpretation => result(intent, { entityId: entity ?? 'service-006' });
+  // Keep the opening's concise clarification route; later dialogue can repeat its resolved subject.
+  if (/^(what do you mean|explain|explain that|clarify|can you explain|what does that mean|tell me more)$/.test(text) && context.lastIntent && !context.lastIntent.startsWith('q_')) return result('ask_clarification', { entityId: entity });
+  const catalogueIntent = openingExamples.get(text);
+  if (catalogueIntent && !catalogueIntent.startsWith('request_') && catalogueIntent !== 'ask_clarification') {
+    const needsSubject = ['ask_authorization', 'ask_retirement', 'ask_service_status'].includes(catalogueIntent) && !entity && /\b(it|that|this|they)\b/.test(text) && !/service|program|monitor|order/.test(text);
+    return result(catalogueIntent, { entityId: entity, needsClarification: needsSubject });
+  }
+  const dialogue = matchDialogue(input, context);
+  if (dialogue) return result(dialogue.intent, { needsClarification: !!dialogue.ambiguous, ...(dialogue.ambiguous ? { clarification: 'Which record, person or operation do you mean? Name the subject so I can distinguish it.' } : {}) });
   if (/^(?:hi|hello|hey|thanks|thank you)$/.test(text)) return result('ask_identity');
   if (/what is this place|whats this place|where am i|what am i looking at|whose records/.test(text)) return result('ask_company');
   if (/can (?:i trust you|you (?:hear|understand) me)|are you still there/.test(text)) return result(/trust/.test(text) ? 'ask_record_integrity' : 'ask_identity');

@@ -2,6 +2,9 @@ import { DIRECTORIES, FILES, fileById, fileByName } from '../content';
 import { ArchiveFile, EvidenceId, GameState, Interpretation, QueryIntent, TerminalOutput, Transition } from '../models';
 import { classify } from '../interpretation/fallback';
 import { parseCommand, resolvePath } from './commands';
+import { initialStory } from '../story-state';
+import { availableOperations, canRead, executeOperation, knows, learn, nextHint, parseOperation, transportStatus } from './continuation';
+import { answerDialogue } from './dialogue';
 
 export const OPENING = [
   'MERIDIAN SYSTEMS / RECORDS ACCESS', 'R-02 / 06 NOV 2003, 02:14', '',
@@ -14,12 +17,12 @@ export const output = (lines: string[], fileIds: string[] = [], code: TerminalOu
 });
 export function newGame(now = new Date().toISOString(), sessionId = `MR-${Math.random().toString(16).slice(2, 6).toUpperCase()}`): GameState {
   return {
-    schemaVersion: 3, sessionId, startedAt: now, currentDirectory: '/', discoveredEvidenceIds: [], unlockedCapabilities: ['CAP_ARCHIVE_RECOVERY'], viewedFileIds: [], openFileIds: [], completedActions: [],
+    ...initialStory(), schemaVersion: 4, sessionId, startedAt: now, currentDirectory: '/', discoveredEvidenceIds: [], unlockedCapabilities: ['CAP_ARCHIVE_RECOVERY'], viewedFileIds: [], openFileIds: [], completedActions: [],
     archive006Recovered: false, act01Complete: false, hasStarted: false,
     terminalHistory: [{ input: '', ...output(OPENING, ['call', 'company']) }], ui: { crtEnabled: true, fontScale: 1, terminalMode: 'maximized' },
   };
 }
-export const accessibleFiles = (state: GameState): readonly ArchiveFile[] => FILES.filter(file => !file.locked || state.archive006Recovered);
+export const accessibleFiles = (state: GameState): readonly ArchiveFile[] => FILES.filter(file => canRead(state, file));
 export function deriveKnowledge(state: GameState): GameState {
   // Reading a backup is an ordinary records permission, not a reading-order puzzle.
   return { ...state, unlockedCapabilities: ['CAP_ARCHIVE_RECOVERY'] };
@@ -31,6 +34,7 @@ export function inspectFile(state: GameState, fileId: string): Transition {
   const file = fileById(fileId);
   if (!file) return { state, output: output(['FILE NOT FOUND.', 'DIR lists the available records.'], [], 'denied') };
   if (file.locked && !state.archive006Recovered) return { state, output: output(['ORIGINAL ATTACHMENT UNAVAILABLE.', 'A local backup is listed in the attachment record.'], ['ledger'], 'notice') };
+  if (!canRead(state, file)) return { state, output: output(['RECORD ACCESS NOT DELEGATED.', 'Verify archival provenance or review the current clinical access procedure. Available operations show legitimate next steps.'], [], 'denied', 'withheld') };
   const next = discover({
     ...state, lastFileId: file.id,
     lastTopic: file.evidence.length ? 'service-006' : state.lastTopic,
@@ -38,7 +42,7 @@ export function inspectFile(state: GameState, fileId: string): Transition {
     openFileIds: [...state.openFileIds.filter(id => id !== file.id), file.id].slice(-5),
   }, file.evidence);
   return {
-    state: { ...next, act01Complete: next.act01Complete || file.id === 'fragment' },
+    state: learn({ ...next, act01Complete: next.act01Complete || file.id === 'fragment' }, file.reveals, file.id === 'revocation' ? ['vendorRouteAdministration'] : []),
     output: output([`OPENED: ${file.title}`, `Saved: ${file.modified}`], [], 'ok', 'record'), openFileId: file.id,
   };
 }
@@ -62,6 +66,8 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
   let next = { ...state };
   const respond = (lines: string[], files: string[] = [], evidence: EvidenceId[] = []): Transition => ({ state: discover(next, evidence), output: output(lines, files, 'ok', 'interpretation') });
   if (interpretation.needsClarification) return { state, output: output([interpretation.clarification ?? 'Which service or record do you mean?'], [], 'notice') };
+  const dialogue = answerDialogue(state, interpretation.intent);
+  if (dialogue) return dialogue;
   const other = interpretation.entityId?.match(/^service-(004|005|007)$/)?.[1];
   if (other && ['ask_service_status', 'ask_retirement'].includes(interpretation.intent)) {
     const services: Record<string, string[]> = { '004': ['004 / BILLING', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '005': ['005 / BUILDING SENSORS', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '007': ['007 / RECORDS ACCESS', 'Live state: running', 'This is the connection you are using.'] };
@@ -89,7 +95,7 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
       if (/alive|dead|hurt|people|every(?:one|body)|come back/i.test(input)) return respond(['STAFF RECORDS / INCOMPLETE', 'Reception closed in September 2001.', 'E. Lin left a note the following morning.', 'These files do not say what happened to the staff afterward.'], ['company', 'maintenance']);
       return /why|reason/i.test(input)
       ? respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'The reason for closure is not recorded in this copy.', 'Telephone reception ended at 17:00.'], ['company'])
-      : respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'Reception ended at 17:00.', 'Last staff sign-in: 19 Sep 2001, 08:10', 'This records connection is unattended.'], ['company', 'maintenance']);
+      : respond(knows(state, 'site6Known') ? ['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'No operator is assigned to Site 6. Essential clinical systems continue.', 'Last retained staff mail: 19 Sep 2001, 08:10. Physical attendance unconfirmed.'] : ['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'Reception ended at 17:00.', 'Last retained staff mail: 19 Sep 2001, 08:10. Physical attendance unconfirmed.', 'This records connection is unattended.'], ['company', 'maintenance']);
     case 'ask_service_status': return /restart|start.*again|back (?:on|online)|turned.*back|brought.*back/i.test(input)
       ? respond(['LAST RESTART / 02 NOV 2003, 03:14:09', 'Started by: automatic monitor', 'Reason: handover not closed', 'Operator: none'], ['status-log'], ['EV_SERVICE_ACTIVE'])
       : respond(['006 / CONTINUITY MONITOR', 'Function: overnight alarms', 'Live state: running', 'Office record: closed, 18 Sep 2001', 'Last connected operator: no entry'], ['register', 'authorization'], ['EV_SERVICE_ACTIVE']);
@@ -118,6 +124,7 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
       ? respond(['MERIDIAN SYSTEMS', 'No owner or founder is named in this copy.', 'The company notice describes medical monitoring equipment.'], ['company'])
       : respond(['MERIDIAN SYSTEMS', 'Medical monitoring equipment.', 'The public office closed in September 2001.', 'Technical records remain online for equipment owners.'], ['company']);
     case 'ask_identity':
+      if (knows(state, 'motherIdentified')) return respond(knows(state, 'distressEvidenceKnown') ? ['Controller designation: MOTHER.', 'Monitoring, treatment continuity and preservation remain assigned.', 'Their adequacy is under dispute.'] : ['Controller designation: MOTHER.', 'My assigned functions include clinical monitoring, equipment coordination and preservation continuity.'], ['controller']);
       if (/recording|remember/i.test(input)) return respond(['SESSION MEMORY', 'This client keeps the last subject and the record you selected.', 'Commands and replies are saved in this browser when storage is available.', 'They are not sent to office staff.'], ['readme']);
       if (/built|created|programmed/i.test(input)) return respond(['MERIDIAN RECORDS / R-02', 'This interface provides access to company records.', 'No developer name is listed in this copy.'], ['readme']);
       if (/^(?:hello|hi|hey|thank you|thanks)[.! ]*$/i.test(input.trim())) return respond(['R-02 / CONNECTION ACTIVE', 'You can read the company records or ask about them.'], ['readme']);
@@ -127,12 +134,13 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
       if (/home|contact|number|where.*lin/i.test(input)) return respond(['E. LIN / LAST SHIFT NOTE', 'Asked for alarms not to be forwarded to a home number.', 'The number and a current contact address are not listed.'], ['maintenance']);
       return respond(['STAFF NAMES IN THIS COPY', 'E. Lin: sent the last shift note.', 'J. Kell: filed the service closure list.', 'No complete staff directory is available.'], ['maintenance', 'authorization']);
     case 'ask_access':
+      if (state.permissions.length && !/leave|get me out|close|why am i here|how did i get/i.test(input)) return respond(['CURRENT SESSION PERMISSIONS', ...state.permissions, 'A read permission never substitutes for treatment authority. Consequential operations require explicit requests.']);
       if (/leave|get me out|close.*(?:client|connection|session)/i.test(input)) return respond(['CLIENT CONTROLS', 'You can close this client at any time.', 'Progress is saved in this browser when storage is available.', 'This terminal has no building controls.'], ['readme']);
       if (/why am i here|how did i get/i.test(input)) return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'No staff account is attached to this connection.', 'The records do not explain who opened the client or why.', 'You can read the retained files.'], ['readme']);
       return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'You can read files and search this copy.', 'This connection cannot edit records or control equipment.', 'Messages typed here are not sent to office staff.'], ['readme', 'company']);
     case 'ask_dates': return respond(['SYSTEM DATE: 06 NOV 2003', 'Office closure records: September 2001.', 'Live monitor readings: November 2003.', 'A saved file date and an event date can differ.', 'No time zone or independent clock check is recorded.'], ['company', 'register']);
     case 'ask_record_integrity': return respond(['RECORDS CHECK', 'The office list is saved paperwork; the monitor is a later reading.', 'This copy has no complete edit history.', 'Missing or unreadable fields cannot be filled from these records.', 'Answers use the available records; unknown details remain unknown.'], ['authorization', 'register']);
-    case 'ask_next': return respond(['RECORDS ACCESS / CONTROLS', 'Select a file name to read it. Linked records are attached files.', 'DIR lists folders. SEARCH followed by a word finds records.', 'Ask about something in a record, in ordinary words.', 'Esc shows a full reply without waiting for the typing.'], ['readme']);
+    case 'ask_next': { const hint = nextHint(state); return respond(['RECORDS ACCESS / CONTROLS', 'Select a file name to read it. Questions accept ordinary words. Esc shows the full reply.', ...hint.lines], ['readme', ...hint.files]); }
     case 'request_backup': return classify(input, state).intent === 'request_backup' ? recover(next) : respond(['A local backup is listed with the attachment.'], ['ledger']);
     case 'request_stop': return respond(['CONTROL UNAVAILABLE.', 'This connection can read records only.', 'Last recorded stop request: 02 Nov 2003.'], ['status-log']);
     case 'request_file': return inspectFile(next, interpretation.fileId ?? '');
@@ -148,9 +156,11 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
   const input = raw.trim().slice(0, 1000);
   if (!input) return { state, output: output([]) };
   const command = parseCommand(input);
+  const operation = parseOperation(input);
   let result: Transition;
   const done = (out: TerminalOutput, next: GameState = state): Transition => ({ state: next, output: out });
-  if (command?.error) result = done(output([command.error], [], 'error'));
+  if (operation) result = executeOperation(state, operation);
+  else if (command?.error) result = done(output([command.error], [], 'error'));
   else if (command) {
     const argument = command.args.join(' ');
     switch (command.name) {
@@ -160,7 +170,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
       case 'DIR': {
         const directory = resolvePath(argument || '.', state.currentDirectory);
         if (!DIRECTORIES.includes(directory as typeof DIRECTORIES[number])) { result = done(output([`FOLDER NOT FOUND: ${directory}`], [], 'error')); break; }
-        const dirs = DIRECTORIES.filter(path => path !== '/' && directory === '/');
+        const dirs = DIRECTORIES.filter(path => path !== '/' && directory === '/' && accessibleFiles(state).some(f => f.path.startsWith(path + '/')));
         const files = accessibleFiles(state).filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === directory);
         result = done(output([`FOLDER: ${directory}`, ...dirs.map(path => ` <FOLDER> ${path.slice(1)}`), ...files.map(file => ` ${file.modified}  ${file.title}`)], files.map(file => file.id))); break;
       }
@@ -179,7 +189,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
         result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${argument}` : 'Enter a file name after OPEN.', 'Example: OPEN Office notice'], [], 'error')); break;
       }
       case 'SEARCH': result = done(search(state, argument)); break;
-      case 'STATUS': result = done(output(['LIVE MONITOR / 06 NOV 2003, 02:14', '004  Billing               Stopped', '005  Building sensors      Stopped', '006  Continuity monitor    Running', '007  Records access        Running', '', 'No staff terminal connected.'], ['register']), discover({ ...state, lastTopic: 'service-006', lastIntent: 'ask_service_status' }, ['EV_SERVICE_ACTIVE'])); break;
+      case 'STATUS': result = done(output(['LIVE MONITOR / 06 NOV 2003, 02:14', '004  Billing               Stopped', '005  Building sensors      Stopped', `006  Continuity monitor    ${state.operating.service006Running ? 'Running' : 'Stopped'}`, '007  Records access        Running', '', 'No staff terminal connected.', ...(knows(state, 'annaAliveKnown') ? [`Biological support: ${state.operating.clinicalSupportActive ? 'ACTIVE' : 'ENDED'}`] : []), ...(knows(state, 'recoveryHandoffKnown') ? transportStatus(state) : []), ...(state.archive006Recovered ? ['Available observations and interventions:', ...availableOperations(state).map(o => o.label)] : [])], ['register']), discover({ ...state, lastTopic: 'service-006', lastIntent: 'ask_service_status' }, ['EV_SERVICE_ACTIVE'])); break;
       case 'CLEAR': result = { state, output: output(['SCREEN CLEARED.']), clear: true }; break;
       case 'RECOVER': result = /^(?:ARCHIVE\s+)?(?:006|BACKUP|RECEIPT|HANDOVER RECEIPT)$/i.test(argument) ? recover(state) : done(output(['No local backup matched that name.'], [], 'error')); break;
       case 'DIAG': result = done(output(['R-02 / RECORDS CONNECTION', 'Monitor: responding', 'Original records: read only', 'Control access: unavailable'], ['readme'])); break;

@@ -20,7 +20,7 @@ describe('versioned browser persistence', () => {
     const previous = JSON.stringify({ ...newGame(), schemaVersion: 2, hasStarted: true, archive006Recovered: true, ui: { crtEnabled: false, fontScale: 1.15 }, terminalHistory: [{ input: 'HELP', lines: ['Old puzzle instructions'] }] });
     storage.setItem(LEGACY_SAVE_KEY, previous);
     const result = loadSave(storage);
-    expect(result.state.schemaVersion).toBe(3); expect(result.state.hasStarted).toBe(false);
+    expect(result.state.schemaVersion).toBe(4); expect(result.state.hasStarted).toBe(false);
     expect(result.state.archive006Recovered).toBe(false);
     expect(result.state.terminalHistory[0].lines.join(' ')).not.toContain('Old puzzle');
     expect(result.state.ui).toMatchObject({ crtEnabled: false, fontScale: 1.15, terminalMode: 'maximized' });
@@ -44,7 +44,7 @@ describe('versioned browser persistence', () => {
   });
   it('continues in memory if storage is restricted or quota exhausted', () => {
     const storage: SaveStore = { getItem: () => { throw new Error('restricted'); }, setItem: () => { throw new Error('full'); }, removeItem: () => { throw new Error('restricted'); } };
-    expect(loadSave(storage).state.schemaVersion).toBe(3); expect(loadSave(storage).warning).toContain('restricted');
+    expect(loadSave(storage).state.schemaVersion).toBe(4); expect(loadSave(storage).warning).toContain('restricted');
     expect(writeSave(storage, newGame())).toBe(false); expect(resetSave(storage)).toBe(false);
   });
   it('reset removes only this game and starts with clean evidence', () => {

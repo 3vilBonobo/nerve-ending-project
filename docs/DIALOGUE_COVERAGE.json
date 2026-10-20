@@ -1,0 +1,159 @@
+{
+  "intents": 200,
+  "recognitionExamples": 1583,
+  "newAuthoredVariants": 368,
+  "existingOpeningCategories": 22,
+  "easterEggTriggers": 16,
+  "contextAwareFollowupCases": 16,
+  "families": {
+    "System identity": {
+      "intents": 8,
+      "examples": 56,
+      "variants": 16
+    },
+    "Meridian history": {
+      "intents": 8,
+      "examples": 56,
+      "variants": 16
+    },
+    "Night desk": {
+      "intents": 7,
+      "examples": 49,
+      "variants": 14
+    },
+    "Preservation": {
+      "intents": 8,
+      "examples": 56,
+      "variants": 16
+    },
+    "Records and evidence": {
+      "intents": 7,
+      "examples": 49,
+      "variants": 14
+    },
+    "Site 6": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "Anna Voss": {
+      "intents": 16,
+      "examples": 112,
+      "variants": 32
+    },
+    "Biomedical technology": {
+      "intents": 12,
+      "examples": 84,
+      "variants": 24
+    },
+    "The accident": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "MOTHER mind": {
+      "intents": 12,
+      "examples": 84,
+      "variants": 24
+    },
+    "Trust and contradictions": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "Communications": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "External medical risk": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "Operations": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "Ethics and choices": {
+      "intents": 12,
+      "examples": 84,
+      "variants": 24
+    },
+    "Personal and emotional": {
+      "intents": 10,
+      "examples": 70,
+      "variants": 20
+    },
+    "Unorthodox and easter eggs": {
+      "intents": 16,
+      "examples": 112,
+      "variants": 32
+    },
+    "Help and conversation": {
+      "intents": 8,
+      "examples": 56,
+      "variants": 16
+    }
+  },
+  "ambiguous": [
+    {
+      "text": "What turned it back on?",
+      "intent": "ask_service_status"
+    },
+    {
+      "text": "Is that process alive?",
+      "intent": "ask_service_status"
+    },
+    {
+      "text": "What brought it back online?",
+      "intent": "ask_service_status"
+    },
+    {
+      "text": "Why does the paperwork say it is closed?",
+      "intent": "ask_retirement"
+    },
+    {
+      "text": "Why is it still on after the shutdown?",
+      "intent": "ask_retirement"
+    },
+    {
+      "text": "Was this process retired?",
+      "intent": "ask_retirement"
+    },
+    {
+      "text": "It should have been switched off already",
+      "intent": "ask_retirement"
+    },
+    {
+      "text": "Why was it allowed to continue after retirement?",
+      "intent": "ask_retirement"
+    },
+    {
+      "text": "Who signed off on this?",
+      "intent": "ask_authorization"
+    },
+    {
+      "text": "Who authorised that decision?",
+      "intent": "ask_authorization"
+    },
+    {
+      "text": "What is the name of the person who approved it?",
+      "intent": "ask_authorization"
+    },
+    {
+      "text": "Who is she?",
+      "intent": "q_anna_identity",
+      "clarification": "Which record, person or operation do you mean? Name the subject so I can distinguish it."
+    },
+    {
+      "text": "What happened to her?",
+      "intent": "q_anna_incident",
+      "clarification": "Which record, person or operation do you mean? Name the subject so I can distinguish it."
+    }
+  ],
+  "deterministicMismatches": [],
+  "missingLateVariants": [],
+  "errors": []
+}

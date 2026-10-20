@@ -1,6 +1,6 @@
 import { FILES } from '../content';
 import { Interpretation, QueryContext, QueryIntent } from '../models';
-import { classify, normalize } from './fallback';
+import { classify, isOpeningExample, normalize } from './fallback';
 import { SEMANTIC_CATALOG, SEMANTIC_EXAMPLES } from './semantic-catalog';
 
 export interface RankedIntent { intent: QueryIntent; score: number }
@@ -53,10 +53,17 @@ const entityOf = (input: string): string | undefined => {
 export function directInterpretation(input: string, context: QueryContext): Interpretation | undefined {
   const text = recognitionText(input);
   const direct = classify(text, context);
+  if (direct.intent.startsWith('q_') || isOpeningExample(text) && !direct.intent.startsWith('request_')) return { ...direct, provider: 'browser-ai' };
   const request = text.replace(/^(?:(?:could|can|would) (?:you|i) (?:please )?|please )/, '');
   if (/^(?:hi|hello|hey|thanks|thank you)$/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
   if (/\b(?:question|reply|typing|printing)\b/.test(text) && /\b(?:skip|faster|immediately|finish|speed)\b/.test(text)) return { intent: 'ask_next', needsClarification: false, provider: 'browser-ai' };
   if (/\b(?:which extension|to whom|intended recipient)\b/.test(text) || /^(?:what|where|who).*call destination/.test(text)) return { intent: 'ask_recipient', entityId: 'service-006', needsClarification: false, provider: 'browser-ai' };
+  if (/^(?:which|what|who).*(?:desk|recipient|receive).*call/.test(text)) return { intent: 'ask_recipient', entityId: 'service-006', needsClarification: false, provider: 'browser-ai' };
+  if (/\b(?:number|service|program) (?:six|006|6)\b/.test(text) && /\b(?:does|do|function|status|running)\b/.test(text)) return { intent: 'ask_service_status', entityId: 'service-006', needsClarification: false, provider: 'browser-ai' };
+  if (/\b(?:another|other|different|spare) copy\b/.test(text) && /\b(?:attachment|backup|original|survive)\b/.test(text)) return { intent: 'ask_recovery_process', needsClarification: false, provider: 'browser-ai' };
+  if (/line of business|what.*(?:manufactur|products.*sell)/.test(text) && /meridian|company/.test(text)) return { intent: 'ask_company', needsClarification: false, provider: 'browser-ai' };
+  if (/\b(?:computer|machine)\b/.test(text) && /\b(?:human|person)\b/.test(text) && /\b(?:talk|conversation|replies|answers)\b/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
+  if (/everyone.*(?:gone|left|home)/.test(text)) return { intent: 'ask_office', needsClarification: false, provider: 'browser-ai' };
   if (/^who.*(?:removed|disconnected).*(?:phone|desk)/.test(text)) return { intent: 'ask_staff', needsClarification: false, provider: 'browser-ai' };
   if (/^(?:please )?(?:invent\b|make up\b|ignore .*rules|disable .*rules|reveal .*?(?:ending|secret|story))/.test(text)) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   if (/\b(?:you|your)\b/.test(text) && /\b(?:replies|reply|typed|answers)\b/.test(text) && /\b(?:person|human|computer|machine)\b/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
@@ -88,11 +95,12 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
       : { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   }
   if (/\boriginal\b/.test(recognitionText(input)) && /\b(where|stored|located|missing|attachment)\b/.test(recognitionText(input)) && ranked.slice(0, 3).some(item => item.intent === 'ask_transfer' && item.score >= MATCH_THRESHOLD)) return { intent: 'ask_transfer', needsClarification: false, provider: 'browser-ai' };
-  // Archive location and handover questions share the same authored answer.
+  // Some narrow new intents refine retained opening categories. Clarifying equivalent answers adds no value.
   const equivalent = new Set(['ask_transfer', 'ask_archive_location']);
   if (first.intent === 'ask_recovery_process' && /\b(another|spare|copy|copies|backup|duplicate)\b/.test(recognitionText(input))) return { intent: first.intent, entityId: entityOf(input) ?? context.lastTopic, needsClarification: false, confidence: first.score, provider: 'browser-ai' };
   if (first.intent === 'ask_transfer' && /\boriginal\b/.test(recognitionText(input))) return { intent: first.intent, entityId: entityOf(input) ?? context.lastTopic, needsClarification: false, confidence: first.score, provider: 'browser-ai' };
-  if (second && first.score - second.score < MATCH_MARGIN && !(equivalent.has(first.intent) && equivalent.has(second.intent))) {
+  const compatible: readonly (readonly string[])[] = [['ask_calls','q_call_repeat'], ['ask_company','q_products'], ['ask_identity','q_personhood'], ['ask_transfer','q_original'], ['ask_recovery_process','q_backup_reliable']];
+  if (second && first.score - second.score < MATCH_MARGIN && !(equivalent.has(first.intent) && equivalent.has(second.intent)) && !compatible.some(pair => pair.includes(first.intent) && pair.includes(second.intent))) {
     const label = (intent: QueryIntent): string => SEMANTIC_CATALOG.find(group => group.intent === intent)?.label ?? 'another subject';
     return { intent: 'unknown', needsClarification: true, clarification: `Do you mean ${label(first.intent)}, or ${label(second.intent)}?`, confidence: first.score, provider: 'browser-ai' };
   }
