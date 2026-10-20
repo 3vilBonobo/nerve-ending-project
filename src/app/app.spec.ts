@@ -8,7 +8,9 @@ describe('Meridian client UI', () => {
   it('starts without a model and exposes terminal controls without story spoilers', async () => {
     const fixture = TestBed.createComponent(App); fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.textContent).toContain('No account, installation, or AI download required.');
+    const setup = element.querySelector('.setup-dialog')!;
+    expect(setup.textContent).toContain('Browse records and ask questions.');
+    expect(setup.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE|SESSION CONFIGURATION/);
     expect(element.textContent).not.toMatch(/MOTHER|Anna Voss|Site 6/);
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();

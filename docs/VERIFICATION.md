@@ -30,3 +30,11 @@ Verified in the available Chromium in-app browser at **1440 × 900** and **390 �
 ## Deliberate limitations
 
 No browser AI model is integrated or benchmarked; no live Ollama daemon was tested. Cross-browser/device testing, physical touch devices, full assistive-technology audits, cache eviction, browser PWA-install UI, and timed human playtests are not claimed. Browser support checks and settings state these limits honestly. There are no later acts, branching endings, drag/resize framework, or custom application backend.
+
+## Visual revision — 2026-10-20
+
+The opening screen is now one early-2000s-style connection dialog with Start/Resume and Settings. The retained interface uses locally served VT323 text based on DEC VT320 glyphs, at 24px desktop / 22px narrow viewport. The previous landing-page sections, duplicated status readouts, and decorative branding blocks were removed.
+
+Browser measurements confirmed a 24px desktop terminal input, a one-character-wide underline approximately 6.7px high, cursor movement to the actual selection position, and Up-arrow history recall. At a 390px viewport, the input was 22px and page width remained 390px. The opening dialog also fit that viewport without horizontal overflow. CRT haze is optional and restricted to terminal/record content.
+
+Historical references and the local font license are recorded in `VISUAL_REFERENCES.md` and `public/fonts/OFL.txt`. The font is included in the production offline cache.

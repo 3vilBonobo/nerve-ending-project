@@ -1,39 +1,28 @@
-<main class="app-surface" [class.crt]="session.state().ui.crtEnabled" [style.--font-scale]="session.state().ui.fontScale">
+<main class="app-surface" [class.is-setup]="stage() === 'setup'" [class.crt]="session.state().ui.crtEnabled" [style.--font-scale]="session.state().ui.fontScale">
+  @if (stage() !== 'setup') {
   <header class="app-header">
     <div class="brand"><span class="meridian-mark" aria-hidden="true"></span><div>MERIDIAN SYSTEMS<span>REMOTE ACCESS CLIENT</span></div></div>
-    <div class="header-center">INFORMATION SERVICES <span class="muted">/ REV. 3.14</span></div>
     <nav aria-label="Client controls"><button class="text-button" (click)="settings.showModal()"><span aria-hidden="true">☷</span> DISPLAY & SETTINGS</button>@if (stage() === 'desktop') { <button class="text-button" (click)="resetDialog.showModal()">NEW SESSION</button> }</nav>
   </header>
+  }
 
   @if (session.storageWarning()) { <div class="storage-notice" role="status">{{ session.storageWarning() }}</div> }
 
   @if (stage() === 'setup') {
-    <section class="setup-screen">
-      <div class="setup-heading"><span><i class="status-light"></i> REMOTE ACCESS GATEWAY</span><span>NODE R-02 / EXTERNAL</span></div>
-      <div class="setup-grid">
-        <div class="setup-intro">
-          <div class="eyebrow">MERIDIAN SYSTEMS / EST. 1987</div>
-          <h1>REMOTE<br>INFORMATION<br><span>SERVICES.</span></h1>
-          <p class="setup-lead">Some services outlive their purpose.</p>
-          <p class="setup-description">Access the retained records of Meridian Systems.<br>Browse the archive. Question the system.<br>Reconcile what remains.</p>
-          <div class="setup-rules"><div><span>01</span><p>INSPECT ORIGINAL RECORDS<small>Documents retain their original provenance.</small></p></div><div><span>02</span><p>QUERY THE INDEX<small>Use commands or ordinary questions.</small></p></div><div><span>03</span><p>FOLLOW THE DISCREPANCIES<small>The records and the system may disagree.</small></p></div></div>
-          <div class="intro-caption">RECORDS MIRROR © 2003 MERIDIAN SYSTEMS</div>
+    <section class="setup-screen" aria-labelledby="setup-title">
+      <div class="setup-dialog">
+        <header class="window-titlebar"><span class="window-title"><span class="terminal-glyph" aria-hidden="true">&gt;_</span> Meridian Remote Access</span></header>
+        <div class="setup-body">
+          <div class="setup-identity"><span class="meridian-mark large" aria-hidden="true"></span><div><h1 id="setup-title">MERIDIAN SYSTEMS</h1><p>Remote Information Services</p></div></div>
+          <p class="setup-description">Connect to the company archive.<br>Browse records and ask questions.</p>
+          <p class="setup-note">Progress is saved in this browser.</p>
         </div>
-        <div class="setup-access">
-          <div class="access-panel">
-            <div class="panel-label"><span>SESSION CONFIGURATION</span><span>[ 01 ]</span></div>
-            <div class="access-emblem" aria-hidden="true"><div class="emblem-ring"></div><span class="meridian-mark large"></span><div class="emblem-coordinates">R-02<br>03.14</div><div class="emblem-cross">+</div></div>
-            <div class="access-status"><span><i class="status-light"></i> APP READY</span><span>EXTERNAL / LIMITED</span></div>
-            <p class="real-world-note">A browser-based investigation. Approx. 10–15 minutes.<br>No account, installation, or AI download required.<br>Progress saves in this browser when storage is available.</p>
-            <button class="primary-button start-button" (click)="start()">{{ session.state().hasStarted ? 'RESUME SESSION' : 'START SESSION' }}<span>↗</span></button>
-            <div class="module-status"><span>LANGUAGE INTERPRETER</span><b>OFFLINE / READY</b></div>
-            <p class="module-note">Authored queries are available immediately.<br>Experimental browser AI: unavailable in this build.<br>No model will be downloaded.</p>
-            <button class="text-button module-detail" (click)="settings.showModal()">MODULE & BROWSER DETAILS <span>→</span></button>
-          </div>
-          <div class="access-bottom"><span><i class="status-light dim"></i> LOCAL PROGRESS STORAGE</span><span>NO EXTERNAL TELEMETRY</span></div>
-        </div>
+        <footer class="setup-actions">
+          <button class="text-button" (click)="settings.showModal()">Settings...</button>
+          <button class="primary-button start-button" (click)="start()">{{ session.state().hasStarted ? 'Resume session' : 'Start session' }}</button>
+        </footer>
       </div>
-      <footer class="setup-footer"><span>NERVE ENDING <span class="muted">/ PROTOTYPE 0.1</span></span><span>KEYBOARD + MOUSE <span class="muted">/ TOUCH SUPPORTED</span></span></footer>
+      <p class="setup-caption">Nerve Ending / Prototype 0.1</p>
     </section>
   }
 
@@ -48,7 +37,7 @@
 
   @if (stage() === 'desktop') {
     <div class="desktop-navigation"><span>MERIDIAN REMOTE DESKTOP <span class="muted">/ RETAINED RECORDS</span></span><span class="muted">2003-11-06 <span class="clock">{{ clock() }}</span></span></div>
-    <nav class="mobile-tabs" aria-label="Workspace view"><button [class.selected]="mobileTab() === 'terminal'" (click)="terminal()">TERMINAL</button><button [class.selected]="mobileTab() === 'files'" (click)="folder(session.state().currentDirectory)">FILES</button><button [class.selected]="mobileTab() === 'documents'" (click)="mobileTab.set('documents')">DOCUMENTS ({{ documents().length }})</button></nav>
+    <nav class="mobile-tabs" aria-label="Workspace view"><button [class.selected]="mobileTab() === 'terminal'" (click)="terminal()">TERMINAL</button><button [class.selected]="mobileTab() === 'files'" (click)="folder(session.state().currentDirectory)">FILES</button><button [class.selected]="mobileTab() === 'documents'" (click)="mobileTab.set('documents')">RECORDS ({{ documents().length }})</button></nav>
     <section class="desktop" [class.terminal-maximized]="session.state().ui.terminalMode === 'maximized'" [class.tab-terminal]="mobileTab() === 'terminal'" [class.tab-files]="mobileTab() === 'files'" [class.tab-documents]="mobileTab() === 'documents'" aria-label="Remote desktop">
       <div class="desktop-watermark" aria-hidden="true"><span class="meridian-mark"></span><div>MERIDIAN<br><small>RETAINED INFORMATION SYSTEMS</small></div></div>
       <div class="desktop-folders">
@@ -70,21 +59,21 @@
     <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILE INDEX</button>@if (session.state().archive006Recovered) { <button (click)="openFile('fragment')">↳ RECOVERED 006</button> }<span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
   }
 
-  <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span>{{ online() ? 'CONNECTION AVAILABLE' : 'BROWSER OFFLINE' }}</span><span class="strip-right">EXTERNAL / LIMITED <span class="muted">│</span> {{ cached() ? 'OFFLINE SHELL READY' : 'LOCAL INTERPRETER' }}</span></footer>
+  @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
 
   @if (showEnding() && stage() === 'desktop') {
     <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">ARCHIVE RECORD RESTORED</div><h2>INDEX RECONCILIATION PARTIAL.</h2><p>End of prototype. This session may be resumed.<br>The original records remain available for review.</p><div><button class="primary-button" (click)="review()">REVIEW RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">RESTART INVESTIGATION</button></div></section>
   }
 </main>
 
-<dialog #settings class="settings-dialog">
+<dialog #settings class="settings-dialog" [style.--font-scale]="session.state().ui.fontScale">
   <header class="window-titlebar"><h2 class="window-title">CLIENT SETTINGS</h2><div class="window-controls"><button (click)="settings.close()" aria-label="Close settings">×</button></div></header>
   <div class="settings-body">
     <h3>DISPLAY</h3>
     <label class="check-label"><input #crtToggle type="checkbox" [checked]="session.state().ui.crtEnabled" (change)="session.display(crtToggle.checked, session.state().ui.fontScale)"> CRT scanlines & phosphor glow</label>
     <p class="muted">Motion effects follow your device’s reduced-motion preference.</p>
     <label class="range-label" for="font-scale">TEXT SIZE <span>{{ (session.state().ui.fontScale * 100).toFixed(0) }}%</span></label><input #fontScale id="font-scale" type="range" min="0.9" max="1.25" step="0.05" [value]="session.state().ui.fontScale" (input)="session.display(session.state().ui.crtEnabled, +fontScale.value)">
-    <h3>LANGUAGE MODULE</h3><div class="settings-status">OFFLINE INTERPRETER: READY</div><p>Understands the authored investigation topics and common question variations. It does not support arbitrary conversation.</p><div class="settings-status">BROWSER AI: UNAVAILABLE</div><p>{{ webGPU ? 'WebGPU detected. ' : 'WebGPU not detected. ' }}No browser model has been integrated or tested. GPU support alone does not establish model compatibility. No model weights are downloaded.</p>
+    <h3>LANGUAGE MODULE</h3><div class="settings-status">OFFLINE INTERPRETER: READY</div><p>No account, installation, or AI download required.</p><p>Understands the authored investigation topics and common question variations. It does not support arbitrary conversation.</p><div class="settings-status">BROWSER AI: UNAVAILABLE</div><p>{{ webGPU ? 'WebGPU detected. ' : 'WebGPU not detected. ' }}No browser model has been integrated or tested. GPU support alone does not establish model compatibility. No model weights are downloaded.</p>
     <h3>OPTIONAL BROWSER INSTALLATION</h3><p>{{ installMessage() }}</p>@if (installPrompt()) { <button class="primary-button" (click)="install()">INSTALL NERVE ENDING</button> }<p class="muted">{{ cached() ? 'Production app shell is controlled by the offline service worker. A completed first cache is required for offline use.' : 'Offline app-shell caching is enabled in production on HTTPS or localhost after a first successful load. It is disabled in development.' }}</p>
     @if (session.developerMode) {
       <details class="developer-settings"><summary>DEVELOPER / INTENT CLASSIFIER</summary><p>Ollama is a separate local daemon. Public builds omit these controls. Queries fail back to the offline interpreter.</p><label for="ollama-endpoint">LOOPBACK ENDPOINT</label><input #endpoint id="ollama-endpoint" value="http://localhost:11434"><label for="ollama-model">INSTALLED MODEL NAME</label><input #model id="ollama-model" placeholder="Your installed model ID"><div class="button-row"><button class="text-button" (click)="setProvider(endpoint.value, model.value)">USE OLLAMA</button><button class="text-button" (click)="fallback()">USE OFFLINE</button></div><p role="status">{{ developerStatus() }}</p><pre>QUERIES: {{ metricSummary().count }}

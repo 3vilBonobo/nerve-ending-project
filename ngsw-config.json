@@ -3,6 +3,6 @@
   "index": "/index.html",
   "assetGroups": [{
     "name": "meridian-app-shell", "installMode": "prefetch",
-    "resources": { "files": ["/index.html", "/*.css", "/*.js", "/manifest.webmanifest", "/icons/**"] }
+    "resources": { "files": ["/index.html", "/*.css", "/*.js", "/manifest.webmanifest", "/icons/**", "/fonts/**"] }
   }]
 }

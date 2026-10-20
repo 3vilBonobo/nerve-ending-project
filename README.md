@@ -32,12 +32,12 @@ Production preview: `http://127.0.0.1:4173/`. Deployable files: **`dist/client/`
 
 ## Controls
 
-- Start immediately with **START SESSION**, and skip the connection sequence if desired.
+- Start immediately with **Start session** in the simple connection dialog, and skip the connection sequence if desired. Returning players see **Resume session**.
 - Type `HELP`, `STATUS`, `DIR`, `CD`, `OPEN`, `SEARCH`, `CLEAR`, or `RECOVER ARCHIVE 006`.
 - Ask questions such as **“Why is service six still running?”** or **“Where is its archive?”**.
 - Press Enter to submit and Up/Down for input history. Records and file paths are clickable.
-- Restore or minimize the terminal to expose desktop folders. On phones, use **TERMINAL / FILES / DOCUMENTS** tabs. Open-record tabs switch between documents.
-- **DISPLAY & SETTINGS** controls CRT effects and font size. Motion follows the device preference.
+- Restore or minimize the terminal to expose desktop folders. On phones, use **TERMINAL / FILES / RECORDS** tabs. Open-record tabs switch between documents.
+- **Settings...** on the opening screen, or **DISPLAY & SETTINGS** in a session, controls CRT effects and font size. Motion follows the device preference.
 - After recovery, read the fragment and select its **END OF PROTOTYPE / SESSION REPORT** control. Review the records or restart.
 
 Progress, record windows, and display settings save in this browser. Restricted or full browser storage produces a warning and the game continues in memory. `CLEAR` only clears scrollback. **NEW SESSION → RESTART INVESTIGATION** clears this game's save after confirmation. It also restores display defaults. The save key is `nerve-ending.save`.
@@ -66,6 +66,10 @@ There is no backend directory because this slice has no backend implementation. 
 **Offline interpreter: implemented and tested. Browser-model runtime: not implemented.** Settings truthfully report that no browser AI model is available. A provider interface and unavailable adapter are ready for a future implementation. No weight downloads or third-party scripts occur during public play.
 
 A development-only Ollama comparison adapter sends classifications to an explicitly selected loopback daemon. No daemon or model was available for end-to-end verification. Public production builds hide its settings. See [AI experiments](docs/AI_EXPERIMENTS.md).
+
+## Visual references
+
+The outer client resembles an early-2000s connection utility. The retained system uses larger DEC-inspired terminal text, line borders, a thick underscore cursor, and optional phosphor softness. VT323 is served locally and cached for offline play; its SIL Open Font License is included in `public/fonts/OFL.txt`. There are no runtime font-CDN requests. See [period references and design choices](docs/VISUAL_REFERENCES.md).
 
 ## Guides
 
