@@ -3,7 +3,7 @@ import { ArchiveFile, EvidenceId, GameState, Interpretation, QueryIntent, Termin
 import { classify } from '../interpretation/fallback';
 import { parseCommand, resolvePath } from './commands';
 
-export const OPENING = ['MERIDIAN SYSTEMS — REMOTE INFORMATION SERVICES', 'REVISION 3.14', '', 'SESSION ESTABLISHED', 'ACCESS: EXTERNAL/LIMITED', 'ARCHIVE SERVICES AVAILABLE', '', 'Type HELP for commands. Ordinary questions are supported.'];
+export const OPENING = ['MERIDIAN SYSTEMS — REMOTE INFORMATION SERVICES', 'REVISION 3.14', '', 'CONNECTION READY', 'ACCESS: EXTERNAL / LIMITED', 'COMPANY ARCHIVE: AVAILABLE', '', 'Type HELP for commands, or ask a question.', 'Start with STATUS to see which services are running.'];
 export const output = (lines: string[], fileIds: string[] = [], code: TerminalOutput['code'] = 'ok', truth: TerminalOutput['truth'] = 'system'): TerminalOutput => ({
   lines, code, truth, links: fileIds.flatMap(id => { const file = fileById(id); return file ? [{ fileId: id, label: file.path }] : []; }),
 });
@@ -27,7 +27,7 @@ function discover(state: GameState, evidence: readonly EvidenceId[]): GameState 
 }
 export function inspectFile(state: GameState, fileId: string): Transition {
   const file = fileById(fileId);
-  if (!file || (file.locked && !state.archive006Recovered)) return { state, output: output(['FILE NOT FOUND IN ACCESSIBLE INDEX.', 'Use DIR or SEARCH to locate an indexed record.'], [], 'denied') };
+  if (!file || (file.locked && !state.archive006Recovered)) return { state, output: output(['FILE NOT FOUND.', 'Use DIR to list files, or SEARCH <term> to find a record.'], [], 'denied') };
   const next = discover({
     ...state, lastFileId: file.id,
     lastTopic: file.evidence.length ? 'service-006' : state.lastTopic,
@@ -39,21 +39,21 @@ export function inspectFile(state: GameState, fileId: string): Transition {
 export function recoveryMissing(state: GameState): string[] {
   const found = new Set(state.discoveredEvidenceIds);
   const missing: string[] = [];
-  if (!found.has('EV_SERVICE_ACTIVE')) missing.push('Operational activity unverified. Run STATUS or inspect the service register.');
-  if (!found.has('EV_RETIREMENT_APPROVED')) missing.push('Retirement approval unverified. Inspect the service register or administrative authorization.');
-  if (!found.has('EV_TRANSFER_MISSING')) missing.push('Batch prefix and transfer discrepancy unverified. Inspect the 2001 transfer ledger.');
-  if (!found.has('EV_REPAIR_REFERENCE')) missing.push('Independent destination slot unverified. Inspect the index repair notes.');
+  if (!found.has('EV_SERVICE_ACTIVE')) missing.push('Check if 006 is running: use STATUS or read the service register.');
+  if (!found.has('EV_RETIREMENT_APPROVED')) missing.push('Check retirement approval: read the service register or approval record.');
+  if (!found.has('EV_TRANSFER_MISSING')) missing.push('Find the batch code: read the 2001 transfer ledger.');
+  if (!found.has('EV_REPAIR_REFERENCE')) missing.push('Find the storage slot: read the index repair notes.');
   return missing;
 }
 export function recover(state: GameState): Transition {
-  if (state.archive006Recovered) return { state, output: output(['ARCHIVE 006 ALREADY RESTORED. No changes made.', 'The retained fragment remains available.'], ['fragment'], 'notice') };
+  if (state.archive006Recovered) return { state, output: output(['ARCHIVE 006: ALREADY RESTORED.', 'No changes made. The recovered file is ready to read.'], ['fragment'], 'notice') };
   const missing = recoveryMissing(state);
-  if (missing.length) return { state, output: output(['RECOVERY HELD / CORROBORATION INCOMPLETE', ...missing], ['recovery-help'], 'denied') };
+  if (missing.length) return { state, output: output(['RECOVERY BLOCKED / CHECKS MISSING', ...missing], ['recovery-help'], 'denied') };
   const next: GameState = {
     ...state, archive006Recovered: true,
     completedActions: [...new Set([...state.completedActions, 'recover-006', 'restore-legacy-references'])],
   };
-  return { state: next, recovered: true, output: output(['ROUTING REFERENCE RECONSTRUCTED: MX-91/006-R', 'INDEPENDENT SOURCES VERIFIED / RETIREMENT APPROVAL PRESENT', '', 'ARCHIVE RECORD RESTORED', 'INDEX RECONCILIATION PARTIAL', '', 'A retained fragment is now available. Open it to inspect the original receipt.'], ['fragment']) };
+  return { state: next, recovered: true, output: output(['STORAGE REFERENCE: MX-91/006-R', 'SOURCE CHECKS: PASSED / RETIREMENT APPROVED', '', 'ARCHIVE RECORD: RESTORED', 'FILE LIST: PARTLY REPAIRED', 'SERVICE 006: STILL RUNNING', '', 'Open the recovered file below to read the transfer receipt.'], ['fragment']) };
 }
 function search(state: GameState, term: string): TerminalOutput {
   if (!term.trim()) return output(['Syntax: SEARCH <term>'], [], 'error');
@@ -63,33 +63,33 @@ function search(state: GameState, term: string): TerminalOutput {
     const line = file.body.split('\n').find(text => text.toUpperCase().includes(needle));
     return `${file.path}\n  ${line?.trim() ?? file.title}`;
   });
-  return output([`INDEX SEARCH: ${term} / ${matches.length} RECORD(S)`, 'Open a record to verify its contents.', ...excerpts], matches.map(file => file.id));
+  return output([`SEARCH: ${term} / ${matches.length} RECORD(S) FOUND`, 'Open a file below to read the full record.', ...excerpts], matches.map(file => file.id));
 }
 function answer(state: GameState, interpretation: Interpretation): Transition {
   let next = { ...state };
   const respond = (lines: string[], files: string[] = [], evidence: EvidenceId[] = []): Transition => ({ state: discover(next, evidence), output: output(lines, files, 'ok', 'interpretation') });
-  if (interpretation.needsClarification) return { state, output: output(['REFERENCE UNCLEAR. Are you asking about service 006?', 'Specify a service, document, or archive operation. Try: "Why is service 006 active?"'], [], 'notice') };
+  if (interpretation.needsClarification) return { state, output: output(['SUBJECT UNCLEAR.', 'Which service or record do you mean?', 'Try: "Why is service 006 still running?"'], [], 'notice') };
   let intent: QueryIntent = interpretation.intent;
   if (intent === 'ask_clarification') {
-    if (!state.lastIntent) return respond(['No previous indexed answer. Specify a service or record.']);
+    if (!state.lastIntent) return respond(['NO PREVIOUS ANSWER.', 'Name the service or record you want to ask about.']);
     intent = state.lastIntent;
   }
   if (interpretation.entityId === 'service-006' || intent.startsWith('ask_') && !['ask_company', 'ask_identity'].includes(intent)) next.lastTopic = 'service-006';
   if (intent !== 'unknown' && intent !== 'ask_clarification') next.lastIntent = intent;
   switch (intent) {
-    case 'ask_service_status': return respond(['SERVICE 006: ACTIVE.', 'RETIREMENT AUTHORIZATION: RECORDED / 2001-09-18.', 'ARCHIVE TRANSFER: NO CONFIRMED ENTRY.', 'Supervisor restart recorded without an attended session.', 'Operational status and approved disposition disagree. Consult the original records.'], ['register', 'status-log'], ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED']);
-    case 'ask_retirement': return respond(['SERVICE 006: RETIREMENT APPROVED / 2001-09-18.', 'An approval is a disposition request. It is not a completed transfer.', 'The operational supervisor still reports the service as active.'], ['register', 'authorization', 'ledger'], ['EV_RETIREMENT_APPROVED']);
-    case 'ask_transfer': return respond(['SERVICE 006: NO COMPLETED TRANSFER RECEIPT IN NORMAL INDEX.', 'The 2001 ledger retains a batch prefix. The independent repair notes retain the destination slot.', 'Inspect both original sources before attempting reconciliation.'], ['ledger', 'repair']);
-    case 'ask_archive_location': return respond(['SERVICE 006: NORMAL ARCHIVE ENTRY MISSING.', 'Retained storage may contain an unindexed payload.', 'The transfer ledger and index repair notes preserve different parts of its routing reference.'], ['ledger', 'repair']);
+    case 'ask_service_status': return respond(['SERVICE 006: ACTIVE.', 'RETIREMENT APPROVED: 2001-09-18.', 'TRANSFER RECEIPT: MISSING.', '006 was approved for shutdown, but it is still running.', 'The supervisor restarted it automatically. No operator was connected.', 'Check the register and status log below.'], ['register', 'status-log'], ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED']);
+    case 'ask_retirement': return respond(['SERVICE 006: RETIREMENT APPROVED / 2001-09-18.', 'Retirement means shutdown and transfer to storage.', 'Approval is recorded. Completed transfer is not.', '006 is still running. Check the transfer ledger.'], ['register', 'authorization', 'ledger'], ['EV_RETIREMENT_APPROVED']);
+    case 'ask_transfer': return respond(['SERVICE 006: TRANSFER RECEIPT MISSING FROM FILE LIST.', 'Read the 2001 transfer ledger for the batch code.', 'Read the index repair notes for the storage slot.', 'Both records are required before recovery.'], ['ledger', 'repair']);
+    case 'ask_archive_location': return respond(['SERVICE 006: ARCHIVE ENTRY MISSING.', 'The stored files may still exist, even if the file list is damaged.', 'The transfer ledger and index repair notes each hold part of the storage reference.', 'Read both records below.'], ['ledger', 'repair']);
     case 'ask_recovery_process': return respond(state.unlockedCapabilities.includes('CAP_ARCHIVE_RECOVERY')
-      ? ['CORROBORATION COMPLETE.', 'ROUTING REFERENCE: MX-91/006-R.', 'To reconcile the retained entry, enter RECOVER ARCHIVE 006.', 'Recovery does not terminate service 006.']
-      : ['ARCHIVE RECOVERY REQUIRES INDEPENDENT CORROBORATION.', ...recoveryMissing(state), 'When verified, enter RECOVER ARCHIVE 006. The reference is assembled automatically.'], ['recovery-help', 'ledger', 'repair']);
-    case 'ask_authorization': return respond(['RETIREMENT AUTHORIZATION ENTRY PRESENT / 2001-09-18.', 'SIGNATORY FIELD: PARTIALLY UNREADABLE.', 'No full signatory can be established from this transcription.'], ['authorization']);
-    case 'ask_company': return respond(['MERIDIAN SYSTEMS / BIOMEDICAL MONITORING AND INFORMATION MANAGEMENT.', 'This remote mirror provides retained corporate and operational records.', 'Commercial inquiries are no longer processed.'], ['company', 'readme']);
-    case 'ask_identity': return respond(['MERIDIAN SYSTEMS / REMOTE INFORMATION SERVICES.', 'REVISION 3.14 / EXTERNAL-LIMITED SESSION.', 'Indexed query interface. No attended operator is connected.'], ['readme']);
+      ? ['RECOVERY CHECKS: PASSED.', 'STORAGE REFERENCE: MX-91/006-R.', 'Enter RECOVER ARCHIVE 006 to restore the missing entry.', 'This makes the file readable. It does not stop service 006.']
+      : ['RECOVERY CHECKS: INCOMPLETE.', ...recoveryMissing(state), 'After these checks, enter RECOVER ARCHIVE 006.', 'The utility combines the reference parts for you.'], ['recovery-help', 'ledger', 'repair']);
+    case 'ask_authorization': return respond(['RETIREMENT APPROVED: 2001-09-18.', 'SIGNED BY: PARTLY UNREADABLE.', 'The damaged approval record does not show the full code.', 'Open the record below to check it.'], ['authorization']);
+    case 'ask_company': return respond(['MERIDIAN SYSTEMS / COMPANY RECORDS.', 'Manufacturer of medical monitoring and information equipment.', 'This connection provides company and service records.', 'Sales inquiries are no longer handled here.'], ['company', 'readme']);
+    case 'ask_identity': return respond(['MERIDIAN SYSTEMS / REMOTE INFORMATION SERVICES.', 'REVISION 3.14 / ACCESS: EXTERNAL-LIMITED.', 'Automated records terminal. No human operator is connected.'], ['readme']);
     case 'request_file': return inspectFile(next, interpretation.fileId ?? '');
     case 'request_search': return { state: next, output: search(next, interpretation.searchTerm ?? '') };
-    default: return { state, output: output(['NO INDEXED INTERPRETATION.', 'Ask about service 006, retirement, transfers, or archive recovery.', 'Use SEARCH <term> for literal records, or HELP for command syntax.'], [], 'notice') };
+    default: return { state, output: output(['QUESTION NOT RECOGNIZED.', 'Ask about service 006, retirement, transfers, or archive recovery.', 'Try: "Why is service 006 still running?"', 'Use SEARCH <term> to find records, or HELP for commands.'], [], 'notice') };
   }
 }
 
@@ -105,23 +105,24 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
     switch (command.name) {
       case 'HELP':
         result = argument.toUpperCase() === 'RECOVER' ? inspectFile(state, 'recovery-help') : done(output([
-          'MERIDIAN REMOTE CLIENT / COMMAND REFERENCE', '',
-          'HELP [RECOVER]           Command / recovery reference',
-          'DIR [path] / LS          List accessible records',
-          'CD <path>               Change directory; .. returns up',
-          'OPEN <file or path>     Inspect an original record',
-          'SEARCH <term>           Search the accessible index',
-          'STATUS                  Operational service snapshot',
-          'CLEAR / CLS             Clear scrollback; keep progress',
-          'RECOVER ARCHIVE 006      Reconcile a verified archive', '',
-          'Natural-language questions are supported.',
+          'MERIDIAN REMOTE CLIENT / COMMANDS', '',
+          'STATUS                  Show which services are running',
+          'DIR [path] / LS          List files and folders',
+          'CD <path>               Change folder; CD .. goes up',
+          'OPEN <file or path>     Read a file',
+          'SEARCH <term>           Find records containing a word',
+          'CLEAR / CLS             Clear terminal text; keep progress',
+          'HELP RECOVER            Show the recovery steps',
+          'RECOVER ARCHIVE 006      Restore the missing archive entry', '',
+          '<...> means enter a value. [...] means optional.',
+          'You can also ask questions.',
           'Try: "Why is service six still running?"',
-          'Use arrow keys for input history. File paths are clickable.',
+          'Use Up/Down to recall commands. Select a file link to read it.',
         ], ['readme']));
         break;
       case 'DIR': {
         const directory = resolvePath(argument || '.', state.currentDirectory);
-        if (!DIRECTORIES.includes(directory as typeof DIRECTORIES[number])) { result = done(output([`DIRECTORY NOT FOUND: ${directory}`, 'Try DIR / to list root directories.'], [], 'error')); break; }
+        if (!DIRECTORIES.includes(directory as typeof DIRECTORIES[number])) { result = done(output([`DIRECTORY NOT FOUND: ${directory}`, 'Use DIR / to list the main folders.'], [], 'error')); break; }
         const dirs = DIRECTORIES.filter(path => path !== '/' && path.slice(0, path.lastIndexOf('/')) === (directory === '/' ? '' : directory));
         const files = accessibleFiles(state).filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === directory);
         result = done(output([`DIRECTORY OF ${directory}`, ...dirs.map(path => ` <DIR>  ${path.split('/').pop()}`), ...files.map(file => ` ${file.modified}  ${file.path.split('/').pop()}`), `${dirs.length} DIRECTORY(S) / ${files.length} FILE(S)`], files.map(file => file.id)));
@@ -129,24 +130,24 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
       }
       case 'CD': {
         const path = resolvePath(argument || '/', state.currentDirectory);
-        result = DIRECTORIES.includes(path as typeof DIRECTORIES[number]) ? done(output([`DIRECTORY: ${path}`]), { ...state, currentDirectory: path }) : done(output([`DIRECTORY NOT FOUND: ${path}`, 'Use DIR / to locate an accessible directory.'], [], 'error'));
+        result = DIRECTORIES.includes(path as typeof DIRECTORIES[number]) ? done(output([`DIRECTORY: ${path}`]), { ...state, currentDirectory: path }) : done(output([`DIRECTORY NOT FOUND: ${path}`, 'Use DIR / to list the main folders.'], [], 'error'));
         break;
       }
       case 'OPEN': {
         const path = resolvePath(argument, state.currentDirectory);
         const file = accessibleFiles(state).find(item => item.path === path);
-        result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND IN ACCESSIBLE INDEX: ${path}` : 'Syntax: OPEN <file or path>', 'Use DIR or SEARCH. Example: OPEN /OPERATIONS/SERVICE_REGISTER.DAT'], [], 'error'));
+        result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${path}` : 'Syntax: OPEN <file or path>', 'Use DIR to list files, or SEARCH <term> to find one.', 'Example: OPEN /OPERATIONS/SERVICE_REGISTER.DAT'], [], 'error'));
         break;
       }
       case 'SEARCH': result = done(search(state, argument)); break;
-      case 'STATUS': result = done(output(['MERIDIAN REMOTE INFORMATION SERVICES / REV 3.14', `SESSION: ${state.sessionId} / EXTERNAL/LIMITED`, '', 'SERVICE 004: RETIRED / OFFLINE', 'SERVICE 005: RETIRED / OFFLINE', 'SERVICE 006: ACTIVE', 'SERVICE 007: ACTIVE / REMOTE MIRROR', `ARCHIVE INDEX: ${state.archive006Recovered ? 'PARTIALLY RECONCILED' : 'DEGRADED'}`, 'RETIREMENT DISPOSITION: CONSULT ORIGINAL REGISTER.'], ['register', 'status-log']), discover({ ...state, lastTopic: 'service-006', lastIntent: 'ask_service_status' }, ['EV_SERVICE_ACTIVE'])); break;
-      case 'CLEAR': result = { state, output: output(['SCROLLBACK CLEARED. Investigation progress retained.']), clear: true }; break;
-      case 'RECOVER': result = argument.toUpperCase() === 'ARCHIVE 006' ? recover(state) : done(output(['Syntax: RECOVER ARCHIVE 006', 'Use HELP RECOVER for corroboration requirements.'], [], 'error')); break;
-      case 'DIAG': result = done(output(['LOCAL SUPERVISOR: RESPONDING', 'REMOTE MIRROR: READ-ONLY', 'INDEX RECONCILIATION: EXTERNAL PERMITTED', 'No attended maintenance channel.'], ['status-log'])); break;
+      case 'STATUS': result = done(output(['MERIDIAN REMOTE INFORMATION SERVICES / REV 3.14', `SESSION: ${state.sessionId} / EXTERNAL/LIMITED`, '', 'SERVICE 004: RETIRED / OFFLINE', 'SERVICE 005: RETIRED / OFFLINE', 'SERVICE 006: ACTIVE', 'SERVICE 007: ACTIVE / REMOTE RECORDS', `ARCHIVE FILE LIST: ${state.archive006Recovered ? 'PARTLY REPAIRED' : 'DAMAGED'}`, 'Open the service register below to check retirement approvals.'], ['register', 'status-log']), discover({ ...state, lastTopic: 'service-006', lastIntent: 'ask_service_status' }, ['EV_SERVICE_ACTIVE'])); break;
+      case 'CLEAR': result = { state, output: output(['TERMINAL TEXT CLEARED. Progress saved.']), clear: true }; break;
+      case 'RECOVER': result = argument.toUpperCase() === 'ARCHIVE 006' ? recover(state) : done(output(['Syntax: RECOVER ARCHIVE 006', 'Use HELP RECOVER for the required checks.'], [], 'error')); break;
+      case 'DIAG': result = done(output(['LOCAL SUPERVISOR: RESPONDING', 'REMOTE RECORDS: READ-ONLY', 'ARCHIVE RECOVERY: EXTERNAL ACCESS ALLOWED', 'No maintenance operator is connected.'], ['status-log'])); break;
     }
   } else {
     const languageLike = /[?]|\b(why|what|where|who|when|how|is|was|did|can|could|show|find|thought|explain|clarify|tell|its|it|that|wheres|wasnt)\b/i.test(input);
-    result = languageLike ? answer(state, interpretation ?? classify(input, state)) : done(output(['UNRECOGNIZED COMMAND. Type HELP for command syntax.', 'For records use SEARCH <term>, or ask a full question.'], [], 'error'));
+    result = languageLike ? answer(state, interpretation ?? classify(input, state)) : done(output(['COMMAND NOT RECOGNIZED. Type HELP for commands.', 'Use SEARCH <term> to find records, or ask a full question.'], [], 'error'));
   }
   const history = result.clear ? [] : result.state.terminalHistory;
   return { ...result, state: { ...result.state, terminalHistory: [...history, { input, ...result.output }].slice(-80) } };

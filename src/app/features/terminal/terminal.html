@@ -19,7 +19,7 @@
         }
       </article>
     }
-    @if (session.busy()) { <p class="processing" role="status">PROCESSING INDEXED QUERY<span>...</span></p> }
+    @if (session.busy()) { <p class="processing" role="status">CHECKING RECORDS<span>...</span></p> }
   </div>
   <form class="command-row" (submit)="$event.preventDefault(); submit()">
     <label for="terminal-command">SYS<span aria-hidden="true">&gt;</span></label>
@@ -29,6 +29,6 @@
     </div>
     <button type="submit" [disabled]="session.busy() || !input.trim()" aria-label="Submit command">ENTER ↵</button>
   </form>
-  <footer class="terminal-footer"><span>HELP <span class="muted">command reference</span></span><span>↑ ↓ <span class="muted">history</span></span></footer>
+  <footer class="terminal-footer"><span>HELP <span class="muted">commands</span></span><span>↑ ↓ <span class="muted">previous commands</span></span></footer>
   <span class="sr-only" aria-live="polite">{{ session.busy() ? 'Processing query.' : 'Ready for input. ' + (session.state().terminalHistory.at(-1)?.lines?.[0] ?? '') }}</span>
 </section>

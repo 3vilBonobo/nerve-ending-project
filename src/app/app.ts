@@ -19,7 +19,6 @@ export class App implements OnDestroy {
   readonly clock = signal('02:14:00');
   readonly online = signal(navigator.onLine);
   readonly cached = signal(false);
-  readonly webGPU = 'gpu' in navigator;
   readonly installPrompt = signal<InstallPromptEvent | null>(null);
   readonly installMessage = signal('Browser installation is optional. Use your browser menu if available.');
   readonly developerStatus = signal('Offline classifier selected.');
@@ -28,7 +27,7 @@ export class App implements OnDestroy {
     const rows = this.session.metrics();
     return { count: rows.length, fallback: rows.length ? Math.round(rows.filter(row => row.fallback).length / rows.length * 100) : 0, ms: rows.length ? Math.round(rows.reduce((sum, row) => sum + row.elapsedMs, 0) / rows.length) : 0 };
   });
-  readonly connectionLines = ['ESTABLISHING CONNECTION...', 'RESOLVING REMOTE MIRROR R-02', 'VERIFYING CLIENT REVISION 3.14', 'EXTERNAL ACCESS CERTIFICATE ACCEPTED', 'MOUNTING RETAINED RECORDS', 'SESSION ESTABLISHED'];
+  readonly connectionLines = ['CONNECTING...', 'REMOTE SYSTEM R-02 FOUND', 'CLIENT VERSION 3.14 CHECKED', 'EXTERNAL ACCESS ACCEPTED', 'LOADING COMPANY RECORDS', 'CONNECTION READY'];
   private connectionTimer?: ReturnType<typeof setInterval>;
   private readonly clockTimer: ReturnType<typeof setInterval>;
   private readonly installListener = (event: Event): void => { event.preventDefault(); this.installPrompt.set(event as InstallPromptEvent); };

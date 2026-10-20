@@ -22,7 +22,7 @@ describe('command and virtual filesystem contract', () => {
   });
   it('lists, navigates and opens the same authored files', () => {
     let state = newGame();
-    expect(runInput(state, 'help').output.lines.join('\n')).toContain('Natural-language');
+    expect(runInput(state, 'help').output.lines.join('\n')).toContain('You can also ask questions.');
     expect(runInput(state, 'DIR').output.lines.join('\n')).toContain('OPERATIONS');
     expect(runInput(state, 'DIR /ARCHIVE').output.links.some(link => link.fileId === 'ledger')).toBe(true);
     state = run(state, 'CD OPERATIONS'); expect(state.currentDirectory).toBe('/OPERATIONS');
@@ -70,7 +70,7 @@ describe('Act 01 evidence and consequences', () => {
     expect(result.output.code).toBe('denied'); expect(result.state.archive006Recovered).toBe(false);
     expect(result.output.lines.join(' ')).toMatch(/STATUS.*register.*ledger.*repair notes/);
     const partial = run(newGame(), 'OPEN /OPERATIONS/SERVICE_REGISTER.DAT');
-    expect(runInput(partial, 'RECOVER ARCHIVE 006').output.lines.join(' ')).not.toContain('Operational activity unverified');
+    expect(runInput(partial, 'RECOVER ARCHIVE 006').output.lines.join(' ')).not.toMatch(/Check if 006 is running|Check retirement approval/);
   });
   it('accepts all independent discovery orders and alternate approval evidence', () => {
     const sources = ['status-log', 'authorization', 'ledger', 'repair'];

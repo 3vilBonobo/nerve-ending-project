@@ -7,8 +7,8 @@ export const FILES: readonly ArchiveFile[] = [
     evidence: ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED'],
     body: `MERIDIAN SYSTEMS / OPERATIONS DIVISION
 SERVICE REGISTER                              REV 3.14
-Snapshot: 2003-11-06 02:10:00     Custodian: OPS/J. KELL
-Source: retained service registry / read-only mirror
+Recorded: 2003-11-06 02:10:00     Filed by: OPS/J. KELL
+Source: service register / read-only copy
 ------------------------------------------------------
 
 ID    DESCRIPTION                 OPERATIONAL STATE
@@ -26,16 +26,17 @@ ID    DESCRIPTION                 OPERATIONAL STATE
       STATE SOURCE: AUTOMATIC SERVICE SUPERVISOR
 007   RETIREMENT APPROVED: NOT APPLICABLE
 
-Registry approval does not alter operational state.
-A retirement closes only when a transfer receipt exists.
-Service 006 has no attached receipt.
+RETIREMENT = approved shutdown and transfer to storage.
+Approval alone does not stop a service.
+A transfer receipt is required to close the record.
+Service 006 is still running. Its receipt is missing.
 
 Cross-references:
 /ARCHIVE/TRANSFER_LEDGER_2001.LOG
 /ADMIN/RETIREMENT_AUTHORIZATIONS.TXT
 
 Operator note, 2003-11-05:
-Do not resolve a missing receipt by changing this table.
+Do not fix a missing receipt by changing this table.
 The table is a copy. The service is not.`,
   },
   {
@@ -47,21 +48,23 @@ Exported: 2003-11-06 02:12:18      Owner: OPS/AUTOMATIC
 ------------------------------------------------------
 
 2003-10-29 01:00:00  004 OFFLINE / 005 OFFLINE / 006 ACTIVE
-2003-10-30 01:00:00  006 ACTIVE / NO ATTENDED SESSION
+2003-10-30 01:00:00  006 ACTIVE / NO OPERATOR CONNECTED
 2003-11-02 03:14:07  006 STOP REQUEST / MAINTENANCE WINDOW
 2003-11-02 03:14:08  006 STOPPED
-2003-11-02 03:14:09  006 RESTART / LEGACY DEPENDENCY HOLD
+2003-11-02 03:14:09  006 RESTART / REQUIRED SYSTEM LINK
 2003-11-02 03:14:09  START REQUEST ORIGIN: LOCAL SUPERVISOR
 2003-11-02 03:14:10  OPERATOR FIELD: EMPTY
-2003-11-04 00:00:00  ARCHIVE INDEX: DEGRADED
-2003-11-06 02:10:00  006 ACTIVE / RETIREMENT FLAG PRESENT
+2003-11-04 00:00:00  ARCHIVE FILE LIST: DAMAGED
+2003-11-06 02:10:00  006 ACTIVE / RETIREMENT APPROVED
 
-No remote operator issued the restart.
-Dependency names are not retained in this mirror.
-The index fault predates this export; original onset unknown.
+The supervisor restarted 006 automatically.
+No operator was connected. A linked system still needs it.
+The name of that system is missing from this copy.
+The file list was already damaged when this log was copied.
+Date of damage: UNKNOWN.
 
 See /ARCHIVE/INDEX_REPAIR_NOTES.TXT.
-Journal ends. Automatic supervision continues.`,
+END OF LOG. Automatic supervision continues.`,
   },
   {
     id: 'ledger', path: '/ARCHIVE/TRANSFER_LEDGER_2001.LOG', title: 'Retirement transfer ledger', modified: '2001-09-19 08:30',
@@ -69,21 +72,21 @@ Journal ends. Automatic supervision continues.`,
     body: `MERIDIAN SYSTEMS / RECORDS & RETENTION
 RETIREMENT TRANSFER LEDGER / FISCAL 2001
 Export: 2001-09-19 08:30         Clerk: ARC/E. LIN
-Provenance: sequential spool 12 / unaltered
+Source: print spool 12 / unchanged
 ------------------------------------------------------
 
 APPROVAL     SERVICE   TRANSFER REF.    RECEIPT
 2001-08-03   004       RT-01-004        CLOSED / 08-04
 2001-08-03   005       RT-01-005        CLOSED / 08-04
-2001-09-18   006       [INDEX LOST]     --
+2001-09-18   006       [ENTRY LOST]     --
 
-September exceptions were routed outside the RT series.
-Routing prefix reserved for that batch: MX-91.
-The destination slot is recorded in index maintenance,
-not on this spool. Combine prefix and slot with a slash.
+Some September transfers used a separate batch code.
+BATCH CODE: MX-91.
+The storage slot is in INDEX_REPAIR_NOTES.TXT.
+The full reference uses both parts: BATCH/SLOT.
 
 There is no completed receipt for service 006.
-This absence is not a certificate of destruction.
+A missing receipt does not mean the files were deleted.
 
 2001-09-19 / E. LIN:
 I have left the line open. Please stop returning it as
@@ -97,25 +100,26 @@ Cross-reference: /ARCHIVE/INDEX_REPAIR_NOTES.TXT`,
     body: `MERIDIAN SYSTEMS / ARCHIVE MAINTENANCE
 INDEX REPAIR NOTES / INCIDENT IR-203
 Updated: 2003-11-05 16:42        Engineer: ARC/T. REED
-Provenance: maintenance notebook / signed export
+Source: maintenance notebook / signed copy
 ------------------------------------------------------
 
-The normal index omits a September 2001 transfer slot.
-Its payload is retained. Only the directory entry failed.
+The index is the archive's file list.
+One September 2001 transfer is missing from that list.
+The stored files still exist. Only the list entry is lost.
 
-Surviving destination mapping:
+STORAGE LOCATION:
 SERVICE 006 -> SLOT 006-R
-Batch prefix -> see TRANSFER_LEDGER_2001.LOG
-Reference format -> PREFIX/SLOT
+Batch code -> see TRANSFER_LEDGER_2001.LOG
+Full reference -> BATCH/SLOT
 
-Do not infer a routing prefix from the service number.
-Two independent sources are required for reconciliation.
+Do not guess the batch code from the service number.
+Read both records before running recovery.
 
-Recovery can rebuild the missing entry without stopping
-the service. The retirement approval must first be
-corroborated against the service register.
+Recovery restores the missing file-list entry.
+It does not stop the service.
+First check the service register for retirement approval.
 
-See /SYSTEM/ARCHIVE_RECOVERY.HLP for the operator syntax.
+See /SYSTEM/ARCHIVE_RECOVERY.HLP for the command.
 
 Additional observation:
 The index has been checking this empty slot every night.
@@ -127,7 +131,7 @@ It does not check the other retired services.`,
     body: `MERIDIAN SYSTEMS / ADMINISTRATIVE CONTROL
 RETIREMENT AUTHORIZATION / RA-2001-0918
 Filed: 2001-09-18 17:04        Department: ADM/RECORDS
-Provenance: damaged microform transcription
+Source: damaged microform / typed copy
 ------------------------------------------------------
 
 SERVICE: 006 / CONTINUITY SUPERVISION
@@ -135,69 +139,71 @@ DISPOSITION: RETIREMENT APPROVED
 EFFECTIVE DATE: 2001-09-18
 SIGNATORY CODE: 04[illegible]
 
-Approval permits transfer to retained storage.
-Destruction is not authorized by this document.
-Operational closure is conditional on a verified receipt.
+Retirement means shutdown and transfer to storage.
+This approval allows storage, not deletion.
+A verified transfer receipt is required before closure.
 
-External limited sessions may reconcile retained entries
-using the standard archive procedure once both routing
-sources and the registry discrepancy are verified.
+External users may recover a missing archive entry.
+First check the service's status and retirement approval.
+Then read the transfer ledger and index repair notes
+to confirm both parts of the storage reference.
 
-The full authorization field must be read from the
-retained payload. No second copy is held by this office.`,
+The full approval code is in the stored archive record.
+This office has no second copy.`,
   },
   {
     id: 'recovery-help', path: '/SYSTEM/ARCHIVE_RECOVERY.HLP', title: 'Archive recovery procedure', modified: '2003-10-21 09:00', evidence: [],
     body: `MERIDIAN SYSTEMS / REMOTE INFORMATION SERVICES
-ARCHIVE RECONCILIATION UTILITY / HELP 3.14
+ARCHIVE RECOVERY UTILITY / HELP 3.14
 Issued: 2003-10-21              Maintainer: SYS/RECORDS
 ------------------------------------------------------
 
 COMMAND: RECOVER ARCHIVE 006
 
-Rebuilds a retained archive entry from surviving sources.
-This procedure does not terminate the associated service.
+Restores a missing archive entry so its files can be read.
+This command does not stop the service.
 
-CORROBORATION REQUIRED
-1. Operational activity and approved retirement recorded.
-   Consult STATUS and the service register or approval.
-2. Missing transfer and batch prefix inspected.
-   Consult the 2001 transfer ledger.
-3. Destination slot inspected independently.
-   Consult the index repair notes.
+REQUIRED CHECKS
+1. Confirm that 006 is running and retirement was approved.
+   Run STATUS. Read SERVICE_REGISTER.DAT or the approval.
+2. Find the missing transfer and its batch code.
+   Read TRANSFER_LEDGER_2001.LOG.
+3. Find the storage slot in a separate record.
+   Read INDEX_REPAIR_NOTES.TXT.
 
-The utility joins the routing reference automatically.
-No password or additional access account is required.
-Questioning a record does not alter the original record.
+The utility combines the batch code and slot for you.
+No password or extra account is required.
+Reading or asking questions does not change the records.
 
-Recovery restores the retained payload and its original
-dependency references. Index reconciliation may remain
-partial. Do not repeat a successful recovery.`,
+Recovery makes the stored record and its system links
+readable again. Other file-list errors may remain.
+After recovery, open the restored file to read it.
+Running recovery again will not make further changes.`,
   },
   {
     id: 'fragment', path: '/ARCHIVE/RECOVERED_006.FRAG', title: 'Recovered transfer fragment', modified: '2001-09-18 23:59',
     evidence: ['EV_RECOVERED_FRAGMENT'], locked: true,
     body: `MERIDIAN SYSTEMS / RETAINED STORAGE
-RECOVERED PAYLOAD / MX-91/006-R
+RECOVERED RECORD / MX-91/006-R
 Original timestamp: 2001-09-18 23:59:41
-Provenance: retained block 006-R / partial checksum valid
+Source: storage block 006-R / data check partly passed
 ------------------------------------------------------
 
 SERVICE: 006
-DISPOSITION REQUESTED: RETIREMENT
-AUTHORIZATION IDENTIFIER: 0417 [PARTIAL]
-TRANSFER STATE: ACCEPTED / CLOSURE WITHHELD
+REQUEST: RETIREMENT
+APPROVAL CODE: 0417 [PARTIAL]
+TRANSFER: ACCEPTED / CLOSURE WITHHELD
 
-Closure reason:
-Preservation dependency has not released the service.
-Retirement approval does not supersede this dependency.
+SHUTDOWN ON HOLD:
+A linked preservation system still requires this service.
+Retirement approval does not override that requirement.
 
-LEGACY DEPENDENCY REFERENCES RESTORED:
-  COMMS/BRIDGE-02 : REGISTERED / LINK STATE UNRESOLVED
-  SUPERVISION/006 : RETAINED
+OLD SYSTEM LINKS RESTORED:
+  COMMS/BRIDGE-02 : REGISTERED / LINK STATUS UNKNOWN
+  SUPERVISION/006 : STILL HELD
 
-Last retained field:
-  RESPONSE EXPECTED FROM AUTHORIZATION 0417
+Last saved field:
+  WAITING FOR RESPONSE / APPROVAL 0417
   RESPONSE RECEIVED: --
   RETRY INTERVAL: UNCHANGED
 
@@ -212,21 +218,20 @@ EXTERNAL ACCESS NOTICE / REVISION 3.14
 2003-10-21                     SYS/INFORMATION SERVICES
 ------------------------------------------------------
 
-This client exposes a retained corporate records mirror.
-Available directories: OPERATIONS, ARCHIVE, ADMIN, SYSTEM.
-Records retain their original dates and departmental codes.
+This terminal provides copies of company records.
+Folders: OPERATIONS, ARCHIVE, ADMIN, SYSTEM.
+Original dates and department codes are unchanged.
 
-Type HELP for command syntax, or ask an ordinary question.
+Type HELP for commands, or ask a question.
 For example: "What is Meridian Systems?"
-Questions return indexed references, not new documents.
+Replies use the available records. Open a file to check it.
 
-Operational status is supplied by the local supervisor.
-The supervisor is still running. Some records are older.
-An inconsistency between them should be investigated
-through independent sources.
+STATUS reports what the supervisor sees running now.
+The records may be older. If they disagree with STATUS,
+check other records to find out why.
 
-Changes to original records are not permitted.
-Archive reconciliation is the sole external write action.`,
+Original records cannot be edited.
+RECOVER can restore a missing archive entry.`,
   },
   {
     id: 'company', path: '/ADMIN/COMPANY_PROFILE.TXT', title: 'Company profile', modified: '2000-02-14 10:00', evidence: [],
@@ -235,16 +240,16 @@ APPROVED EXTERNAL PROFILE / 2000-02-14
 Issued by: ADM/COMMUNICATIONS
 ------------------------------------------------------
 
-Meridian Systems develops biomedical monitoring and
-information management equipment for institutional use.
-The company maintains long-term technical records for
-discontinued instruments and associated support services.
+Meridian Systems makes medical monitoring equipment
+and systems for storing and managing information.
+It keeps technical records for older equipment and
+the services that support it.
 
-This mirror is maintained for records access.
-Commercial inquiries are no longer processed here.
+This connection is for reading records.
+Sales inquiries are no longer handled here.
 
-Office hours field removed by revision 3.12.
-No replacement contact has been supplied.`,
+Office hours removed in revision 3.12.
+No new contact listed.`,
   },
   {
     id: 'maintenance', path: '/OPERATIONS/SHIFT_HANDOVER.TXT', title: 'Shift handover', modified: '2003-11-05 18:00', evidence: [],
@@ -254,13 +259,13 @@ No replacement contact has been supplied.`,
 
 Printer tray 2 is empty. Do not submit another test page.
 004 and 005 remain offline. Their receipts are filed.
-Remote mirror 007 is responding within tolerance.
+Remote records service 007 is responding normally.
 
-The 006 indication has been carried forward again.
+The 006 warning is still on the list.
 I was told it was an old lamp fault. It is a software field.
 
 Please attach a transfer receipt before closing the item.
-Relief acknowledgment: NOT ENTERED.`,
+Next shift confirmation: NOT ENTERED.`,
   },
   {
     id: 'retention', path: '/ARCHIVE/RETENTION_POLICY.TXT', title: 'Retention policy', modified: '1998-04-03 12:00', evidence: [],
@@ -269,14 +274,14 @@ RETENTION POLICY / RP-98-04
 1998-04-03                     ARC/POLICY OFFICE
 ------------------------------------------------------
 
-Operational journals: retain five years.
-Retirement approvals: retain indefinitely.
-Transfer receipts: retain with original service record.
-Continuity records: retain while dependencies remain open.
+Service logs: keep five years.
+Retirement approvals: keep permanently.
+Transfer receipts: keep with the original service record.
+Continuity records: keep while linked systems need them.
 
-Missing index entries do not establish missing payloads.
-Damaged entries must be reconstructed from independent
-sources. A copy of a source is not a second source.
+Missing from the file list does not mean deleted.
+Rebuild damaged entries using separate source records.
+Two copies of the same record count as one source.
 
 Never mark an absent receipt as a completed transfer.`,
   },

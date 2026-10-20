@@ -36,7 +36,7 @@
   }
 
   @if (stage() === 'desktop') {
-    <div class="desktop-navigation"><span>MERIDIAN REMOTE DESKTOP <span class="muted">/ RETAINED RECORDS</span></span><span class="muted">2003-11-06 <span class="clock">{{ clock() }}</span></span></div>
+    <div class="desktop-navigation"><span>MERIDIAN REMOTE DESKTOP <span class="muted">/ COMPANY RECORDS</span></span><span class="muted">2003-11-06 <span class="clock">{{ clock() }}</span></span></div>
     <nav class="mobile-tabs" aria-label="Workspace view"><button [class.selected]="mobileTab() === 'terminal'" (click)="terminal()">TERMINAL</button><button [class.selected]="mobileTab() === 'files'" (click)="folder(session.state().currentDirectory)">FILES</button><button [class.selected]="mobileTab() === 'documents'" (click)="mobileTab.set('documents')">RECORDS ({{ documents().length }})</button></nav>
     <section class="desktop" [class.terminal-maximized]="session.state().ui.terminalMode === 'maximized'" [class.tab-terminal]="mobileTab() === 'terminal'" [class.tab-files]="mobileTab() === 'files'" [class.tab-documents]="mobileTab() === 'documents'" aria-label="Remote desktop">
       <div class="desktop-watermark" aria-hidden="true"><span class="meridian-mark"></span><div>MERIDIAN<br><small>RETAINED INFORMATION SYSTEMS</small></div></div>
@@ -46,23 +46,23 @@
       <div class="desktop-note"><span>REMOTE MIRROR R-02</span><span>RECORDS RETAINED<br>SUPERVISION CONTINUES</span></div>
       @if (session.state().ui.terminalMode !== 'minimized') { <ne-terminal class="terminal-window" [class.restored]="session.state().ui.terminalMode === 'restored'" (fileOpened)="openFile($event)" /> }
       @if (explorer() || mobileTab() === 'files') {
-        <section class="explorer-window"><header class="window-titlebar"><div class="window-title"><span class="folder-icon" aria-hidden="true"></span> FILE INDEX</div><div class="window-controls"><button (click)="explorer.set(false); mobileTab.set('terminal')" aria-label="Close file index">×</button></div></header><ne-file-browser (opened)="openFile($event)" /></section>
+        <section class="explorer-window"><header class="window-titlebar"><div class="window-title"><span class="folder-icon" aria-hidden="true"></span> FILES</div><div class="window-controls"><button (click)="explorer.set(false); mobileTab.set('terminal')" aria-label="Close file browser">×</button></div></header><ne-file-browser (opened)="openFile($event)" /></section>
       }
       <div class="documents-area">
         @for (file of documents(); track file.id; let index = $index) {
           <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="showEnding.set(true)" />
         }
-        @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Open an indexed file from the terminal or file browser.</small></div> }
+        @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Select a file in the terminal or file browser to read it.</small></div> }
         @if (documents().length > 1) { <nav class="document-tabs" aria-label="Open records">@for (file of documents(); track file.id) { <button (click)="session.focusFile(file.id)" [class.selected]="file.id === documents().at(-1)?.id">{{ file.title }}</button> }</nav> }
       </div>
     </section>
-    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILE INDEX</button>@if (session.state().archive006Recovered) { <button (click)="openFile('fragment')">↳ RECOVERED 006</button> }<span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
+    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILES</button>@if (session.state().archive006Recovered) { <button (click)="openFile('fragment')">↳ RECOVERED 006</button> }<span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
   }
 
   @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
 
   @if (showEnding() && stage() === 'desktop') {
-    <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">ARCHIVE RECORD RESTORED</div><h2>INDEX RECONCILIATION PARTIAL.</h2><p>End of prototype. This session may be resumed.<br>The original records remain available for review.</p><div><button class="primary-button" (click)="review()">REVIEW RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">RESTART INVESTIGATION</button></div></section>
+    <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">ARCHIVE RECORD RESTORED</div><h2>FILE LIST: PARTLY REPAIRED.</h2><p>End of prototype. Service 006 is still running.<br>You can resume this session and review the records.</p><div><button class="primary-button" (click)="review()">REVIEW RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">RESTART INVESTIGATION</button></div></section>
   }
 </main>
 
@@ -73,8 +73,8 @@
     <label class="check-label"><input #crtToggle type="checkbox" [checked]="session.state().ui.crtEnabled" (change)="session.display(crtToggle.checked, session.state().ui.fontScale)"> CRT scanlines & phosphor glow</label>
     <p class="muted">Motion effects follow your device’s reduced-motion preference.</p>
     <label class="range-label" for="font-scale">TEXT SIZE <span>{{ (session.state().ui.fontScale * 100).toFixed(0) }}%</span></label><input #fontScale id="font-scale" type="range" min="0.9" max="1.25" step="0.05" [value]="session.state().ui.fontScale" (input)="session.display(session.state().ui.crtEnabled, +fontScale.value)">
-    <h3>LANGUAGE MODULE</h3><div class="settings-status">OFFLINE INTERPRETER: READY</div><p>No account, installation, or AI download required.</p><p>Understands the authored investigation topics and common question variations. It does not support arbitrary conversation.</p><div class="settings-status">BROWSER AI: UNAVAILABLE</div><p>{{ webGPU ? 'WebGPU detected. ' : 'WebGPU not detected. ' }}No browser model has been integrated or tested. GPU support alone does not establish model compatibility. No model weights are downloaded.</p>
-    <h3>OPTIONAL BROWSER INSTALLATION</h3><p>{{ installMessage() }}</p>@if (installPrompt()) { <button class="primary-button" (click)="install()">INSTALL NERVE ENDING</button> }<p class="muted">{{ cached() ? 'Production app shell is controlled by the offline service worker. A completed first cache is required for offline use.' : 'Offline app-shell caching is enabled in production on HTTPS or localhost after a first successful load. It is disabled in development.' }}</p>
+    <h3>QUESTIONS</h3><div class="settings-status">OFFLINE PROCESSOR: READY</div><p>Understands questions about the investigation records. No account or AI download required.</p><div class="settings-status">BROWSER AI: UNAVAILABLE</div><p>This build does not include a browser AI model.</p>
+    <h3>OPTIONAL INSTALLATION</h3><p>{{ installMessage() }}</p>@if (installPrompt()) { <button class="primary-button" (click)="install()">INSTALL NERVE ENDING</button> }<p class="muted">{{ cached() ? 'Offline support is active. Offline play requires a completed first download.' : 'The published game supports offline play after a full first load.' }}</p>
     @if (session.developerMode) {
       <details class="developer-settings"><summary>DEVELOPER / INTENT CLASSIFIER</summary><p>Ollama is a separate local daemon. Public builds omit these controls. Queries fail back to the offline interpreter.</p><label for="ollama-endpoint">LOOPBACK ENDPOINT</label><input #endpoint id="ollama-endpoint" value="http://localhost:11434"><label for="ollama-model">INSTALLED MODEL NAME</label><input #model id="ollama-model" placeholder="Your installed model ID"><div class="button-row"><button class="text-button" (click)="setProvider(endpoint.value, model.value)">USE OLLAMA</button><button class="text-button" (click)="fallback()">USE OFFLINE</button></div><p role="status">{{ developerStatus() }}</p><pre>QUERIES: {{ metricSummary().count }}
 MEAN INTERPRETATION: {{ metricSummary().ms }} ms
