@@ -81,7 +81,12 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
   if (direct) return direct;
   const first = ranked[0]; const second = ranked[1];
   if (!first || !Number.isFinite(first.score) || first.intent === 'unknown' || first.score < .35) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
-  if (first.score < MATCH_THRESHOLD) return { intent: 'unknown', needsClarification: true, clarification: `Are you asking about ${SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record'}? Please name the record or subject.`, provider: 'browser-ai' };
+  if (first.score < MATCH_THRESHOLD) {
+    const aboutRecords = /\b(record|records|paperwork|reading|file|files|service|call|office|staff|terminal|company|backup|receipt|date|clock|phone|monitor|archive|handover)\b/.test(recognitionText(input));
+    return aboutRecords
+      ? { intent: 'unknown', needsClarification: true, clarification: `Are you asking about ${SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record'}? Please name the record or subject.`, provider: 'browser-ai' }
+      : { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
+  }
   if (/\boriginal\b/.test(recognitionText(input)) && /\b(where|stored|located|missing|attachment)\b/.test(recognitionText(input)) && ranked.slice(0, 3).some(item => item.intent === 'ask_transfer' && item.score >= MATCH_THRESHOLD)) return { intent: 'ask_transfer', needsClarification: false, provider: 'browser-ai' };
   // Archive location and handover questions share the same authored answer.
   const equivalent = new Set(['ask_transfer', 'ask_archive_location']);
