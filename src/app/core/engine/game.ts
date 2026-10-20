@@ -61,7 +61,7 @@ function search(state: GameState, term: string): TerminalOutput {
 function answer(state: GameState, interpretation: Interpretation, input: string): Transition {
   let next = { ...state };
   const respond = (lines: string[], files: string[] = [], evidence: EvidenceId[] = []): Transition => ({ state: discover(next, evidence), output: output(lines, files, 'ok', 'interpretation') });
-  if (interpretation.needsClarification) return { state, output: output(['Which service or record do you mean?'], [], 'notice') };
+  if (interpretation.needsClarification) return { state, output: output([interpretation.clarification ?? 'Which service or record do you mean?'], [], 'notice') };
   const other = interpretation.entityId?.match(/^service-(004|005|007)$/)?.[1];
   if (other && ['ask_service_status', 'ask_retirement'].includes(interpretation.intent)) {
     const services: Record<string, string[]> = { '004': ['004 / BILLING', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '005': ['005 / BUILDING SENSORS', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '007': ['007 / RECORDS ACCESS', 'Live state: running', 'This is the connection you are using.'] };
@@ -75,33 +75,53 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
     if (state.lastIntent === 'ask_service_status') return respond(['The live monitor shows 006 running.', 'The office paperwork lists it as closed.', 'These are separate records, made on different dates.'], ['register', 'authorization']);
     intent = state.lastIntent;
   }
-  if (!['ask_company', 'ask_identity', 'unknown', 'request_search'].includes(intent)) next.lastTopic = 'service-006';
+  if (!['ask_company', 'ask_identity', 'ask_office', 'ask_staff', 'ask_access', 'ask_dates', 'ask_record_integrity', 'ask_next', 'unknown', 'request_search'].includes(intent)) next.lastTopic = 'service-006';
   if (intent !== 'unknown') next.lastIntent = intent;
   switch (intent) {
     case 'ask_calls':
-      if (/who|from|source/i.test(input)) return respond(['FROM: SERVICE 006', 'An automatic overnight alarm.', 'No staff operator is connected.'], ['register'], ['EV_CALL_PENDING']);
-      if (/when|since|how long/i.test(input)) return respond(['FIRST QUEUED: 18 SEP 2001, 23:59', 'Latest attempt: 06 Nov 2003, 02:13', 'No answer.'], ['call'], ['EV_CALL_PENDING']);
+      if (/who|from|source|origin|caller|making.*(?:noise|ring)/i.test(input)) return respond(['FROM: SERVICE 006', 'An automatic overnight alarm.', 'No staff operator is connected.'], ['register'], ['EV_CALL_PENDING']);
+      if (/when|since|how long|how many (?:years|days|months)/i.test(input)) return respond(['FIRST QUEUED: 18 SEP 2001, 23:59', 'Latest attempt: 06 Nov 2003, 02:13', 'No answer.'], ['call'], ['EV_CALL_PENDING']);
       return respond(['OVERNIGHT CALL / NIGHT DESK 214', 'The alarm remains in the overnight queue.', 'Latest attempt: 02:13 / No answer.'], ['call'], ['EV_CALL_PENDING']);
     case 'ask_recipient': return respond(state.archive006Recovered
       ? ['CALL DESTINATION: NIGHT DESK / 214', 'The saved confirmation came from COMMS/BRIDGE-02.', 'No staff name can be read from the receipt.']
       : ['CALL DESTINATION: NIGHT DESK / 214', 'The phone was removed on 18 Sep 2001 at 17:00.', 'No replacement number is listed.'], state.archive006Recovered ? ['fragment', 'maintenance'] : ['maintenance'], ['EV_DESK_CLOSED']);
-    case 'ask_office': return respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'Reception ended at 17:00.', 'Last staff sign-in: 19 Sep 2001, 08:10', 'This records connection is unattended.'], ['company', 'maintenance']);
-    case 'ask_service_status': return /restart/i.test(input)
+    case 'ask_office': return /why|reason/i.test(input)
+      ? respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'The reason for closure is not recorded in this copy.', 'Telephone reception ended at 17:00.'], ['company'])
+      : respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'Reception ended at 17:00.', 'Last staff sign-in: 19 Sep 2001, 08:10', 'This records connection is unattended.'], ['company', 'maintenance']);
+    case 'ask_service_status': return /restart|start.*again|back (?:on|online)|turned.*back|brought.*back/i.test(input)
       ? respond(['LAST RESTART / 02 NOV 2003, 03:14:09', 'Started by: automatic monitor', 'Reason: handover not closed', 'Operator: none'], ['status-log'], ['EV_SERVICE_ACTIVE'])
       : respond(['006 / CONTINUITY MONITOR', 'Function: overnight alarms', 'Live state: running', 'Office record: closed, 18 Sep 2001', 'Last connected operator: no entry'], ['register', 'authorization'], ['EV_SERVICE_ACTIVE']);
     case 'ask_retirement': return respond(['OFFICE RECORD / 18 SEP 2001', '006 is listed as closed. Shutdown was approved.', 'The automatic monitor restarted it on 02 Nov 2003.', 'Recorded reason: handover not closed.'], ['authorization', 'status-log'], ['EV_RETIREMENT_APPROVED']);
     case 'ask_transfer':
-    case 'ask_archive_location': return respond(state.archive006Recovered
+    case 'ask_archive_location':
+      if (/hold|withheld|release|handover not closed/i.test(input)) return state.archive006Recovered
+        ? respond(['SERVICE RELEASE: WITHHELD', 'The receipt requires a reply from the holding system.', 'The office shutdown order does not clear that hold.', 'No release reply is present in this copy.'], ['fragment'])
+        : respond(['HANDOVER RECORD INCOMPLETE.', 'The office list names an attachment.', 'Its original is unavailable; a local copy is listed.'], ['ledger']);
+      return respond(state.archive006Recovered
       ? ['HANDOVER RECEIPT / BACKUP AVAILABLE', 'Transfer: accepted, 18 Sep 2001 at 23:59:41', 'Service release: withheld']
       : ['HANDOVER RECEIPT', 'The attachment is named in the call record.', 'Original file: not listed', 'Local backup: available'], state.archive006Recovered ? ['fragment'] : ['ledger']);
-    case 'ask_recovery_process': return respond(['A local backup of the attachment is available.', 'It can be read without changing the original.', 'Reading a record does not switch off a service.'], [state.archive006Recovered ? 'fragment' : 'ledger']);
+    case 'ask_recovery_process':
+      if (/complete|unreadable|name|damaged|reconstruct/i.test(input)) return state.archive006Recovered
+        ? respond(['BACKUP COPY: PARTIAL', 'Some fields could not be read.', 'No clearer staff name is present in this copy.', 'Reading the backup does not repair missing data.'], ['fragment'])
+        : respond(['LOCAL BACKUP: AVAILABLE', 'The attachment record lists a saved copy.', 'Its contents have not been loaded in this session.'], ['ledger']);
+      return respond(['A local backup of the attachment is available.', 'It can be read without changing the original.', 'Reading a record does not switch off a service.'], [state.archive006Recovered ? 'fragment' : 'ledger']);
     case 'ask_authorization':
       if (/0417/.test(input) && !state.archive006Recovered) return respond(['NO MATCH IN THE CURRENT DIRECTORY.']);
       return respond(state.archive006Recovered
         ? ['AUTHORISATION: 0417 [PARTIAL]', 'Staff name: unreadable', 'No matching name in the current directory.']
         : ['SHUTDOWN ORDER / 18 SEP 2001', 'Filed by: J. Kell', 'The handover attachment is not in the active file list.'], [state.archive006Recovered ? 'fragment' : 'authorization']);
-    case 'ask_company': return respond(['MERIDIAN SYSTEMS', 'Medical monitoring equipment.', 'The public office closed in September 2001.', 'Technical records remain online for equipment owners.'], ['company']);
+    case 'ask_company': return /own(?:ed|er)|found(?:ed|er)/i.test(input)
+      ? respond(['MERIDIAN SYSTEMS', 'No owner or founder is named in this copy.', 'The company notice describes medical monitoring equipment.'], ['company'])
+      : respond(['MERIDIAN SYSTEMS', 'Medical monitoring equipment.', 'The public office closed in September 2001.', 'Technical records remain online for equipment owners.'], ['company']);
     case 'ask_identity': return respond(['MERIDIAN RECORDS / R-02', 'Automatic records access.', 'No staff terminal is connected.'], ['readme']);
+    case 'ask_staff':
+      if (/removed|disconnect/i.test(input)) return respond(['NIGHT DESK PHONE', 'E. Lin reported its removal on 19 Sep 2001.', 'The note does not name the person who removed it.'], ['maintenance']);
+      if (/home|contact|number|where.*lin/i.test(input)) return respond(['E. LIN / LAST SHIFT NOTE', 'Asked for alarms not to be forwarded to a home number.', 'The number and a current contact address are not listed.'], ['maintenance']);
+      return respond(['STAFF NAMES IN THIS COPY', 'E. Lin: sent the last shift note.', 'J. Kell: filed the service closure list.', 'No complete staff directory is available.'], ['maintenance', 'authorization']);
+    case 'ask_access': return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'You can read files and search this copy.', 'This connection cannot edit records or control equipment.', 'Messages typed here are not sent to office staff.'], ['readme', 'company']);
+    case 'ask_dates': return respond(['SYSTEM DATE: 06 NOV 2003', 'Office closure records: September 2001.', 'Live monitor readings: November 2003.', 'A saved file date and an event date can differ.', 'No time zone or independent clock check is recorded.'], ['company', 'register']);
+    case 'ask_record_integrity': return respond(['RECORDS CHECK', 'The office list is saved paperwork; the monitor is a later reading.', 'This copy has no complete edit history.', 'Missing or unreadable fields cannot be filled from these records.', 'Answers use the available records; unknown details remain unknown.'], ['authorization', 'register']);
+    case 'ask_next': return respond(['RECORDS ACCESS / CONTROLS', 'Select a file name to read it. Linked records are attached files.', 'DIR lists folders. SEARCH followed by a word finds records.', 'Ask about something in a record, in ordinary words.', 'Esc shows a full reply without waiting for the typing.'], ['readme']);
     case 'request_backup': return classify(input, state).intent === 'request_backup' ? recover(next) : respond(['A local backup is listed with the attachment.'], ['ledger']);
     case 'request_stop': return respond(['CONTROL UNAVAILABLE.', 'This connection can read records only.', 'Last recorded stop request: 02 Nov 2003.'], ['status-log']);
     case 'request_file': return inspectFile(next, interpretation.fileId ?? '');

@@ -1,6 +1,7 @@
 import { FILES } from '../content';
 import { INTENTS, Interpretation, IntentInterpreter, QueryContext } from '../models';
 import { classify } from './fallback';
+export { BrowserAIInterpreter } from './browser-ai';
 
 export function validateInterpretation(value: unknown, provider: Interpretation['provider']): Interpretation | undefined {
   if (!value || typeof value !== 'object') return undefined;
@@ -16,14 +17,9 @@ export function validateInterpretation(value: unknown, provider: Interpretation[
     entityId: candidate['entityId'] as string | undefined,
     fileId: candidate['fileId'] as string | undefined,
     searchTerm: typeof candidate['searchTerm'] === 'string' ? candidate['searchTerm'].slice(0, 150) : undefined,
+    ...(typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
+    ...(typeof candidate['confidence'] === 'number' && Number.isFinite(candidate['confidence']) && candidate['confidence'] >= 0 && candidate['confidence'] <= 1 ? { confidence: candidate['confidence'] } : {}),
   };
-}
-
-/** Honest extension point: no runtime or model weights are bundled. */
-export class BrowserAIInterpreter implements IntentInterpreter {
-  readonly id = 'browser-ai';
-  async isAvailable(): Promise<boolean> { return false; }
-  async interpret(): Promise<Interpretation> { throw new Error('No browser model has been integrated or tested.'); }
 }
 
 export class OllamaInterpreter implements IntentInterpreter {
@@ -64,7 +60,7 @@ export async function interpretSafely(input: string, context: QueryContext, prov
         if (!await provider.isAvailable()) throw new Error('Unavailable');
         const value = await provider.interpret(input, { ...context });
         const validated = validateInterpretation(value, value.provider);
-        if (!validated || validated.intent === 'unknown') throw new Error('Invalid or unknown');
+        if (!validated || validated.intent === 'unknown' && validated.provider !== 'browser-ai') throw new Error('Invalid or unknown');
         return validated;
       })(),
       new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('Timeout')), timeoutMs); }),

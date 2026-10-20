@@ -219,6 +219,14 @@ small { font-size: .85em; }
 .developer-settings input { width: 100%; }
 .developer-settings pre { font-size: .85em; line-height: 1.7; white-space: pre-wrap; }
 .button-row { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+.language-settings { border: 1px solid var(--line); padding: 16px; }
+.language-settings progress { display: block; width: 100%; height: 20px; accent-color: var(--bright); }
+.language-progress { font-variant-numeric: tabular-nums; }
+.language-details { margin-top: 20px; font-size: .9em; }
+.language-details summary { cursor: pointer; }
+.setup-language { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; }
+.setup-language progress { width: 100%; height: 16px; accent-color: var(--bright); }
+.setup-language .text-button { font-size: 12px; padding: 6px 10px; }
 
 @media (max-width: 1100px) {
   .app-header { padding-inline: 18px; }

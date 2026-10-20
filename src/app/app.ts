@@ -22,6 +22,10 @@ export class App implements OnDestroy {
   readonly installPrompt = signal<InstallPromptEvent | null>(null);
   readonly installMessage = signal('Browser installation is optional. Use your browser menu if available.');
   readonly developerStatus = signal('Offline classifier selected.');
+  readonly modelPercent = computed(() => {
+    const state = this.session.language.state();
+    return Math.min(100, Math.floor(state.total ? state.loaded / state.total * 100 : 0));
+  });
   readonly documents = computed(() => this.session.state().openFileIds.flatMap(id => { const file = fileById(id); return file ? [file] : []; }));
   readonly metricSummary = computed(() => {
     const rows = this.session.metrics();

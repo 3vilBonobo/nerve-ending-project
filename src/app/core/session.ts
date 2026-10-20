@@ -5,6 +5,7 @@ import { IntentInterpreter, TerminalMode } from './models';
 import { loadSave, resetSave, writeSave } from './persistence/saves';
 import { InterpretationMetrics, interpretSafely } from './interpretation/providers';
 import { TerminalPlayback } from './presentation/terminal-playback';
+import { LocalLanguage } from './interpretation/local-language';
 
 @Injectable({ providedIn: 'root' })
 export class Session implements OnDestroy {
@@ -17,6 +18,7 @@ export class Session implements OnDestroy {
   readonly state = signal(this.initial.state);
   readonly storageWarning = signal(this.initial.warning ?? '');
   readonly playback = inject(TerminalPlayback);
+  readonly language = inject(LocalLanguage);
   readonly busy = this.playback.busy;
   readonly files = computed(() => accessibleFiles(this.state()));
   readonly metrics = signal<InterpretationMetrics[]>([]);
@@ -35,7 +37,7 @@ export class Session implements OnDestroy {
     try {
       const current = this.state();
       const [result] = await Promise.all([
-        parseCommand(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.lastFileId, lastIntent: current.lastIntent }, this.provider),
+        parseCommand(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.openFileIds.at(-1) ?? current.lastFileId, lastIntent: current.lastIntent }, this.provider ?? this.language.provider),
         pause,
       ]);
       if (request !== this.requestId) return;
