@@ -1,0 +1,32 @@
+<section class="terminal-shell" aria-label="Meridian remote terminal">
+  <header class="window-titlebar">
+    <div class="window-title"><span class="terminal-glyph" aria-hidden="true">&gt;_</span> REMOTE TERMINAL <span class="muted">/ R-02</span></div>
+    <div class="window-controls">
+      <button aria-label="Minimize terminal" title="Minimize terminal" (click)="session.terminalMode('minimized')">_</button>
+      <button [attr.aria-label]="session.state().ui.terminalMode === 'maximized' ? 'Restore terminal' : 'Maximize terminal'" [title]="session.state().ui.terminalMode === 'maximized' ? 'Restore terminal' : 'Maximize terminal'" (click)="session.terminalMode(session.state().ui.terminalMode === 'maximized' ? 'restored' : 'maximized')">{{ session.state().ui.terminalMode === 'maximized' ? '▣' : '□' }}</button>
+    </div>
+  </header>
+  <div class="terminal-toolbar"><span><i class="status-light"></i> SECURE SESSION</span><span>ENCODING: ASCII <span class="toolbar-divider">│</span> {{ session.state().currentDirectory }}</span></div>
+  <div class="scrollback" #scrollback (scroll)="scroll()" tabindex="0" aria-label="Terminal scrollback">
+    @for (entry of session.state().terminalHistory; track $index) {
+      <article class="terminal-entry" [class.initial-entry]="!entry.input" [class.entry-notice]="entry.code === 'denied' || entry.code === 'error'">
+        @if (entry.input) { <div class="input-echo"><span class="muted">SYS&gt;</span> {{ entry.input }}</div> }
+        @else { <div class="terminal-banner" aria-hidden="true"><span class="meridian-mark small"></span><div>MERIDIAN<span>REMOTE INFORMATION SERVICES</span></div><b>3.14</b></div> }
+        @for (line of entry.lines; track $index) { <div class="output-line">{{ line || ' ' }}</div> }
+        @if (entry.links.length) {
+          <div class="record-links">
+            @for (link of entry.links; track link.fileId) { <button class="record-link" (click)="fileOpened.emit(link.fileId)"><span aria-hidden="true">↳</span> {{ link.label }} <span aria-hidden="true">↗</span></button> }
+          </div>
+        }
+      </article>
+    }
+    @if (session.busy()) { <p class="processing" role="status">PROCESSING INDEXED QUERY<span>...</span></p> }
+  </div>
+  <form class="command-row" (submit)="$event.preventDefault(); submit()">
+    <label for="terminal-command">SYS<span aria-hidden="true">&gt;</span></label>
+    <input id="terminal-command" #command [value]="input" (input)="input = command.value" (keydown)="history($event)" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="1000" placeholder="Enter command or ask a question..." [readOnly]="session.busy()" aria-label="Terminal command or question">
+    <button type="submit" [disabled]="session.busy() || !input.trim()" aria-label="Submit command">ENTER ↵</button>
+  </form>
+  <footer class="terminal-footer"><span>HELP <span class="muted">command reference</span></span><span>↑ ↓ <span class="muted">history</span></span><span class="muted">NATURAL LANGUAGE ENABLED</span></footer>
+  <span class="sr-only" aria-live="polite">{{ session.busy() ? 'Processing query.' : 'Ready for input. ' + (session.state().terminalHistory.at(-1)?.lines?.[0] ?? '') }}</span>
+</section>

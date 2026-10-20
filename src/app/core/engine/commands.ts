@@ -1,0 +1,25 @@
+export type CommandName = 'HELP' | 'DIR' | 'CD' | 'OPEN' | 'SEARCH' | 'STATUS' | 'CLEAR' | 'RECOVER' | 'DIAG';
+export interface ParsedCommand { name: CommandName; args: string[]; error?: string }
+const ALIASES: Record<string, CommandName> = { HELP: 'HELP', DIR: 'DIR', LS: 'DIR', CD: 'CD', OPEN: 'OPEN', SEARCH: 'SEARCH', STATUS: 'STATUS', CLEAR: 'CLEAR', CLS: 'CLEAR', RECOVER: 'RECOVER', DIAG: 'DIAG' };
+export function parseCommand(input: string): ParsedCommand | undefined {
+  const word = input.trim().split(/\s+/)[0]?.toUpperCase();
+  if (!word || !ALIASES[word]) return undefined;
+  const rest = input.trim().slice(word.length).trim();
+  const tokens: string[] = [];
+  const regex = /"([^"]*)"|'([^']*)'|([^\s"']+)/g;
+  if (((rest.match(/"/g) ?? []).length % 2) || ((rest.match(/'/g) ?? []).length % 2)) {
+    return { name: ALIASES[word], args: [], error: 'Unclosed quote. Example: OPEN "SERVICE_REGISTER.DAT"' };
+  }
+  for (const match of rest.matchAll(regex)) tokens.push(match[1] ?? match[2] ?? match[3]);
+  return { name: ALIASES[word], args: tokens };
+}
+export function resolvePath(input: string, cwd: string): string {
+  const normalized = input.replace(/\\/g, '/').toUpperCase();
+  const parts = (normalized.startsWith('/') ? normalized : `${cwd}/${normalized}`).split('/');
+  const result: string[] = [];
+  for (const part of parts) {
+    if (part === '..') result.pop();
+    else if (part && part !== '.') result.push(part);
+  }
+  return `/${result.join('/')}`;
+}
