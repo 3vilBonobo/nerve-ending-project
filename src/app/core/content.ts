@@ -3,287 +3,285 @@ import { ArchiveFile } from './models';
 export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM'] as const;
 export const FILES: readonly ArchiveFile[] = [
   {
-    id: 'register', path: '/OPERATIONS/SERVICE_REGISTER.DAT', title: 'Service register', modified: '2003-11-06 02:10',
+    id: 'register', path: '/OPERATIONS/SERVICE_REGISTER.DAT', title: 'Service list', modified: '2003-11-06 02:10',
     evidence: ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED'],
-    body: `MERIDIAN SYSTEMS / OPERATIONS DIVISION
-SERVICE REGISTER                              REV 3.14
-Recorded: 2003-11-06 02:10:00     Filed by: OPS/J. KELL
-Source: service register / read-only copy
+    body: `MERIDIAN SYSTEMS / OPERATIONS
+SERVICE LIST                                  REV 3.14
+Saved: 2003-11-06 02:10:00       Filed by: OPS/J. KELL
+Source: service register / copy, cannot be edited
 ------------------------------------------------------
 
-ID    DESCRIPTION                 OPERATIONAL STATE
-004   Billing reconciliation      RETIRED
-005   Environmental telemetry     RETIRED
-006   Continuity supervision      ACTIVE
-007   Remote information access   ACTIVE
+A service is a program running on this computer.
 
-004   RETIREMENT APPROVED: 2001-08-03
-      ARCHIVE TRANSFER: COMPLETE / RT-01-004
-005   RETIREMENT APPROVED: 2001-08-03
-      ARCHIVE TRANSFER: COMPLETE / RT-01-005
-006   RETIREMENT APPROVED: 2001-09-18
-      ARCHIVE TRANSFER: NOT RECORDED
-      STATE SOURCE: AUTOMATIC SERVICE SUPERVISOR
-007   RETIREMENT APPROVED: NOT APPLICABLE
+ID    NAME                        STATUS
+004   Billing reconciliation      STOPPED
+005   Environmental telemetry     STOPPED
+006   Continuity supervision      RUNNING
+007   Remote information access   RUNNING
 
-RETIREMENT = approved shutdown and transfer to storage.
+004   STOP APPROVED: 2001-08-03
+      FILE MOVE: COMPLETE / RT-01-004
+005   STOP APPROVED: 2001-08-03
+      FILE MOVE: COMPLETE / RT-01-005
+006   STOP APPROVED: 2001-09-18
+      FILE MOVE: NO RECEIPT FOUND
+      STATUS REPORTED BY: AUTOMATIC MONITOR
+007   STOP APPROVED: NOT REQUESTED
+
 Approval alone does not stop a service.
-A transfer receipt is required to close the record.
-Service 006 is still running. Its receipt is missing.
+Its files must be moved to storage. A receipt confirms
+that the move is complete.
+006 is still running. Its receipt is missing.
 
-Cross-references:
+Related files:
 /ARCHIVE/TRANSFER_LEDGER_2001.LOG
 /ADMIN/RETIREMENT_AUTHORIZATIONS.TXT
 
 Operator note, 2003-11-05:
-Do not fix a missing receipt by changing this table.
-The table is a copy. The service is not.`,
+Do not hide the missing receipt by changing this list.
+The list is a copy. The service is not.`,
   },
   {
-    id: 'status-log', path: '/OPERATIONS/STATUS_LOG_2003.TXT', title: 'Operational snapshots', modified: '2003-11-06 02:12',
+    id: 'status-log', path: '/OPERATIONS/STATUS_LOG_2003.TXT', title: 'Activity log', modified: '2003-11-06 02:12',
     evidence: ['EV_SERVICE_ACTIVE'],
     body: `MERIDIAN SYSTEMS / OPERATIONS
-SUPERVISOR JOURNAL / NODE R-02
-Exported: 2003-11-06 02:12:18      Owner: OPS/AUTOMATIC
+ACTIVITY LOG / SYSTEM R-02
+Copied: 2003-11-06 02:12:18      Owner: OPS/AUTOMATIC
 ------------------------------------------------------
 
-2003-10-29 01:00:00  004 OFFLINE / 005 OFFLINE / 006 ACTIVE
-2003-10-30 01:00:00  006 ACTIVE / NO OPERATOR CONNECTED
-2003-11-02 03:14:07  006 STOP REQUEST / MAINTENANCE WINDOW
+2003-10-29 01:00:00  004 STOPPED / 005 STOPPED / 006 RUNNING
+2003-10-30 01:00:00  006 RUNNING / NO OPERATOR CONNECTED
+2003-11-02 03:14:07  006 STOP REQUEST / SCHEDULED REPAIRS
 2003-11-02 03:14:08  006 STOPPED
-2003-11-02 03:14:09  006 RESTART / REQUIRED SYSTEM LINK
-2003-11-02 03:14:09  START REQUEST ORIGIN: LOCAL SUPERVISOR
-2003-11-02 03:14:10  OPERATOR FIELD: EMPTY
-2003-11-04 00:00:00  ARCHIVE FILE LIST: DAMAGED
-2003-11-06 02:10:00  006 ACTIVE / RETIREMENT APPROVED
+2003-11-02 03:14:09  006 RESTARTED / NEEDED BY ANOTHER SYSTEM
+2003-11-02 03:14:09  RESTART REQUEST: AUTOMATIC MONITOR
+2003-11-02 03:14:10  OPERATOR: NONE
+2003-11-04 00:00:00  FILE LIST: DAMAGED
+2003-11-06 02:10:00  006 RUNNING / STOP APPROVED
 
-The supervisor restarted 006 automatically.
-No operator was connected. A linked system still needs it.
-The name of that system is missing from this copy.
-The file list was already damaged when this log was copied.
+The computer restarted 006 on its own.
+Another system still needs it.
+That system's name is missing from this copy.
+The file list was already damaged when this log was saved.
 Date of damage: UNKNOWN.
 
 See /ARCHIVE/INDEX_REPAIR_NOTES.TXT.
-END OF LOG. Automatic supervision continues.`,
+END OF LOG. Automatic checks continue.`,
   },
   {
-    id: 'ledger', path: '/ARCHIVE/TRANSFER_LEDGER_2001.LOG', title: 'Retirement transfer ledger', modified: '2001-09-19 08:30',
+    id: 'ledger', path: '/ARCHIVE/TRANSFER_LEDGER_2001.LOG', title: 'File move log', modified: '2001-09-19 08:30',
     evidence: ['EV_TRANSFER_MISSING'],
-    body: `MERIDIAN SYSTEMS / RECORDS & RETENTION
-RETIREMENT TRANSFER LEDGER / FISCAL 2001
-Export: 2001-09-19 08:30         Clerk: ARC/E. LIN
+    body: `MERIDIAN SYSTEMS / RECORDS
+FILE MOVE LOG / 2001
+Copied: 2001-09-19 08:30         Clerk: ARC/E. LIN
 Source: print spool 12 / unchanged
 ------------------------------------------------------
 
-APPROVAL     SERVICE   TRANSFER REF.    RECEIPT
-2001-08-03   004       RT-01-004        CLOSED / 08-04
-2001-08-03   005       RT-01-005        CLOSED / 08-04
+APPROVED     SERVICE   FILE ADDRESS     RECEIPT
+2001-08-03   004       RT-01-004        COMPLETE / 08-04
+2001-08-03   005       RT-01-005        COMPLETE / 08-04
 2001-09-18   006       [ENTRY LOST]     --
 
-Some September transfers used a separate batch code.
-BATCH CODE: MX-91.
-The storage slot is in INDEX_REPAIR_NOTES.TXT.
-The full reference uses both parts: BATCH/SLOT.
+Some September files went to a different storage area.
+First part of the address: MX-91.
+The second part is in File repair notes:
+/ARCHIVE/INDEX_REPAIR_NOTES.TXT
+Join the two parts with a slash: FIRST/SECOND.
 
-There is no completed receipt for service 006.
+No receipt confirms that 006's files arrived.
 A missing receipt does not mean the files were deleted.
 
 2001-09-19 / E. LIN:
 I have left the line open. Please stop returning it as
-a duplicate. Nothing has been received at this end.
-
-Cross-reference: /ARCHIVE/INDEX_REPAIR_NOTES.TXT`,
+a duplicate. Nothing has been received at this end.`,
   },
   {
-    id: 'repair', path: '/ARCHIVE/INDEX_REPAIR_NOTES.TXT', title: 'Index repair notes', modified: '2003-11-05 16:42',
+    id: 'repair', path: '/ARCHIVE/INDEX_REPAIR_NOTES.TXT', title: 'File repair notes', modified: '2003-11-05 16:42',
     evidence: ['EV_REPAIR_REFERENCE'],
-    body: `MERIDIAN SYSTEMS / ARCHIVE MAINTENANCE
-INDEX REPAIR NOTES / INCIDENT IR-203
+    body: `MERIDIAN SYSTEMS / ARCHIVE REPAIRS
+FILE REPAIR NOTES / IR-203
 Updated: 2003-11-05 16:42        Engineer: ARC/T. REED
 Source: maintenance notebook / signed copy
 ------------------------------------------------------
 
-The index is the archive's file list.
-One September 2001 transfer is missing from that list.
-The stored files still exist. Only the list entry is lost.
+006's files are missing from the list.
+The files still exist. The list lost their address.
 
-STORAGE LOCATION:
-SERVICE 006 -> SLOT 006-R
-Batch code -> see TRANSFER_LEDGER_2001.LOG
-Full reference -> BATCH/SLOT
+SECOND PART OF ADDRESS: 006-R
+The first part is in File move log:
+/ARCHIVE/TRANSFER_LEDGER_2001.LOG
+Full address: FIRST/SECOND
 
-Do not guess the batch code from the service number.
-Read both records before running recovery.
+Do not guess the address. Read both files.
+Then check Service list to see whether 006 was
+approved to stop.
 
-Recovery restores the missing file-list entry.
-It does not stop the service.
-First check the service register for retirement approval.
+RECOVER adds the missing file back to the list.
+It does not stop 006.
+For instructions, read /SYSTEM/ARCHIVE_RECOVERY.HLP.
 
-See /SYSTEM/ARCHIVE_RECOVERY.HLP for the command.
-
-Additional observation:
-The index has been checking this empty slot every night.
-It does not check the other retired services.`,
+Other notes:
+The computer looks for these missing files every night.
+It does not look for the other stopped services.`,
   },
   {
-    id: 'authorization', path: '/ADMIN/RETIREMENT_AUTHORIZATIONS.TXT', title: 'Retirement authorizations', modified: '2001-09-18 17:04',
+    id: 'authorization', path: '/ADMIN/RETIREMENT_AUTHORIZATIONS.TXT', title: 'Shutdown approval', modified: '2001-09-18 17:04',
     evidence: ['EV_RETIREMENT_APPROVED', 'EV_AUTHORIZATION'],
-    body: `MERIDIAN SYSTEMS / ADMINISTRATIVE CONTROL
-RETIREMENT AUTHORIZATION / RA-2001-0918
-Filed: 2001-09-18 17:04        Department: ADM/RECORDS
-Source: damaged microform / typed copy
+    body: `MERIDIAN SYSTEMS / ADMIN
+SHUTDOWN APPROVAL / RA-2001-0918
+Filed: 2001-09-18 17:04          Department: ADM/RECORDS
+Source: damaged original / typed copy
 ------------------------------------------------------
 
 SERVICE: 006 / CONTINUITY SUPERVISION
-DISPOSITION: RETIREMENT APPROVED
-EFFECTIVE DATE: 2001-09-18
-SIGNATORY CODE: 04[illegible]
+STOP: APPROVED
+DATE: 2001-09-18
+SIGNED BY: 04[unreadable]
 
-Retirement means shutdown and transfer to storage.
-This approval allows storage, not deletion.
-A verified transfer receipt is required before closure.
+006 may be stopped and its files moved to storage.
+The files must be kept. Do not delete them.
+A receipt must confirm the move before the record closes.
 
-External users may recover a missing archive entry.
-First check the service's status and retirement approval.
-Then read the transfer ledger and index repair notes
-to confirm both parts of the storage reference.
+You may use RECOVER to find the missing file.
+First check whether 006 is running and was approved
+to stop. Read File move log and File repair notes
+for the two parts of its address.
 
-The full approval code is in the stored archive record.
+The full approval code is in the saved file.
 This office has no second copy.`,
   },
   {
-    id: 'recovery-help', path: '/SYSTEM/ARCHIVE_RECOVERY.HLP', title: 'Archive recovery procedure', modified: '2003-10-21 09:00', evidence: [],
+    id: 'recovery-help', path: '/SYSTEM/ARCHIVE_RECOVERY.HLP', title: 'How to recover a file', modified: '2003-10-21 09:00', evidence: [],
     body: `MERIDIAN SYSTEMS / REMOTE INFORMATION SERVICES
-ARCHIVE RECOVERY UTILITY / HELP 3.14
+FILE RECOVERY / HELP 3.14
 Issued: 2003-10-21              Maintainer: SYS/RECORDS
 ------------------------------------------------------
 
-COMMAND: RECOVER ARCHIVE 006
+RECOVER finds a saved file missing from the file list.
+It does not stop the service.
 
-Restores a missing archive entry so its files can be read.
-This command does not stop the service.
+BEFORE YOU START
+1. Type STATUS to check if 006 is running.
+2. Read Service list or Shutdown approval.
+   Check whether 006 was approved to stop.
+3. Read File move log and File repair notes.
+   Each holds one part of the missing file's address.
 
-REQUIRED CHECKS
-1. Confirm that 006 is running and retirement was approved.
-   Run STATUS. Read SERVICE_REGISTER.DAT or the approval.
-2. Find the missing transfer and its batch code.
-   Read TRANSFER_LEDGER_2001.LOG.
-3. Find the storage slot in a separate record.
-   Read INDEX_REPAIR_NOTES.TXT.
+THEN TYPE: RECOVER ARCHIVE 006
+The computer joins the address parts for you.
+No password needed.
 
-The utility combines the batch code and slot for you.
-No password or extra account is required.
-Reading or asking questions does not change the records.
-
-Recovery makes the stored record and its system links
-readable again. Other file-list errors may remain.
-After recovery, open the restored file to read it.
-Running recovery again will not make further changes.`,
+When the file is found, select [OPEN] to read it.
+Some damage to the file list may remain.
+Running RECOVER again will not change anything else.
+Reading files or asking questions does not change them.`,
   },
   {
-    id: 'fragment', path: '/ARCHIVE/RECOVERED_006.FRAG', title: 'Recovered transfer fragment', modified: '2001-09-18 23:59',
+    id: 'fragment', path: '/ARCHIVE/RECOVERED_006.FRAG', title: 'Recovered receipt', modified: '2001-09-18 23:59',
     evidence: ['EV_RECOVERED_FRAGMENT'], locked: true,
-    body: `MERIDIAN SYSTEMS / RETAINED STORAGE
-RECOVERED RECORD / MX-91/006-R
-Original timestamp: 2001-09-18 23:59:41
-Source: storage block 006-R / data check partly passed
+    body: `MERIDIAN SYSTEMS / STORED FILES
+RECOVERED RECEIPT / MX-91/006-R
+Original date: 2001-09-18 23:59:41
+Source: storage block 006-R / only part could be checked
 ------------------------------------------------------
 
 SERVICE: 006
-REQUEST: RETIREMENT
+REQUEST: STOP SERVICE
 APPROVAL CODE: 0417 [PARTIAL]
-TRANSFER: ACCEPTED / CLOSURE WITHHELD
+FILE MOVE: ACCEPTED
+SHUTDOWN: ON HOLD
 
-SHUTDOWN ON HOLD:
-A linked preservation system still requires this service.
-Retirement approval does not override that requirement.
+Another system needs 006 to keep something preserved.
+006 cannot stop until that system allows it.
+The shutdown approval does not change this rule.
 
-OLD SYSTEM LINKS RESTORED:
-  COMMS/BRIDGE-02 : REGISTERED / LINK STATUS UNKNOWN
+OLD CONNECTIONS FOUND:
+  COMMS/BRIDGE-02 : KNOWN / CONNECTION STATUS UNKNOWN
   SUPERVISION/006 : STILL HELD
 
-Last saved field:
-  WAITING FOR RESPONSE / APPROVAL 0417
-  RESPONSE RECEIVED: --
-  RETRY INTERVAL: UNCHANGED
+Last saved message:
+  WAITING FOR REPLY / APPROVAL 0417
+  REPLY RECEIVED: --
+  RETRY DELAY: UNCHANGED
 
-[END OF READABLE FRAGMENT]
+[END OF READABLE TEXT]
 
 The receipt was accepted. Why is it still waiting?`,
   },
   {
-    id: 'readme', path: '/SYSTEM/READ_FIRST.TXT', title: 'Remote access notice', modified: '2003-10-21 09:00', evidence: [],
+    id: 'readme', path: '/SYSTEM/READ_FIRST.TXT', title: 'Start here', modified: '2003-10-21 09:00', evidence: [],
     body: `MERIDIAN SYSTEMS / REMOTE INFORMATION SERVICES
-EXTERNAL ACCESS NOTICE / REVISION 3.14
+START HERE / VERSION 3.14
 2003-10-21                     SYS/INFORMATION SERVICES
 ------------------------------------------------------
 
-This terminal provides copies of company records.
-Folders: OPERATIONS, ARCHIVE, ADMIN, SYSTEM.
-Original dates and department codes are unchanged.
+This computer holds old company records.
+You can read files and ask questions about them.
+Select [OPEN] beside a file name to read it.
 
-Type HELP for commands, or ask a question.
-For example: "What is Meridian Systems?"
-Replies use the available records. Open a file to check it.
+A service is a program running on this computer.
+Type STATUS to see which ones are running.
+Or ask: "Why is 006 still running?"
 
-STATUS reports what the supervisor sees running now.
-The records may be older. If they disagree with STATUS,
-check other records to find out why.
+Old records may disagree with what is running now.
+Read other files to find out why.
 
-Original records cannot be edited.
-RECOVER can restore a missing archive entry.`,
+Type HELP for more things you can try.
+You cannot edit the records.
+RECOVER can find a file missing from the list.`,
   },
   {
-    id: 'company', path: '/ADMIN/COMPANY_PROFILE.TXT', title: 'Company profile', modified: '2000-02-14 10:00', evidence: [],
-    body: `MERIDIAN SYSTEMS / CORPORATE INFORMATION
-APPROVED EXTERNAL PROFILE / 2000-02-14
+    id: 'company', path: '/ADMIN/COMPANY_PROFILE.TXT', title: 'About Meridian', modified: '2000-02-14 10:00', evidence: [],
+    body: `MERIDIAN SYSTEMS / COMPANY INFORMATION
+ABOUT MERIDIAN / 2000-02-14
 Issued by: ADM/COMMUNICATIONS
 ------------------------------------------------------
 
 Meridian Systems makes medical monitoring equipment
-and systems for storing and managing information.
-It keeps technical records for older equipment and
-the services that support it.
+and systems that store information.
+It keeps records for old equipment and the programs
+that support it.
 
 This connection is for reading records.
-Sales inquiries are no longer handled here.
+Sales questions are no longer answered here.
 
-Office hours removed in revision 3.12.
+Office hours removed in version 3.12.
 No new contact listed.`,
   },
   {
-    id: 'maintenance', path: '/OPERATIONS/SHIFT_HANDOVER.TXT', title: 'Shift handover', modified: '2003-11-05 18:00', evidence: [],
-    body: `MERIDIAN SYSTEMS / OPERATIONS / SHIFT HANDOVER
+    id: 'maintenance', path: '/OPERATIONS/SHIFT_HANDOVER.TXT', title: 'Staff notes', modified: '2003-11-05 18:00', evidence: [],
+    body: `MERIDIAN SYSTEMS / OPERATIONS / STAFF NOTES
 2003-11-05 18:00                OPS/J. KELL -> OPS/RELIEF
 ------------------------------------------------------
 
-Printer tray 2 is empty. Do not submit another test page.
-004 and 005 remain offline. Their receipts are filed.
-Remote records service 007 is responding normally.
+Printer tray 2 is empty. Do not print another test page.
+004 and 005 are still stopped. Their receipts are filed.
+Remote records service 007 is working normally.
 
 The 006 warning is still on the list.
-I was told it was an old lamp fault. It is a software field.
+I was told it was a broken warning light.
+It is a message on the screen.
 
-Please attach a transfer receipt before closing the item.
+Please add a receipt before marking the move complete.
 Next shift confirmation: NOT ENTERED.`,
   },
   {
-    id: 'retention', path: '/ARCHIVE/RETENTION_POLICY.TXT', title: 'Retention policy', modified: '1998-04-03 12:00', evidence: [],
-    body: `MERIDIAN SYSTEMS / RECORDS & RETENTION
-RETENTION POLICY / RP-98-04
+    id: 'retention', path: '/ARCHIVE/RETENTION_POLICY.TXT', title: 'Rules for keeping files', modified: '1998-04-03 12:00', evidence: [],
+    body: `MERIDIAN SYSTEMS / RECORDS
+RULES FOR KEEPING FILES / RP-98-04
 1998-04-03                     ARC/POLICY OFFICE
 ------------------------------------------------------
 
-Service logs: keep five years.
-Retirement approvals: keep permanently.
-Transfer receipts: keep with the original service record.
-Continuity records: keep while linked systems need them.
+Activity logs: keep five years.
+Shutdown approvals: keep permanently.
+Move receipts: keep with the service's original record.
+Continuity records: keep while other systems need them.
 
 Missing from the file list does not mean deleted.
-Rebuild damaged entries using separate source records.
-Two copies of the same record count as one source.
+Use two separate records to fix a damaged entry.
+Two copies of the same record only count as one.
 
-Never mark an absent receipt as a completed transfer.`,
+Never mark a file move complete without a receipt.`,
   },
 ];
 export const fileById = (id: string): ArchiveFile | undefined => FILES.find(file => file.id === id);

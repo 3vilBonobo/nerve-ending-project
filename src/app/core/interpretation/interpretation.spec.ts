@@ -21,6 +21,11 @@ describe('authored offline question vocabulary', () => {
     ['Who am I talking to?', 'ask_identity'], ['Who are you?', 'ask_identity'],
     ['What do you mean?', 'ask_clarification'], ['Explain that', 'ask_clarification'],
     ['Find continuity', 'request_search'],
+    ['Why was 006 not stopped?', 'ask_retirement'], ['Was 006 turned off?', 'ask_retirement'],
+    ['Who gave permission to stop 006?', 'ask_authorization'],
+    ['How do I find the missing file?', 'ask_recovery_process'],
+    ['Show me the File move log', 'request_file'], ['Can I open the Service list?', 'request_file'],
+    ['Show me About Meridian', 'request_file'],
   ];
   it.each(questions)('%s → %s', (question, intent) => {
     expect(classify(question, { lastTopic: 'service-006', lastIntent: 'ask_transfer' }).intent).toBe(intent);
@@ -31,6 +36,10 @@ describe('authored offline question vocabulary', () => {
     expect(classify('Why is service 005 active?').needsClarification).toBe(true);
     expect(classify('When was it decommissioned?', { lastTopic: 'service-006' }).entityId).toBe('service-006');
     expect(classify('What do you mean?').needsClarification).toBe(true);
+  });
+  it('understands the opening suggestion without earlier conversation', () => {
+    expect(classify('What is still running?')).toMatchObject({ intent: 'ask_service_status', entityId: 'service-006', needsClarification: false });
+    expect(classify('How do I find the missing file?')).toMatchObject({ intent: 'ask_recovery_process', needsClarification: false });
   });
 });
 

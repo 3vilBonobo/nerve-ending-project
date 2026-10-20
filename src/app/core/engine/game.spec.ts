@@ -22,7 +22,7 @@ describe('command and virtual filesystem contract', () => {
   });
   it('lists, navigates and opens the same authored files', () => {
     let state = newGame();
-    expect(runInput(state, 'help').output.lines.join('\n')).toContain('You can also ask questions.');
+    expect(runInput(state, 'help').output.lines.join('\n')).toContain('You can ask questions in ordinary words.');
     expect(runInput(state, 'DIR').output.lines.join('\n')).toContain('OPERATIONS');
     expect(runInput(state, 'DIR /ARCHIVE').output.links.some(link => link.fileId === 'ledger')).toBe(true);
     state = run(state, 'CD OPERATIONS'); expect(state.currentDirectory).toBe('/OPERATIONS');
@@ -37,7 +37,7 @@ describe('command and virtual filesystem contract', () => {
       const result = runInput(state, command);
       expect(result.output.code).toBe('error'); expect(result.state.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
     }
-    expect(runInput(state, 'OPEN').output.lines[0]).toContain('Syntax');
+    expect(runInput(state, 'OPEN').output.lines[0]).toContain('file name');
     expect(runInput(state, 'SEARCH').output.code).toBe('error');
   });
   it('clears only scrollback and leaves the input state immutable', () => {
@@ -53,24 +53,26 @@ describe('command and virtual filesystem contract', () => {
       expect(runInput(state, `SEARCH ${query}`).output.links).toHaveLength(0);
     }
     expect(runInput(state, 'OPEN /ARCHIVE/RECOVERED_006.FRAG').openFileId).toBeUndefined();
+    expect(runInput(state, 'OPEN Recovered receipt').openFileId).toBeUndefined();
     expect(inspectFile(state, 'fragment').state).toEqual(state);
   });
 });
 
 describe('Act 01 evidence and consequences', () => {
   it('preserves the operational and retirement contradiction', () => {
-    expect(runInput(newGame(), 'sTaTuS').output.lines).toContain('SERVICE 006: ACTIVE');
+    expect(runInput(newGame(), 'sTaTuS').output.lines).toContain('SERVICE 006: RUNNING');
     const register = FILES.find(file => file.id === 'register')!;
-    expect(register.body).toContain('006   Continuity supervision      ACTIVE');
-    expect(register.body).toContain('RETIREMENT APPROVED: 2001-09-18');
-    expect(register.body).toContain('ARCHIVE TRANSFER: NOT RECORDED');
+    expect(register.body).toContain('006   Continuity supervision      RUNNING');
+    expect(register.body).toContain('006   STOP APPROVED: 2001-09-18');
+    expect(register.body).toContain('FILE MOVE: NO RECEIPT FOUND');
   });
   it('denies premature recovery with specific missing sources', () => {
     const result = runInput(newGame(), 'RECOVER ARCHIVE 006');
     expect(result.output.code).toBe('denied'); expect(result.state.archive006Recovered).toBe(false);
-    expect(result.output.lines.join(' ')).toMatch(/STATUS.*register.*ledger.*repair notes/);
+    expect(result.output.lines.join(' ')).toContain('STATUS');
+    expect(result.output.links.map(link => link.fileId)).toEqual(['register', 'ledger', 'repair']);
     const partial = run(newGame(), 'OPEN /OPERATIONS/SERVICE_REGISTER.DAT');
-    expect(runInput(partial, 'RECOVER ARCHIVE 006').output.lines.join(' ')).not.toMatch(/Check if 006 is running|Check retirement approval/);
+    expect(runInput(partial, 'RECOVER ARCHIVE 006').output.links.map(link => link.fileId)).not.toContain('register');
   });
   it('accepts all independent discovery orders and alternate approval evidence', () => {
     const sources = ['status-log', 'authorization', 'ledger', 'repair'];
@@ -107,5 +109,18 @@ describe('Act 01 evidence and consequences', () => {
   it('keeps later-act secrets outside all prototype records and initial outputs', () => {
     expect(FILES.map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
     expect(newGame().terminalHistory[0].lines.join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6/i);
+  });
+  it('finishes using ordinary questions and readable file names without navigating paths', () => {
+    let state = newGame();
+    for (const command of ['What is still running?', 'Show me the File move log', 'OPEN File repair notes', 'How do I find the missing file?']) {
+      const result = runInput(state, command);
+      expect(result.output.code).toBe('ok');
+      state = result.state;
+    }
+    expect(state.unlockedCapabilities).toContain('CAP_ARCHIVE_RECOVERY');
+    state = run(state, 'RECOVER ARCHIVE 006');
+    const receipt = runInput(state, 'OPEN Recovered receipt');
+    expect(receipt.openFileId).toBe('fragment');
+    expect(receipt.state.act01Complete).toBe(true);
   });
 });

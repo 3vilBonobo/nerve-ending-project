@@ -9,14 +9,14 @@ describe('Meridian client UI', () => {
     const fixture = TestBed.createComponent(App); fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
     const setup = element.querySelector('.setup-dialog')!;
-    expect(setup.textContent).toContain('Browse records and ask questions.');
+    expect(setup.textContent).toContain('Read files and ask questions.');
     expect(setup.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE|SESSION CONFIGURATION/);
     expect(element.textContent).not.toMatch(/MOTHER|Anna Voss|Site 6/);
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();
     expect(element.querySelector('[aria-label="Restore terminal"]')).not.toBeNull();
     await TestBed.inject(Session).submit('STATUS'); fixture.detectChanges();
-    expect(element.textContent).toContain('SERVICE 006: ACTIVE'); fixture.destroy();
+    expect(element.textContent).toContain('SERVICE 006: RUNNING'); fixture.destroy();
   });
   it('uses one state for file browsing and terminal recovery, with explicit fragment review', async () => {
     const fixture = TestBed.createComponent(App); const app = fixture.componentInstance;

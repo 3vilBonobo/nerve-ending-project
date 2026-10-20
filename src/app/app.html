@@ -14,7 +14,7 @@
         <header class="window-titlebar"><span class="window-title"><span class="terminal-glyph" aria-hidden="true">&gt;_</span> Meridian Remote Access</span></header>
         <div class="setup-body">
           <div class="setup-identity"><span class="meridian-mark large" aria-hidden="true"></span><div><h1 id="setup-title">MERIDIAN SYSTEMS</h1><p>Remote Information Services</p></div></div>
-          <p class="setup-description">Connect to the company archive.<br>Browse records and ask questions.</p>
+          <p class="setup-description">Open the company’s old records.<br>Read files and ask questions.</p>
           <p class="setup-note">Progress is saved in this browser.</p>
         </div>
         <footer class="setup-actions">
@@ -62,7 +62,7 @@
   @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
 
   @if (showEnding() && stage() === 'desktop') {
-    <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">ARCHIVE RECORD RESTORED</div><h2>FILE LIST: PARTLY REPAIRED.</h2><p>End of prototype. Service 006 is still running.<br>You can resume this session and review the records.</p><div><button class="primary-button" (click)="review()">REVIEW RECORDS</button><button class="text-button" (click)="resetDialog.showModal()">RESTART INVESTIGATION</button></div></section>
+    <section class="ending-card" aria-label="End of prototype" role="region"><div class="eyebrow">RECEIPT RECOVERED</div><h2>FILE FOUND.</h2><p>End of prototype. 006 is still running.<br>You can return to this session and read the files again.</p><div><button class="primary-button" (click)="review()">READ FILES AGAIN</button><button class="text-button" (click)="resetDialog.showModal()">START AGAIN</button></div></section>
   }
 </main>
 

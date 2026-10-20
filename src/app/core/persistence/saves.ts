@@ -22,7 +22,7 @@ export function decodeSave(raw: string | null): LoadResult {
       if (!item || typeof item !== 'object' || typeof item.input !== 'string' || !Array.isArray(item.lines ?? item.output)) continue;
       history.push({
         input: item.input.slice(0, 1000), lines: strings(item.lines ?? item.output).map(line => line.slice(0, 16000)).slice(0, 50),
-        links: Array.isArray(item.links) ? item.links.filter((link: { fileId?: string }) => allowedIds.includes(link?.fileId ?? '')).map((link: { fileId: string }) => ({ fileId: link.fileId, label: FILES.find(file => file.id === link.fileId)!.path })) : [],
+        links: Array.isArray(item.links) ? item.links.filter((link: { fileId?: string }) => allowedIds.includes(link?.fileId ?? '')).map((link: { fileId: string }) => ({ fileId: link.fileId, label: FILES.find(file => file.id === link.fileId)!.title })) : [],
         code: ['ok', 'denied', 'error', 'notice'].includes(item.code) ? item.code : 'ok',
         truth: ['record', 'interpretation', 'withheld', 'system'].includes(item.truth) ? item.truth : 'system',
       });
