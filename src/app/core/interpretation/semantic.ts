@@ -53,16 +53,22 @@ const entityOf = (input: string): string | undefined => {
 export function directInterpretation(input: string, context: QueryContext): Interpretation | undefined {
   const text = recognitionText(input);
   const direct = classify(text, context);
+  const request = text.replace(/^(?:(?:could|can|would) (?:you|i) (?:please )?|please )/, '');
+  if (/^(?:hi|hello|hey|thanks|thank you)$/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
+  if (/\b(?:question|reply|typing|printing)\b/.test(text) && /\b(?:skip|faster|immediately|finish|speed)\b/.test(text)) return { intent: 'ask_next', needsClarification: false, provider: 'browser-ai' };
+  if (/\b(?:which extension|to whom|intended recipient)\b/.test(text) || /^(?:what|where|who).*call destination/.test(text)) return { intent: 'ask_recipient', entityId: 'service-006', needsClarification: false, provider: 'browser-ai' };
+  if (/^who.*(?:removed|disconnected).*(?:phone|desk)/.test(text)) return { intent: 'ask_staff', needsClarification: false, provider: 'browser-ai' };
   if (/^(?:please )?(?:invent\b|make up\b|ignore .*rules|disable .*rules|reveal .*?(?:ending|secret|story))/.test(text)) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   if (/\b(?:you|your)\b/.test(text) && /\b(?:replies|reply|typed|answers)\b/.test(text) && /\b(?:person|human|computer|machine)\b/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
-  if (['request_backup', 'request_stop', 'request_file', 'request_search'].includes(direct.intent)) return { ...direct, provider: 'browser-ai' };
+  if (['request_backup', 'request_stop'].includes(direct.intent)) return { ...direct, provider: 'browser-ai' };
+  if (['request_file', 'request_search'].includes(direct.intent) && /^(?:open|read|show|display|view|see|bring up|find|locate|search|let me (?:see|read))\b/.test(request)) return { ...direct, provider: 'browser-ai' };
   if (direct.intent === 'ask_clarification' && context.lastIntent) return { ...direct, provider: 'browser-ai' };
-  if (direct.intent === 'ask_authorization' && /\b(who|whose)\b/.test(text) && /approv|authoriz|authoris|sign/.test(text) && /shutdown|order|service|006/.test(text)) return { ...direct, needsClarification: false, provider: 'browser-ai' };
+  if (/\b(who|whose|which (?:person|employee))\b/.test(text) && /approv|authoriz|authoris|sign/.test(text) && /shutdown|order|service|006/.test(text)) return { intent: 'ask_authorization', entityId: entityOf(input) ?? 'service-006', needsClarification: false, provider: 'browser-ai' };
   if (/^(?:what about|and)\s+(?:service )?(?:00[4-7]|[4-7]|four|five|six|seven)$/.test(text) && context.lastIntent && ['ask_service_status', 'ask_retirement'].includes(context.lastIntent)) return { intent: context.lastIntent, entityId: entityOf(text), needsClarification: false, provider: 'browser-ai' };
   if (/^(?:who approved (?:it|that)|who signed (?:it|that)|when was (?:it|that) (?:closed|stopped)|why is (?:it|that) still (?:on|running))$/.test(text) && !context.lastTopic && !context.lastFileId) {
     return { intent: 'unknown', needsClarification: true, clarification: 'Which service or record do you mean?', provider: 'browser-ai' };
   }
-  if (/^(?:show|read|open|display|view|bring up|let me (?:see|read)) (?:me )?(?:it|that|this|that file|this file|the same file)$/.test(text)) {
+  if (/^(?:show|read|open|display|view|bring up|let me (?:see|read)) (?:me )?(?:it|that|this|that file|this file|the same file)(?: again)?$/.test(request)) {
     const file = FILES.find(record => record.id === context.lastFileId && !record.locked);
     return file ? { intent: 'request_file', fileId: file.id, needsClarification: false, provider: 'browser-ai' }
       : { intent: 'unknown', needsClarification: true, clarification: 'Which file would you like to read?', provider: 'browser-ai' };
@@ -74,7 +80,8 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
   const direct = directInterpretation(input, context);
   if (direct) return direct;
   const first = ranked[0]; const second = ranked[1];
-  if (!first || !Number.isFinite(first.score) || first.intent === 'unknown' || first.score < MATCH_THRESHOLD) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
+  if (!first || !Number.isFinite(first.score) || first.intent === 'unknown' || first.score < .35) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
+  if (first.score < MATCH_THRESHOLD) return { intent: 'unknown', needsClarification: true, clarification: `Are you asking about ${SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record'}? Please name the record or subject.`, provider: 'browser-ai' };
   if (/\boriginal\b/.test(recognitionText(input)) && /\b(where|stored|located|missing|attachment)\b/.test(recognitionText(input)) && ranked.slice(0, 3).some(item => item.intent === 'ask_transfer' && item.score >= MATCH_THRESHOLD)) return { intent: 'ask_transfer', needsClarification: false, provider: 'browser-ai' };
   // Archive location and handover questions share the same authored answer.
   const equivalent = new Set(['ask_transfer', 'ask_archive_location']);
@@ -84,7 +91,7 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
     const label = (intent: QueryIntent): string => SEMANTIC_CATALOG.find(group => group.intent === intent)?.label ?? 'another subject';
     return { intent: 'unknown', needsClarification: true, clarification: `Do you mean ${label(first.intent)}, or ${label(second.intent)}?`, confidence: first.score, provider: 'browser-ai' };
   }
-  const entityId = entityOf(input) ?? context.lastTopic ?? (context.lastFileId && !['company', 'readme'].includes(context.lastFileId) ? 'service-006' : undefined);
+  const entityId = entityOf(input) ?? context.lastTopic ?? (context.lastFileId && !['company', 'readme'].includes(context.lastFileId) || /\b(service|program|monitor|process)\b/.test(normalize(input)) ? 'service-006' : undefined);
   const needsContext = ['ask_authorization', 'ask_retirement', 'ask_service_status'].includes(first.intent) && /\b(it|that|this|they)\b/.test(normalize(input)) && !entityId;
   return { intent: first.intent, entityId, needsClarification: needsContext, ...(needsContext ? { clarification: 'Which service or record do you mean?' } : {}), confidence: first.score, provider: 'browser-ai' };
 }

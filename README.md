@@ -65,7 +65,11 @@ There is no backend directory because this slice has no backend implementation. 
 
 ## AI status
 
-**Offline interpreter: implemented and tested. Browser-model runtime: not implemented.** Settings truthfully report that no browser AI model is available. A provider interface and unavailable adapter are ready for a future implementation. No weight downloads or third-party scripts occur during public play.
+**Basic interpreter and optional browser model: implemented.** Enable **Question model** on the start page or **Improved questions** in Settings. The optional download is about 36.6 MB, including runtime and recognition examples. The start page and Settings show real byte progress and a percentage; play remains available while loading. Cancellation returns to basic questions.
+
+The pinned, quantized all-MiniLM-L6-v2 model runs in a background worker using CPU WebAssembly. It recognises meaning against 298 authored questions. It does not generate story facts or execute commands. Ambiguous inputs ask for clarification. All assets are served by this site and cached in the browser; player questions are not sent to a model server. The enabled preference survives visits. Browser storage eviction can require another download.
+
+See [the developer question catalogue](docs/QUESTION_CATALOG.md) for questions and actual initial replies. It contains spoilers and is not exposed in player HELP. See [AI implementation and measurements](docs/AI_EXPERIMENTS.md) for model preparation and evaluation commands.
 
 A development-only Ollama comparison adapter sends classifications to an explicitly selected loopback daemon. No daemon or model was available for end-to-end verification. Public production builds hide its settings. See [AI experiments](docs/AI_EXPERIMENTS.md).
 

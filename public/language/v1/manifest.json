@@ -51,9 +51,9 @@
     },
     {
       "path": "embeddings.json",
-      "bytes": 1039912,
-      "sha256": "a02676f95591be7182f74f6f74b466c9a85af183f2456e101568de301cc4dcb6"
+      "bytes": 1191603,
+      "sha256": "9ee798bdd4a020376d5d73a55d5541eb0f68ef97f9236debd25bd3a7eb63bda7"
     }
   ],
-  "downloadBytes": 36399878
+  "downloadBytes": 36551569
 }

@@ -45,4 +45,17 @@ describe('Meridian investigation UI', () => {
       expect(session.state().hasStarted).toBe(false);
     } finally { write.mockRestore(); }
   });
+  it('shows the loading percentage on the start page while keeping play available', () => {
+    const fixture = TestBed.createComponent(App); const app = fixture.componentInstance;
+    app.session.language.state.update(state => ({ ...state, phase: 'loading', loaded: 12_500_000, total: 25_000_000 }));
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelector('.setup-language')?.textContent).toContain('50%');
+    expect(element.querySelector<HTMLProgressElement>('#start-model-progress')?.value).toBe(50);
+    expect(element.querySelector<HTMLButtonElement>('.start-button')?.disabled).toBe(false);
+    app.session.language.state.update(state => ({ ...state, phase: 'initializing', detail: 'Checking first question…' }));
+    fixture.detectChanges();
+    expect(element.querySelector('.setup-language')?.textContent).toContain('files loaded 100%');
+    fixture.destroy();
+  });
 });

@@ -11,6 +11,14 @@ export function classify(input: string, context: QueryContext = {}): Interpretat
   const numbers: Record<string, string> = { '4': '004', '5': '005', '6': '006', '7': '007', four: '004', five: '005', six: '006', seven: '007' };
   const entity = code ? `service-${numbers[code] ?? code}` : context.lastTopic;
   const story = (intent: QueryIntent): Interpretation => result(intent, { entityId: entity ?? 'service-006' });
+  if (/^(?:hi|hello|hey|thanks|thank you)$/.test(text)) return result('ask_identity');
+  if (/what is this place|whats this place|where am i|what am i looking at|whose records/.test(text)) return result('ask_company');
+  if (/can (?:i trust you|you (?:hear|understand) me)|are you still there/.test(text)) return result(/trust/.test(text) ? 'ask_record_integrity' : 'ask_identity');
+  if (/hiding something|telling me everything|why wont you tell|record.*(?:reliable|trust|contradict|altered)|edit history/.test(text)) return result('ask_record_integrity');
+  if (/where is everybody|what happened to the people|anyone still alive|someone get hurt|everyone leave|anybody come back/.test(text)) return result('ask_office');
+  if (/who am i$|why am i here|can i leave|can you get me out|how did i get access|permissions|administrator|(?:can|may|could) i.*(?:edit|change|remove|write)|give me a password/.test(text)) return result('ask_access');
+  if (/time ?zone|timestamp|what date is it|date of this session|system clock|different years/.test(text)) return result('ask_dates');
+  if (/\be lin\b|\bj kell\b|who.*(?:wrote|sent).*(?:note|message)|who.*removed.*phone/.test(text)) return result('ask_staff');
   if (/^(what do you mean|explain|explain that|clarify|can you explain|what does that mean|tell me more|why)$/.test(text)) {
     return context.lastIntent ? result('ask_clarification', { entityId: entity }) : result('unknown', { needsClarification: true });
   }

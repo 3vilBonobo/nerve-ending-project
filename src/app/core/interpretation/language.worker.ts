@@ -53,13 +53,13 @@ async function load(root: string): Promise<void> {
     if (!cached) { try { await cache?.put(key, new Response(body, { headers: { 'Content-Type': asset.path.endsWith('.json') ? 'application/json' : 'application/octet-stream' } })); } catch { cache = undefined; } }
     send({ type: 'progress', loaded, total: manifest.downloadBytes, cached });
   }
-  send({ type: 'initializing' });
-  console.info('[Local questions] Files ready; loading runtime.');
+  send({ type: 'initializing', detail: 'Loading local processor…' });
   const read = (path: string): Uint8Array => { const body = files.get(new URL(path, base).href); if (!body) throw new Error('Required model asset missing.'); return body; };
   const moduleUrl = URL.createObjectURL(new Blob([read('runtime/transformers.mjs') as BlobPart], { type: 'application/javascript' }));
   const factoryUrl = URL.createObjectURL(new Blob([read('runtime/ort-wasm-simd-threaded.mjs') as BlobPart], { type: 'application/javascript' }));
+  const wasmUrl = URL.createObjectURL(new Blob([read('runtime/ort-wasm-simd-threaded.wasm') as BlobPart], { type: 'application/wasm' }));
   const runtime = await import(/* @vite-ignore */ moduleUrl);
-  console.info('[Local questions] Runtime loaded; preparing sentence model.');
+  send({ type: 'initializing', detail: 'Reading sentence model…' });
   runtime.env.allowRemoteModels = false; runtime.env.allowLocalModels = true;
   runtime.env.localModelPath = base.href;
   runtime.env.useBrowserCache = false; runtime.env.useFSCache = false; runtime.env.useFS = false;
@@ -73,16 +73,17 @@ async function load(root: string): Promise<void> {
   };
   runtime.env.backends.onnx.wasm.numThreads = 1;
   runtime.env.backends.onnx.wasm.proxy = false;
-  runtime.env.backends.onnx.wasm.wasmPaths = { mjs: factoryUrl };
-  runtime.env.backends.onnx.wasm.wasmBinary = read('runtime/ort-wasm-simd-threaded.wasm');
+  runtime.env.backends.onnx.wasm.initTimeout = 15000;
+  runtime.env.backends.onnx.wasm.wasmPaths = { mjs: factoryUrl, wasm: wasmUrl };
   extractor = await runtime.pipeline('feature-extraction', 'all-MiniLM-L6-v2', { dtype: 'q8', device: 'wasm', local_files_only: true });
-  console.info('[Local questions] Model loaded; checking first inference.');
+  send({ type: 'initializing', detail: 'Checking first question…' });
   const references = JSON.parse(new TextDecoder().decode(read('embeddings.json'))) as Embeddings;
   if (references.version !== CATALOG_VERSION || references.texts.join('\n') !== SEMANTIC_EXAMPLES.map(example => example.text).join('\n')) throw new Error('Question catalogue mismatch.');
   vectors = references.vectors;
   await extractor!('Ready', { pooling: 'mean', normalize: true });
-  console.info('[Local questions] Ready.');
   URL.revokeObjectURL(moduleUrl);
+  URL.revokeObjectURL(factoryUrl); URL.revokeObjectURL(wasmUrl);
+  files.clear();
   send({ type: 'ready', loadMs: performance.now() - started, persistent: !!cache });
 }
 
@@ -96,5 +97,5 @@ addEventListener('message', async ({ data }: MessageEvent<LanguageRequest>) => {
       const interpretation = selectMeaning(data.input, data.context, rankIntents(embedding.tolist()[0], vectors));
       send({ type: 'result', id: data.id, interpretation, elapsedMs: performance.now() - started });
     }
-  } catch { send({ type: 'error', ...(data.type === 'query' ? { id: data.id } : {}) }); }
+  } catch (error) { send({ type: 'error', detail: error instanceof Error ? error.message.slice(0, 250) : 'Local processor failed.', ...(data.type === 'query' ? { id: data.id } : {}) }); }
 });

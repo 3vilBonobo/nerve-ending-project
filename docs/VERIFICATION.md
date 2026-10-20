@@ -16,6 +16,12 @@ The revised production build was reviewed in the available Chromium in-app brows
 
 ## Limits
 
-No independent human engagement playtest has been performed. A scripted walkthrough does not establish that the story is compelling or establish a play duration. Physical touch devices, a complete assistive-technology audit, disconnected offline cache behaviour and live Ollama were not tested. No browser model is bundled. Later acts remain unimplemented.
+No independent human engagement playtest has been performed. A scripted walkthrough does not establish that the story is compelling or establish a play duration. Physical touch devices, a complete assistive-technology audit, disconnected offline cache behaviour and live Ollama were not tested. Later acts remain unimplemented.
+
+## Local model revision
+
+The optional all-MiniLM-L6-v2 q8 browser model is self-hosted with its CPU WASM runtime and runs in a background worker. Ten manifest assets total 36,551,569 bytes; hashes and individual file sizes are checked before publication. The start page and Settings display real byte progress, a percentage, cancellation, preparation and Ready states. Play remains available during loading. Cached loading and an actual semantic question were verified in Chromium; observed Settings measurements were 0.6 seconds load and 17 ms inference on this machine.
+
+The full unit/component suite passes 103 checks. It includes human questions, protected identity/receipt fields, stale workers, timeout fallback and the start-page percentage. Real-model catalogue coverage is 298/298. The 50 development cases pass; 36 additional wording cases produce 33 intended direct answers and three clarifications, without a wrong factual route in that set. These are development/regression measurements, not an independent generalization benchmark. See AI_EXPERIMENTS.md for commands, scope and limits; QUESTION_CATALOG.md lists actual replies without adding examples to player help.
 
 Visual reference and font licence details remain in VISUAL_REFERENCES.md and public/fonts/OFL.txt.

@@ -7,11 +7,13 @@ const PREFERENCE = 'nerve-ending.local-questions.v1';
 export class LocalLanguage implements OnDestroy {
   readonly state = signal(emptyLanguageState());
   private interpreter?: BrowserAIInterpreter;
+  private destroyed = false;
   get provider(): BrowserAIInterpreter | undefined { return this.state().phase === 'ready' ? this.interpreter : undefined; }
   constructor() {
     try { if (localStorage.getItem(PREFERENCE) === 'enabled') queueMicrotask(() => this.enable()); } catch { /* Current-visit use remains possible. */ }
   }
   enable(): void {
+    if (this.destroyed) return;
     if (['loading', 'initializing', 'ready'].includes(this.state().phase)) return;
     if (typeof Worker === 'undefined' || typeof WebAssembly === 'undefined') { this.state.update(state => ({ ...state, phase: 'unsupported' })); return; }
     try { localStorage.setItem(PREFERENCE, 'enabled'); } catch { /* Preference is optional. */ }
@@ -23,5 +25,5 @@ export class LocalLanguage implements OnDestroy {
     this.interpreter?.dispose(); this.interpreter = undefined; this.state.set(emptyLanguageState());
     try { localStorage.removeItem(PREFERENCE); } catch { /* Current-visit setting still applies. */ }
   }
-  ngOnDestroy(): void { this.interpreter?.dispose(); }
+  ngOnDestroy(): void { this.destroyed = true; this.interpreter?.dispose(); }
 }

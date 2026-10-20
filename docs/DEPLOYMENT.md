@@ -30,7 +30,7 @@ Expected hosting cost: **€0 for this static app within the selected free tier*
 
 ## Offline / PWA behavior
 
-Production builds generate Angular's service worker and `ngsw.json`. It prefetches the app shell, authored content included in JavaScript, manifest, and local icons. Registration occurs after the app stabilizes. A first successful visit and completed cache are needed before offline use; browser storage eviction can remove the cache. No uncached model or third-party dependency is promised offline.
+Production builds generate Angular's service worker and `ngsw.json`. It prefetches the app shell, authored content included in JavaScript, manifest, and local icons. Registration occurs after the app stabilizes. A first successful visit and completed cache are needed before offline use; browser storage eviction can remove the cache. Optional language weights and runtime are excluded from prefetch. They load only after opt-in, under `/language/v1/`, and the worker keeps them in its own versioned Cache API store. Later cached loads use these bytes and fall back to a cached manifest when the network is unavailable. Uncached assets cannot be used offline.
 
 The app manifest uses **Nerve Ending** for both name and short name. Browsers decide whether and when an install prompt appears. When the native `beforeinstallprompt` event is available, settings show an accurate installation control. Other browsers may offer installation through their own menus. Installation is optional and separate from a language model.
 

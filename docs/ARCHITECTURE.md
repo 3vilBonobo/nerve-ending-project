@@ -16,7 +16,11 @@ The deterministic interpreter covers the call, recipient, office, services, reco
 
 Optional provider results are validated against known intents, services and accessible files. They receive copied context and no mutation API. Even a validated request_backup is checked against the actual user input before restoring the copy. An informational question cannot become a restore because of an incorrect classifier.
 
-Browser AI is unavailable. The development-only Ollama adapter uses a selected local daemon. Public play uses the bundled interpreter.
+The optional browser provider loads the pinned all-MiniLM-L6-v2 q8 model in a Web Worker. semantic-catalog.ts contains 298 recognition examples, including ordinary human questions. semantic.ts compares sentence vectors, applies a similarity threshold and a margin between meanings, and resolves explicit subjects and selected-file follow-ups. Similarity scores are not calibrated probabilities. Borderline or competing matches ask for clarification. Explicit operations remain in the deterministic parser; informational questions containing words such as “show” do not become file operations.
+
+local-language.ts manages opt-in, byte progress, cancellation, readiness, failure and a separate local preference. language.worker.ts streams same-origin assets into a dedicated Cache API store, imports the CPU runtime from saved bytes, and warms up inference before reporting Ready. Model data stays out of the initial app shell. Missing storage permits current-visit use. A five-second inference timeout terminates the worker and returns the request to basic interpretation. Context is copied, and the worker receives no hidden file bodies or later story.
+
+The engine remains the authority for every reply and knowledge gate. It answers human questions from the currently available records and explicitly identifies missing information. Receipt fields require the actual backup-read flag. The later identity is not unlocked by this preview. A development-only Ollama adapter remains available for comparison.
 
 ## Session and presentation
 

@@ -33,9 +33,9 @@ export class BrowserAIInterpreter implements IntentInterpreter {
   private receive(message: LanguageResponse): void {
     if (!this.worker) return;
     if (message.type === 'progress') this.update({ phase: 'loading', loaded: message.loaded, total: message.total, cached: message.cached });
-    else if (message.type === 'initializing') this.update({ phase: 'initializing' });
+    else if (message.type === 'initializing') this.update({ phase: 'initializing', detail: message.detail });
     else if (message.type === 'ready') { clearTimeout(this.loadTimer); this.update({ phase: 'ready', loadMs: message.loadMs, persistent: message.persistent }); }
-    else if (message.type === 'error') this.fail();
+    else if (message.type === 'error') { this.fail(); this.update({ detail: message.detail ?? 'Local processor unavailable.' }); }
     else {
       const request = this.pending.get(message.id);
       if (!request) return;

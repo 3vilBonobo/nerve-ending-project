@@ -1,40 +1,40 @@
-# AI experiments and actual implementation status
+# Local language model — implementation and verification
 
-## Shipped behavior
+The game always includes its basic interpreter. The optional browser model is implemented and was exercised in the Chromium in-app browser. No model server, API key or Ollama installation is required by players.
 
-The deterministic offline interpreter is implemented and tested with 31 varied question examples plus ambiguity and failure handling. It performs no network requests, needs no weights, and is sufficient to finish Act 01. It normalizes case, apostrophes and punctuation, resolves authored file aliases and service-six variations, and retains a small last-topic/last-intent context.
+## Model and assets
 
-It is a topic classifier rather than an open-ended conversational system. The game engine selects every answer from authored text and validates all transitions. Original evidence does not change when it is queried.
+- Model: Xenova/all-MiniLM-L6-v2, revision 751bff37182d3f1213fa05d7196b954e230abad9.
+- Quantization: q8, mean-pooled normalized 384-dimensional sentence vectors.
+- Runtime: Transformers.js 3.8.1 with the CPU-only ONNX Runtime Web WASM backend; one thread, no WebGPU requirement.
+- Download: 36,551,569 bytes for the ten manifest assets, including about 23 MB of model weights, WASM, runtime and recognition vectors. The small manifest and app worker are additional overhead.
+- Licences: model and Transformers.js Apache 2.0; ONNX Runtime MIT. Licence files and upstream model card are retained under public/language/v1/.
+- Player requests use same-origin static assets. Questions are never sent to an inference server. Developer-only Ollama controls remain a separate comparison option.
 
-## Browser AI — not implemented
+All assets are committed. A normal build needs no model-hub connection. To recreate them, run npm run model:prepare, then npm run model:references, then npm run model:catalogue. Preparation pins the model revision, checks the upstream weight checksum and records asset hashes. npm run model:verify checks the supplied bytes before packaging.
 
-No WebLLM or Transformers.js runtime has been integrated. No model has been selected, downloaded, licensed for this distribution, loaded, benchmarked, or tested in a target browser. There is therefore **no tested model ID, model download size, model license, load time, or inference timing** to report.
+## Download and runtime behavior
 
-`BrowserAIInterpreter.isAvailable()` returns false and its inference method raises an explicit unavailable error. Setup and settings show **UNAVAILABLE**, and no download button imitates an installer. WebGPU detection is informational only; the app correctly states that this does not prove model compatibility. The initial bundle contains no AI runtime or weights.
+The first download requires explicit enablement on the start page or in Settings. Both show a percentage based on real bytes prepared, byte totals, cancellation and a distinct initialization stage. Start/resume stays available. The preference is remembered separately from investigation saves. Later visits initialize the enabled model again, using cached bytes where present. Browser eviction can require a new download.
 
-Concrete next steps:
+The worker uses a versioned Cache API store. Denied storage permits in-memory use for the current visit. A cached manifest can be used after a network failure. Runtime and WASM modules are created from saved bytes, so inference does not depend on a model CDN. The WASM module uses explicit module and binary URLs; an inline binary override with a blob module did not initialize in the reviewed browser and was replaced. Temporary buffers and URLs are released after warmup.
 
-1. Select a small classification-capable model with a verified redistribution license and documented runtime support. Evaluate actual download bytes, memory, initialization, and latency before deciding it is practical.
-2. Add its runtime via a lazy import inside a provider, leaving the initial app and game engine independent.
-3. Add explicit opt-in with the actual model ID, download estimate, honest progress from the runtime, and cancellation/error handling. Never start a weight download on page render.
-4. Test cold download, browser cache recovery/eviction, denied persistent storage, WebGPU adapter/device failures, and a representative question corpus on real desktop and mobile targets.
-5. Feed only validated intent JSON through `interpretSafely`. Measure model load time separately from inference and document unsupported browsers. Retain the deterministic fallback and complete-game regression tests.
+Ready means the runtime, tokenizer, model, catalogue and first inference have all completed. Failed loading or inference returns control to the basic interpreter. Loading can be cancelled; inference has a five-second timeout. A terminated worker cannot complete a stale request.
 
-## Ollama developer comparison
+## Recognition and answers
 
-The HTTP adapter is implemented, with explicit model/endpoint selection in **development settings only**. No real Ollama daemon/model was available during this implementation, so live network/CORS compatibility and classification quality are **unverified**. Tests cover the provider boundary, rejection, unavailable providers, malformed output, unknown labels, timeout, and copied context.
+semantic-catalog.ts contains 298 recognition examples across identity, place/company, staff, calls, recipients, office, running services, shutdown, records, backups, approval, dates, access, record reliability, controls and unsupported subjects. The developer-only QUESTION_CATALOG.md lists their actual initial answers. Player HELP remains short and does not expose that catalogue.
 
-To try it:
+The model compares meaning against these examples. Similarity is not a calibrated probability. A threshold and a margin between distinct meanings decide whether to answer or clarify. Restricted spelling repair preserves codes and paths. Context contains the last subject, selected document and previous question category. Explicit file operations and backup requests remain deterministic; asking what a receipt shows does not open it.
 
-1. Run Ollama as a separate local service using its official installation instructions and install a model appropriate for your device.
-2. Configure that daemon to allow the specific development origin (`http://127.0.0.1:4200` or `http://localhost:4200`) as required by its CORS settings; consult the current [Ollama FAQ](https://docs.ollama.com/faq).
-3. Run `npm start`, open **DISPLAY & SETTINGS → DEVELOPER / INTENT CLASSIFIER**, enter the actual installed model name, and select **USE OLLAMA**.
-4. Ask a question. Commands bypass classification. Diagnostics show observed query count, mean interpretation time, and fallback rate. Failed requests revert to the offline classifier; **USE OFFLINE** selects it explicitly.
+The model never generates story text. engine/game.ts selects short authored replies and source links. Missing facts stay missing. Initial identity/place questions describe the records interface and company without exposing later identity. The backup-read state gates protected receipt fields; opening the backup does not unlock later acts or the hidden full identity.
 
-The adapter POSTs to `/api/chat` using `stream: false`, `format: 'json'`, a classification-only system prompt, and a six-second request abort. The outer boundary has a 6.5-second timeout. It restricts endpoints to HTTP(S) loopback addresses. It does not discover or download models. Do not expose raw Ollama to the internet or allow arbitrary remote origins.
+## Measurements and evaluation limits
 
-The prompt contains allowed labels, accessible initial file IDs, small topic context, and user input. It excludes hidden later-act story content. Validation strips unrecognized fields and rejects invented entities, inaccessible records, unsupported intents, or invalid request fields. An AI request cannot directly mutate state, issue commands, or generate in-world prose.
+The real cached browser load displayed 0.6 seconds; an actual semantic question displayed 17 ms inference in Settings. These are single observations on this machine, not promised device performance. The first download was observed progressing through byte percentages before initialization. Cancel/retry and responsive rendering are part of browser QA.
 
-## Measurements
+The current catalogue coverage run routes 298/298 examples as intended. This is a self-coverage check, not generalization. Fifty development examples pass. The separate 36-question wording set returns 33 intended direct answers and three clarifications, with no wrong factual route in that set. The rules-only interpreter recognizes 18/36 in that set. The additional wording set was inspected during implementation and is now a regression suite, not an independent blind benchmark. Node timing in its generated report is not a browser performance claim.
 
-Production build size is recorded in `VERIFICATION.md`. Runtime development diagnostics measure the complete interpretation boundary using `performance.now()`; fallback timing includes failed provider time where applicable. They are not model benchmarks. No analytics or telemetry is transmitted.
+Commands: npm run model:evaluate, npm run model:holdout and npm run model:catalogue. Full reports are written under ignored tmp/. Evaluation fails on wrong factual routes or direct accuracy below 85%; legitimate clarification is reported separately. Unit/component checks cover byte progress, warmup readiness, cancellation, late results, timeouts, unknown queries, context, vocabulary repair, operation boundaries and protected story facts.
+
+Physical mobile devices, a disconnected browser session, cache eviction, storage denial in a real browser and a complete assistive-technology audit have not been verified. No independent human engagement playtest has been performed. The model currently supports English questions about the implemented preview; future acts require new authored answers and recognition examples. It is not an unrestricted conversation generator.

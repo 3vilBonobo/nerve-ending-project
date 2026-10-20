@@ -17,7 +17,7 @@ export function validateInterpretation(value: unknown, provider: Interpretation[
     entityId: candidate['entityId'] as string | undefined,
     fileId: candidate['fileId'] as string | undefined,
     searchTerm: typeof candidate['searchTerm'] === 'string' ? candidate['searchTerm'].slice(0, 150) : undefined,
-    ...(typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
+    ...(provider === 'browser-ai' && typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
     ...(typeof candidate['confidence'] === 'number' && Number.isFinite(candidate['confidence']) && candidate['confidence'] >= 0 && candidate['confidence'] <= 1 ? { confidence: candidate['confidence'] } : {}),
   };
 }

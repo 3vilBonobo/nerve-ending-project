@@ -85,7 +85,9 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
     case 'ask_recipient': return respond(state.archive006Recovered
       ? ['CALL DESTINATION: NIGHT DESK / 214', 'The saved confirmation came from COMMS/BRIDGE-02.', 'No staff name can be read from the receipt.']
       : ['CALL DESTINATION: NIGHT DESK / 214', 'The phone was removed on 18 Sep 2001 at 17:00.', 'No replacement number is listed.'], state.archive006Recovered ? ['fragment', 'maintenance'] : ['maintenance'], ['EV_DESK_CLOSED']);
-    case 'ask_office': return /why|reason/i.test(input)
+    case 'ask_office':
+      if (/alive|dead|hurt|people|every(?:one|body)|come back/i.test(input)) return respond(['STAFF RECORDS / INCOMPLETE', 'Reception closed in September 2001.', 'E. Lin left a note the following morning.', 'These files do not say what happened to the staff afterward.'], ['company', 'maintenance']);
+      return /why|reason/i.test(input)
       ? respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'The reason for closure is not recorded in this copy.', 'Telephone reception ended at 17:00.'], ['company'])
       : respond(['PUBLIC OFFICE CLOSED / 18 SEP 2001', 'Reception ended at 17:00.', 'Last staff sign-in: 19 Sep 2001, 08:10', 'This records connection is unattended.'], ['company', 'maintenance']);
     case 'ask_service_status': return /restart|start.*again|back (?:on|online)|turned.*back|brought.*back/i.test(input)
@@ -110,15 +112,24 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
       return respond(state.archive006Recovered
         ? ['AUTHORISATION: 0417 [PARTIAL]', 'Staff name: unreadable', 'No matching name in the current directory.']
         : ['SHUTDOWN ORDER / 18 SEP 2001', 'Filed by: J. Kell', 'The handover attachment is not in the active file list.'], [state.archive006Recovered ? 'fragment' : 'authorization']);
-    case 'ask_company': return /own(?:ed|er)|found(?:ed|er)/i.test(input)
+    case 'ask_company':
+      if (/this place|where am i|looking at|whose records|these machines/i.test(input)) return respond(['MERIDIAN SYSTEMS / REMOTE RECORDS', 'You are viewing saved company files through an old records terminal.', 'Meridian made medical monitoring equipment.', 'This connection does not identify your physical location.'], ['company']);
+      return /own(?:ed|er)|found(?:ed|er)/i.test(input)
       ? respond(['MERIDIAN SYSTEMS', 'No owner or founder is named in this copy.', 'The company notice describes medical monitoring equipment.'], ['company'])
       : respond(['MERIDIAN SYSTEMS', 'Medical monitoring equipment.', 'The public office closed in September 2001.', 'Technical records remain online for equipment owners.'], ['company']);
-    case 'ask_identity': return respond(['MERIDIAN RECORDS / R-02', 'Automatic records access.', 'No staff terminal is connected.'], ['readme']);
+    case 'ask_identity':
+      if (/recording|remember/i.test(input)) return respond(['SESSION MEMORY', 'This client keeps the last subject and the record you selected.', 'Commands and replies are saved in this browser when storage is available.', 'They are not sent to office staff.'], ['readme']);
+      if (/built|created|programmed/i.test(input)) return respond(['MERIDIAN RECORDS / R-02', 'This interface provides access to company records.', 'No developer name is listed in this copy.'], ['readme']);
+      if (/^(?:hello|hi|hey|thank you|thanks)[.! ]*$/i.test(input.trim())) return respond(['R-02 / CONNECTION ACTIVE', 'You can read the company records or ask about them.'], ['readme']);
+      return respond(['MERIDIAN RECORDS / R-02', 'I provide access to saved company records.', 'This terminal accepts typed questions.', 'No staff terminal is connected.'], ['readme']);
     case 'ask_staff':
       if (/removed|disconnect/i.test(input)) return respond(['NIGHT DESK PHONE', 'E. Lin reported its removal on 19 Sep 2001.', 'The note does not name the person who removed it.'], ['maintenance']);
       if (/home|contact|number|where.*lin/i.test(input)) return respond(['E. LIN / LAST SHIFT NOTE', 'Asked for alarms not to be forwarded to a home number.', 'The number and a current contact address are not listed.'], ['maintenance']);
       return respond(['STAFF NAMES IN THIS COPY', 'E. Lin: sent the last shift note.', 'J. Kell: filed the service closure list.', 'No complete staff directory is available.'], ['maintenance', 'authorization']);
-    case 'ask_access': return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'You can read files and search this copy.', 'This connection cannot edit records or control equipment.', 'Messages typed here are not sent to office staff.'], ['readme', 'company']);
+    case 'ask_access':
+      if (/leave|get me out|close.*(?:client|connection|session)/i.test(input)) return respond(['CLIENT CONTROLS', 'You can close this client at any time.', 'Progress is saved in this browser when storage is available.', 'This terminal has no building controls.'], ['readme']);
+      if (/why am i here|how did i get/i.test(input)) return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'No staff account is attached to this connection.', 'The records do not explain who opened the client or why.', 'You can read the retained files.'], ['readme']);
+      return respond(['ACCESS: EXTERNAL / RECORDS ONLY', 'You can read files and search this copy.', 'This connection cannot edit records or control equipment.', 'Messages typed here are not sent to office staff.'], ['readme', 'company']);
     case 'ask_dates': return respond(['SYSTEM DATE: 06 NOV 2003', 'Office closure records: September 2001.', 'Live monitor readings: November 2003.', 'A saved file date and an event date can differ.', 'No time zone or independent clock check is recorded.'], ['company', 'register']);
     case 'ask_record_integrity': return respond(['RECORDS CHECK', 'The office list is saved paperwork; the monitor is a later reading.', 'This copy has no complete edit history.', 'Missing or unreadable fields cannot be filled from these records.', 'Answers use the available records; unknown details remain unknown.'], ['authorization', 'register']);
     case 'ask_next': return respond(['RECORDS ACCESS / CONTROLS', 'Select a file name to read it. Linked records are attached files.', 'DIR lists folders. SEARCH followed by a word finds records.', 'Ask about something in a record, in ordinary words.', 'Esc shows a full reply without waiting for the typing.'], ['readme']);
@@ -159,6 +170,10 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
       }
       case 'OPEN': {
         if (/^(?:the )?(?:local )?backup(?: copy| receipt)?$/i.test(argument)) { result = recover(state); break; }
+        if (/^(?:it|that|this|that file|this file)$/i.test(argument)) {
+          const id = state.openFileIds.at(-1) ?? state.lastFileId;
+          result = id ? inspectFile(state, id) : done(output(['Which file would you like to read?'], [], 'notice')); break;
+        }
         const path = resolvePath(argument, state.currentDirectory);
         const file = FILES.find(item => item.path === path) ?? fileByName(argument);
         result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${argument}` : 'Enter a file name after OPEN.', 'Example: OPEN Office notice'], [], 'error')); break;
