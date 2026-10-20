@@ -221,14 +221,14 @@ Select [OPEN] beside a file name to read it.
 
 A service is a program running on this computer.
 Type STATUS to see which ones are running.
-Or ask: "Why is 006 still running?"
+Or ask: "What is Meridian Systems?"
 
-Old records may disagree with what is running now.
-Read other files to find out why.
+You can browse the folders or ask to see a named file.
+For example: "Show me About Meridian."
 
 Type HELP for more things you can try.
 You cannot edit the records.
-RECOVER can find a file missing from the list.`,
+Dates and department codes belong to the original files.`,
   },
   {
     id: 'company', path: '/ADMIN/COMPANY_PROFILE.TXT', title: 'About Meridian', modified: '2000-02-14 10:00', evidence: [],

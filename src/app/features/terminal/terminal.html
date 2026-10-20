@@ -1,4 +1,4 @@
-<section class="terminal-shell" aria-label="Meridian remote terminal">
+<section class="terminal-shell" aria-label="Meridian remote terminal" (keydown.escape)="showAll($event)">
   <header class="window-titlebar">
     <div class="window-title"><span class="terminal-glyph" aria-hidden="true">&gt;_</span> REMOTE TERMINAL <span class="muted">/ R-02</span></div>
     <div class="window-controls">
@@ -7,11 +7,11 @@
     </div>
   </header>
   <div class="terminal-toolbar"><span>Folder: {{ session.state().currentDirectory }}</span></div>
-  <div class="scrollback" #scrollback (scroll)="scroll()" tabindex="0" aria-label="Terminal scrollback">
-    @for (entry of session.state().terminalHistory; track $index) {
+  <div class="scrollback" #scrollback (scroll)="scroll()" tabindex="0" aria-label="Terminal scrollback" [attr.aria-busy]="session.busy()">
+    @for (entry of entries(); track $index) {
       <article class="terminal-entry" [class.initial-entry]="!entry.input" [class.entry-notice]="entry.code === 'denied' || entry.code === 'error'">
         @if (entry.input) { <div class="input-echo"><span class="muted">SYS&gt;</span> {{ entry.input }}</div> }
-        @for (line of entry.lines; track $index) { <div class="output-line">{{ line || ' ' }}</div> }
+        @for (line of entry.lines; track $index; let lastLine = $last) { <div class="output-line">{{ line || ' ' }}@if (entry.printing && lastLine) { <span class="reply-caret" aria-hidden="true"></span> }</div> }
         @if (entry.links.length) {
           <div class="record-links">
             @for (link of entry.links; track link.fileId) { <button class="record-link" (click)="fileOpened.emit(link.fileId)"><span aria-hidden="true">[OPEN]</span> {{ link.label }}</button> }
@@ -19,7 +19,9 @@
         }
       </article>
     }
-    @if (session.busy()) { <p class="processing" role="status">CHECKING RECORDS<span>...</span></p> }
+    @if (session.playback.current(); as reply) {
+      @if (reply.phase === 'processing') { <article class="terminal-entry pending-entry"><div class="input-echo"><span class="muted">SYS&gt;</span> {{ reply.input }}</div><p class="processing">WORKING<span class="processing-dots" aria-hidden="true">...</span></p></article> }
+    }
   </div>
   <form class="command-row" (submit)="$event.preventDefault(); submit()">
     <label for="terminal-command">SYS<span aria-hidden="true">&gt;</span></label>
@@ -29,6 +31,6 @@
     </div>
     <button type="submit" [disabled]="session.busy() || !input.trim()" aria-label="Submit command">ENTER ↵</button>
   </form>
-  <footer class="terminal-footer"><span>HELP <span class="muted">commands</span></span><span>↑ ↓ <span class="muted">previous commands</span></span></footer>
-  <span class="sr-only" aria-live="polite">{{ session.busy() ? 'Processing query.' : 'Ready for input. ' + (session.state().terminalHistory.at(-1)?.lines?.[0] ?? '') }}</span>
+  <footer class="terminal-footer"><span>HELP <span class="muted">commands</span></span>@if (session.busy()) { <button class="show-reply" (click)="showAll()">SHOW FULL REPLY <span class="muted">[ESC]</span></button> } @else { <span>↑ ↓ <span class="muted">previous commands</span></span> }</footer>
+  <span class="sr-only" aria-live="polite">{{ session.busy() ? (session.playback.current()?.phase === 'processing' ? 'Working.' : 'Reply arriving. Press Escape to show the full reply.') : 'Ready for input. ' + (session.state().terminalHistory.at(-1)?.lines?.join(' ') ?? '') }}</span>
 </section>

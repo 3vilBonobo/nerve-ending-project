@@ -3,7 +3,7 @@ import { ArchiveFile, EvidenceId, GameState, Interpretation, QueryIntent, Termin
 import { classify } from '../interpretation/fallback';
 import { parseCommand, resolvePath } from './commands';
 
-export const OPENING = ['MERIDIAN SYSTEMS / RECORDS ACCESS', 'VERSION 3.14', '', 'READY', 'This computer holds old company records.', 'You can open files or ask questions.', '', 'To begin, type: What is still running?', 'Type HELP if you need instructions.'];
+export const OPENING = ['MERIDIAN SYSTEMS / RECORDS ACCESS', 'VERSION 3.14', '', 'READY', 'This computer holds old company records.', 'You can open files or ask questions.', '', 'For example: What is Meridian Systems?', 'Type HELP if you need instructions.'];
 export const output = (lines: string[], fileIds: string[] = [], code: TerminalOutput['code'] = 'ok', truth: TerminalOutput['truth'] = 'system'): TerminalOutput => ({
   lines, code, truth, links: fileIds.flatMap(id => { const file = fileById(id); return file ? [{ fileId: id, label: file.title }] : []; }),
 });
@@ -56,7 +56,7 @@ export function recover(state: GameState): Transition {
   return { state: next, recovered: true, output: output(['FILE FOUND.', 'ADDRESS: MX-91/006-R', 'The file list is not fully fixed.', '006 is still running.', '', 'Select [OPEN] below to read the recovered receipt.'], ['fragment']) };
 }
 function search(state: GameState, term: string): TerminalOutput {
-  if (!term.trim()) return output(['Enter a word after SEARCH.', 'Example: SEARCH 006'], [], 'error');
+  if (!term.trim()) return output(['Enter a word after SEARCH.', 'Example: SEARCH company'], [], 'error');
   const needle = term.toUpperCase();
   const matches = accessibleFiles(state).filter(file => `${file.path} ${file.title} ${file.body}`.toUpperCase().includes(needle));
   const excerpts = matches.map(file => {
@@ -68,7 +68,7 @@ function search(state: GameState, term: string): TerminalOutput {
 function answer(state: GameState, interpretation: Interpretation): Transition {
   let next = { ...state };
   const respond = (lines: string[], files: string[] = [], evidence: EvidenceId[] = []): Transition => ({ state: discover(next, evidence), output: output(lines, files, 'ok', 'interpretation') });
-  if (interpretation.needsClarification) return { state, output: output(['MORE DETAIL NEEDED.', 'Which program or file do you mean?', 'Try: Why is 006 still running?'], [], 'notice') };
+  if (interpretation.needsClarification) return { state, output: output(['MORE DETAIL NEEDED.', 'Which program or file do you mean?', 'Include its name or number in your question.'], [], 'notice') };
   let intent: QueryIntent = interpretation.intent;
   if (intent === 'ask_clarification') {
     if (!state.lastIntent) return respond(['MORE DETAIL NEEDED.', 'Name the program or file you want to ask about.']);
@@ -89,7 +89,7 @@ function answer(state: GameState, interpretation: Interpretation): Transition {
     case 'ask_identity': return respond(['MERIDIAN RECORDS SYSTEM / VERSION 3.14.', 'This is an automatic reply. No person is connected.', 'You can ask about the saved records.'], ['readme']);
     case 'request_file': return inspectFile(next, interpretation.fileId ?? '');
     case 'request_search': return { state: next, output: search(next, interpretation.searchTerm ?? '') };
-    default: return { state, output: output(['QUESTION NOT UNDERSTOOD.', 'Try: Why is 006 still running?', 'Or type HELP for instructions.'], [], 'notice') };
+    default: return { state, output: output(['QUESTION NOT UNDERSTOOD.', 'Try: What is Meridian Systems?', 'Or type HELP for instructions.'], [], 'notice') };
   }
 }
 
@@ -107,19 +107,17 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
         result = argument.toUpperCase() === 'RECOVER' ? inspectFile(state, 'recovery-help') : done(output([
           'HELP / THINGS TO TRY', '',
           'You can ask questions in ordinary words.',
-          'Try: Why is 006 still running?',
-          'Try: Show me the Service list',
-          'Try: How do I find the missing file?', '',
+          'Try: What is Meridian Systems?',
+          'Try: Show me About Meridian',
+          'Try: Who am I talking to?', '',
           'Select [OPEN] beside a file name to read it.', '',
           'SHORT COMMANDS',
           'STATUS                 Show what is running',
           'DIR                    List files and folders',
-          'OPEN Service list      Read the Service list',
-          'SEARCH 006             Find files that mention 006',
-          'HELP RECOVER           Explain how to find the missing file',
-          'RECOVER ARCHIVE 006     Find the missing file after reading the records',
+          'OPEN About Meridian    Read the company information',
+          'SEARCH company         Find files that mention a word',
           'CLEAR                  Clear the screen; keep progress', '',
-          'To open a folder: CD /ARCHIVE. To go back: CD ..',
+          'To open a folder: CD /SYSTEM. To go back: CD ..',
           'Up/Down brings back things you typed before.',
         ], ['readme']));
         break;
@@ -140,7 +138,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
         const path = resolvePath(argument, state.currentDirectory);
         const name = argument.toUpperCase();
         const file = accessibleFiles(state).find(item => item.path === path || item.title.toUpperCase() === name || item.path.split('/').pop() === name);
-        result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${argument}` : 'Enter a file name after OPEN.', 'Example: OPEN Service list', 'Type DIR to see available files.'], [], 'error'));
+        result = file ? inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${argument}` : 'Enter a file name after OPEN.', 'Example: OPEN About Meridian', 'Type DIR to see available files.'], [], 'error'));
         break;
       }
       case 'SEARCH': result = done(search(state, argument)); break;
@@ -151,7 +149,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
     }
   } else {
     const languageLike = /[?]|\b(why|what|where|who|when|how|is|was|did|can|could|show|find|thought|explain|clarify|tell|its|it|that|wheres|wasnt)\b/i.test(input);
-    result = languageLike ? answer(state, interpretation ?? classify(input, state)) : done(output(['REQUEST NOT UNDERSTOOD.', 'Type HELP for things you can try.', 'You can also ask a question, such as: Why is 006 still running?'], [], 'error'));
+    result = languageLike ? answer(state, interpretation ?? classify(input, state)) : done(output(['REQUEST NOT UNDERSTOOD.', 'Type HELP for things you can try.', 'You can also ask a question, such as: What is Meridian Systems?'], [], 'error'));
   }
   const history = result.clear ? [] : result.state.terminalHistory;
   return { ...result, state: { ...result.state, terminalHistory: [...history, { input, ...result.output }].slice(-80) } };

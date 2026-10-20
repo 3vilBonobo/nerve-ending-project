@@ -56,6 +56,25 @@ describe('command and virtual filesystem contract', () => {
     expect(runInput(state, 'OPEN Recovered receipt').openFileId).toBeUndefined();
     expect(inspectFile(state, 'fragment').state).toEqual(state);
   });
+  it('keeps general help and default examples free of investigation clues', () => {
+    const state = newGame();
+    const surfaces = [
+      ...state.terminalHistory[0].lines,
+      ...runInput(state, 'HELP').output.lines,
+      ...runInput(state, 'What about the weather?').output.lines,
+      ...runInput(state, 'FROBULATE').output.lines,
+      ...runInput(state, 'SEARCH').output.lines,
+      ...runInput(state, 'OPEN').output.lines,
+      FILES.find(file => file.id === 'readme')!.body,
+    ].join('\n');
+    expect(surfaces).not.toMatch(/0*006|still running|missing file|RECOVER ARCHIVE|shutdown|retirement/i);
+    expect(runInput(state, 'HELP').output.links.map(link => link.fileId)).toEqual(['readme']);
+    for (const example of ['What is Meridian Systems?', 'Show me About Meridian', 'Who am I talking to?']) {
+      const reply = runInput(state, example);
+      expect(reply.output.code).toBe('ok');
+      expect(reply.state.discoveredEvidenceIds).toHaveLength(0);
+    }
+  });
 });
 
 describe('Act 01 evidence and consequences', () => {

@@ -15,14 +15,15 @@ describe('Meridian client UI', () => {
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();
     expect(element.querySelector('[aria-label="Restore terminal"]')).not.toBeNull();
-    await TestBed.inject(Session).submit('STATUS'); fixture.detectChanges();
+    const session = TestBed.inject(Session);
+    const reply = session.submit('STATUS'); session.playback.skip(); await reply; fixture.detectChanges();
     expect(element.textContent).toContain('SERVICE 006: RUNNING'); fixture.destroy();
   });
   it('uses one state for file browsing and terminal recovery, with explicit fragment review', async () => {
     const fixture = TestBed.createComponent(App); const app = fixture.componentInstance;
     app.start(); app.skipConnection();
     for (const id of ['register', 'ledger', 'repair']) app.openFile(id);
-    await app.session.submit('RECOVER ARCHIVE 006'); app.openFile('fragment'); fixture.detectChanges();
+    const reply = app.session.submit('RECOVER ARCHIVE 006'); app.session.playback.skip(); await reply; app.openFile('fragment'); fixture.detectChanges();
     expect(app.session.state().act01Complete).toBe(true); expect(app.showEnding()).toBe(false);
     const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.fragment-finish');
     expect(button).not.toBeNull(); button!.click(); fixture.detectChanges();

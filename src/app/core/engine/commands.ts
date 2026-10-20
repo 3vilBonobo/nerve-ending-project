@@ -8,7 +8,7 @@ export function parseCommand(input: string): ParsedCommand | undefined {
   const tokens: string[] = [];
   const regex = /"([^"]*)"|'([^']*)'|([^\s"']+)/g;
   if (((rest.match(/"/g) ?? []).length % 2) || ((rest.match(/'/g) ?? []).length % 2)) {
-    return { name: ALIASES[word], args: [], error: 'Unclosed quote. Example: OPEN "SERVICE_REGISTER.DAT"' };
+    return { name: ALIASES[word], args: [], error: 'Unclosed quote. Example: OPEN "COMPANY_PROFILE.TXT"' };
   }
   for (const match of rest.matchAll(regex)) tokens.push(match[1] ?? match[2] ?? match[3]);
   return { name: ALIASES[word], args: tokens };

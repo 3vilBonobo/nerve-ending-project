@@ -1,12 +1,19 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, effect, inject, output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject, output } from '@angular/core';
 import { Session } from '../../core/session';
+import { TerminalEntry } from '../../core/models';
 
 @Component({
   selector: 'ne-terminal', standalone: true, templateUrl: './terminal.html',
 })
-export class Terminal implements AfterViewInit {
+export class Terminal implements AfterViewInit, OnDestroy {
   readonly session = inject(Session);
   readonly fileOpened = output<string>();
+  readonly entries = computed<(TerminalEntry & { printing?: boolean })[]>(() => {
+    const reply = this.session.playback.current();
+    return this.session.state().terminalHistory.map(entry => reply?.phase === 'printing' && reply.entry === entry
+      ? { ...entry, lines: reply.visibleText ? reply.visibleText.split('\n') : [], links: [], printing: true }
+      : entry);
+  });
   @ViewChild('scrollback') private scrollback?: ElementRef<HTMLElement>;
   @ViewChild('command') private command?: ElementRef<HTMLInputElement>;
   input = '';
@@ -16,12 +23,16 @@ export class Terminal implements AfterViewInit {
   private position = -1;
   private draft = '';
   private stickToBottom = true;
+  private followTimer?: ReturnType<typeof setTimeout>;
+  private caretTimer?: ReturnType<typeof setTimeout>;
+  private destroyed = false;
 
   constructor() {
     effect(() => {
-      this.session.state().terminalHistory;
-      this.session.busy();
-      setTimeout(() => {
+      this.entries();
+      this.session.playback.current();
+      clearTimeout(this.followTimer);
+      this.followTimer = setTimeout(() => {
         if (this.stickToBottom && this.scrollback) this.scrollback.nativeElement.scrollTop = this.scrollback.nativeElement.scrollHeight;
         if (this.command) this.updateCaret(this.command.nativeElement);
       });
@@ -42,7 +53,12 @@ export class Terminal implements AfterViewInit {
     if (!input.trim() || this.session.busy()) return;
     this.input = ''; this.position = -1; this.stickToBottom = true;
     await this.session.submit(input);
-    this.command?.nativeElement.focus();
+    if (!this.destroyed) this.command?.nativeElement.focus();
+  }
+  showAll(event?: Event): void {
+    if (!this.session.busy()) return;
+    event?.preventDefault();
+    this.session.playback.skip();
   }
   history(event: KeyboardEvent): void {
     if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return;
@@ -51,6 +67,8 @@ export class Terminal implements AfterViewInit {
     if (this.position === -1) this.draft = this.input;
     this.position = event.key === 'ArrowUp' ? Math.min(this.position + 1, items.length - 1) : Math.max(-1, this.position - 1);
     this.input = this.position === -1 ? this.draft : items[this.position] ?? '';
-    setTimeout(() => { if (this.command) this.updateCaret(this.command.nativeElement); });
+    clearTimeout(this.caretTimer);
+    this.caretTimer = setTimeout(() => { if (this.command) this.updateCaret(this.command.nativeElement); });
   }
+  ngOnDestroy(): void { this.destroyed = true; clearTimeout(this.followTimer); clearTimeout(this.caretTimer); }
 }
