@@ -14,6 +14,7 @@
     "model:references": "node scripts/evaluate-language-model.mjs --write-embeddings",
     "model:evaluate": "node scripts/evaluate-language-model.mjs",
     "model:holdout": "node scripts/evaluate-language-model.mjs --holdout",
+    "model:continuation": "node scripts/evaluate-language-model.mjs --continuation",
     "model:catalogue": "node scripts/evaluate-language-model.mjs --catalogue",
     "model:verify": "node scripts/verify-language-assets.mjs"
   },
@@ -32,6 +33,7 @@
     "@angular/build": "^21.2.0",
     "@angular/cli": "^21.2.0",
     "@angular/compiler-cli": "^21.2.0",
+    "fake-indexeddb": "6.2.6",
     "jsdom": "^27.0.0",
     "typescript": "~5.9.3",
     "vitest": "^4.0.0"

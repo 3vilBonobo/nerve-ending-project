@@ -3,7 +3,7 @@ import { CLINICAL_SNAPSHOT } from './story-state';
 
 // Historical records are immutable; current transport/clinical observations are separate engine output.
 export const STORY_FILES: readonly ArchiveFile[] = [
-  { id: 'bridge', path: '/COMMS/BRIDGE_02_STATUS.LOG', title: 'Bridge 02 status', modified: '2001-09-19 00:02', author: 'Communications maintenance', provenance: 'Communications maintenance archive', requiresKnowledge: 'clinicalHoldKnown', evidence: [], references: ['audit', 'hold-policy'], body: `BRIDGE-02 / TRANSFER MONITOR
+  { id: 'bridge', path: '/COMMS/BRIDGE_02_STATUS.LOG', title: 'Bridge 02 status', modified: '2001-09-19 00:02', author: 'Communications maintenance', provenance: 'Communications maintenance archive', requiresBackup: true, evidence: [], references: ['audit', 'hold-policy'], body: `BRIDGE-02 / TRANSFER MONITOR
 18 Sep 2001, 23:59:41 / Continuity transfer accepted.
 Service: 006
 Receiving destination: PRESERVATION CONTROLLER

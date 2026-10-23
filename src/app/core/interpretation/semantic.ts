@@ -53,7 +53,9 @@ const entityOf = (input: string): string | undefined => {
 export function directInterpretation(input: string, context: QueryContext): Interpretation | undefined {
   const text = recognitionText(input);
   const direct = classify(text, context);
+  if (direct.subject || direct.choices || direct.entityId === 'service-007' && /records access/.test(text) || /^what(?:s| is) (?:service )?(?:006|6|six)$/.test(text)) return { ...direct, provider: 'browser-ai' };
   if (direct.intent.startsWith('q_') || isOpeningExample(text) && !direct.intent.startsWith('request_')) return { ...direct, provider: 'browser-ai' };
+  if (direct.intent === 'unknown' && direct.needsClarification) return { ...direct, provider: 'browser-ai' };
   const request = text.replace(/^(?:(?:could|can|would) (?:you|i) (?:please )?|please )/, '');
   if (/^(?:hi|hello|hey|thanks|thank you)$/.test(text)) return { intent: 'ask_identity', needsClarification: false, provider: 'browser-ai' };
   if (/\b(?:question|reply|typing|printing)\b/.test(text) && /\b(?:skip|faster|immediately|finish|speed)\b/.test(text)) return { intent: 'ask_next', needsClarification: false, provider: 'browser-ai' };
@@ -85,13 +87,13 @@ export function directInterpretation(input: string, context: QueryContext): Inte
 
 export function selectMeaning(input: string, context: QueryContext, ranked: readonly RankedIntent[]): Interpretation {
   const direct = directInterpretation(input, context);
-  if (direct) return direct;
+  if (direct) return { ...direct, method: 'deterministic' };
   const first = ranked[0]; const second = ranked[1];
   if (!first || !Number.isFinite(first.score) || first.intent === 'unknown' || first.score < .35) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   if (first.score < MATCH_THRESHOLD) {
     const aboutRecords = /\b(record|records|paperwork|reading|file|files|service|call|office|staff|terminal|company|backup|receipt|date|clock|phone|monitor|archive|handover)\b/.test(recognitionText(input));
     return aboutRecords
-      ? { intent: 'unknown', needsClarification: true, clarification: `Are you asking about ${SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record'}? Please name the record or subject.`, provider: 'browser-ai' }
+      ? { intent: 'unknown', needsClarification: true, clarification: `Are you asking about ${SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record'}? Please name the record or subject.`, choices: [{ intent: first.intent, label: SEMANTIC_CATALOG.find(group => group.intent === first.intent)?.label ?? 'a record' }], provider: 'browser-ai' }
       : { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   }
   if (/\boriginal\b/.test(recognitionText(input)) && /\b(where|stored|located|missing|attachment)\b/.test(recognitionText(input)) && ranked.slice(0, 3).some(item => item.intent === 'ask_transfer' && item.score >= MATCH_THRESHOLD)) return { intent: 'ask_transfer', needsClarification: false, provider: 'browser-ai' };
@@ -102,7 +104,7 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
   const compatible: readonly (readonly string[])[] = [['ask_calls','q_call_repeat'], ['ask_company','q_products'], ['ask_identity','q_personhood'], ['ask_transfer','q_original'], ['ask_recovery_process','q_backup_reliable']];
   if (second && first.score - second.score < MATCH_MARGIN && !(equivalent.has(first.intent) && equivalent.has(second.intent)) && !compatible.some(pair => pair.includes(first.intent) && pair.includes(second.intent))) {
     const label = (intent: QueryIntent): string => SEMANTIC_CATALOG.find(group => group.intent === intent)?.label ?? 'another subject';
-    return { intent: 'unknown', needsClarification: true, clarification: `Do you mean ${label(first.intent)}, or ${label(second.intent)}?`, confidence: first.score, provider: 'browser-ai' };
+    return { intent: 'unknown', needsClarification: true, clarification: `Do you mean ${label(first.intent)}, or ${label(second.intent)}?`, choices: [{ intent: first.intent, label: label(first.intent) }, { intent: second.intent, label: label(second.intent) }], confidence: first.score, provider: 'browser-ai' };
   }
   const entityId = entityOf(input) ?? context.lastTopic ?? (context.lastFileId && !['company', 'readme'].includes(context.lastFileId) || /\b(service|program|monitor|process)\b/.test(normalize(input)) ? 'service-006' : undefined);
   const needsContext = ['ask_authorization', 'ask_retirement', 'ask_service_status'].includes(first.intent) && /\b(it|that|this|they)\b/.test(normalize(input)) && !entityId;

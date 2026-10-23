@@ -1,0 +1,604 @@
+{
+  "project": "NERVE ENDING",
+  "artifact": "Meridian proposed personnel reference",
+  "version": "0.4",
+  "date": "2026-10-21",
+  "status": "PROPOSED — not approved for runtime implementation",
+  "source": "NERVE_ENDING_MERIDIAN_WORLD_BIBLE_v0_4.md",
+  "notes": [
+    "40 records are a curated searchable sample of a larger company, not complete payroll.",
+    "Never expose author_only_note in player-facing records.",
+    "Restricted writer depth is not a visible player badge.",
+    "Anna ordinary work identity and protected clinical identity require separate disclosure decisions.",
+    "Linked document IDs are proposed references; some remain stubs."
+  ],
+  "personnel": [
+    {
+      "id": "P001",
+      "name": "Dr. Ruth Calder",
+      "department": "Leadership",
+      "job_title": "Co-founder; former Medical Director",
+      "employment_dates_proposed": "1984–1999",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Helped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999.",
+      "author_only_note": "Opposed indefinite unchecked automation in general; no established knowledge of Anna's real suffering. Former access to research approvals; exact 1996 role still OPEN.",
+      "proposed_record_links": [
+        "DOC-COR-01",
+        "DOC-RSH-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P002",
+      "name": "Martin Shaw",
+      "department": "Leadership",
+      "job_title": "Co-founder; former Systems Director",
+      "employment_dates_proposed": "1984–2000",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Co-founded Meridian and oversaw development of its internal computing and service-management systems.",
+      "author_only_note": "Architectural sponsor of the central MOTHER platform; aware of its breadth, not necessarily its later compromised interpretations. Exact 1996 involvement OPEN.",
+      "proposed_record_links": [
+        "DOC-COR-01",
+        "DOC-SYS-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P003",
+      "name": "Daniel Price",
+      "department": "Executive",
+      "job_title": "Acting Chief Executive",
+      "employment_dates_proposed": "2001–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Leads Meridian's reduced commercial and support operations following the restructuring.",
+      "author_only_note": "Prioritizes financial survival and contract exposure; receives summary reports, not raw patient neurodata.",
+      "proposed_record_links": [
+        "DOC-COR-03",
+        "DOC-FIN-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P004",
+      "name": "Helen Mercer",
+      "department": "Finance",
+      "job_title": "Finance Director",
+      "employment_dates_proposed": "1992–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Responsible for budgets, contracts, insurance administration and monthly financial reporting.",
+      "author_only_note": "Knows Site 6 is an expensive restricted obligation via anonymized ledger codes; not Anna's conscious suffering.",
+      "proposed_record_links": [
+        "DOC-FIN-02",
+        "DOC-FIN-06"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P005",
+      "name": "Caroline Fitch",
+      "department": "Legal",
+      "job_title": "Corporate Counsel",
+      "employment_dates_proposed": "1995–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Handles liability, licensing terms, former research agreements and clinical-support contracts.",
+      "author_only_note": "Knows consent and continuation arguments, not proof of current awareness. Do not write her as having absolute lawful permission to continue experimentation.",
+      "proposed_record_links": [
+        "DOC-LEG-01",
+        "DOC-LEG-04"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P006",
+      "name": "Julian Kell",
+      "department": "Administration",
+      "job_title": "Former Administration Supervisor",
+      "employment_dates_proposed": "1993–2001",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Coordinated facility and service closures during the 2001 consolidation.",
+      "author_only_note": "Filed the administration-level decommission report for 004/005/006. Lacked authority to verify all clinical release conditions.",
+      "proposed_record_links": [
+        "DOC-OPS-04",
+        "DOC-OPS-07"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P007",
+      "name": "Evelyn Lin",
+      "department": "Operations",
+      "job_title": "Former Operations Coordinator",
+      "employment_dates_proposed": "1996–2001",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Maintained shift schedules, operator assignments and unresolved communications requests.",
+      "author_only_note": "Noted failed night-desk handover before leaving; no evidence she understood Site 6 or Anna's condition.",
+      "proposed_record_links": [
+        "DOC-OPS-05",
+        "DOC-COM-03"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P008",
+      "name": "Lydia Brooks",
+      "department": "Human Resources",
+      "job_title": "Human Resources Coordinator",
+      "employment_dates_proposed": "1997–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Processes staff changes and maintains the ordinary work directory.",
+      "author_only_note": "Mundane employee. Her private HR records are not part of the remote work-directory mirror.",
+      "proposed_record_links": [
+        "DOC-HR-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P009",
+      "name": "Peter Duarte",
+      "department": "Contracts",
+      "job_title": "Contracts Administrator",
+      "employment_dates_proposed": "2000–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Maintains support-contract renewals and standard customer records.",
+      "author_only_note": "Mundane employee; no secret assignment.",
+      "proposed_record_links": [
+        "DOC-CON-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P010",
+      "name": "Maya Singh",
+      "department": "Procurement",
+      "job_title": "Procurement Officer",
+      "employment_dates_proposed": "1998–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Coordinates suppliers, equipment orders and contract deliveries.",
+      "author_only_note": "Sees anonymized consumables and recurring legacy maintenance shipments; not clinical details.",
+      "proposed_record_links": [
+        "DOC-PRC-02",
+        "DOC-FIN-06"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P011",
+      "name": "Brent Holloway",
+      "department": "Finance",
+      "job_title": "Payroll Clerk",
+      "employment_dates_proposed": "1999–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Supports payroll processing for Meridian's reduced workforce.",
+      "author_only_note": "Mundane employee; no secrets.",
+      "proposed_record_links": [
+        "DOC-HR-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P012",
+      "name": "Teresa Walsh",
+      "department": "Facilities",
+      "job_title": "Former Reception Supervisor",
+      "employment_dates_proposed": "1988–2001",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Supervised the Providence Operations Annex reception desk until its closure.",
+      "author_only_note": "Ordinary office-contact history, useful for checking office dates but not a secret holder.",
+      "proposed_record_links": [
+        "DOC-OFF-03"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P013",
+      "name": "Oliver Ames",
+      "department": "Records",
+      "job_title": "Records Archivist",
+      "employment_dates_proposed": "1996–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Maintains legacy document indexing and retention schedules.",
+      "author_only_note": "Mundane archives role; can explain why old records have uneven metadata.",
+      "proposed_record_links": [
+        "DOC-ARC-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P014",
+      "name": "Samuel Ortiz",
+      "department": "Customer Support",
+      "job_title": "Customer Support Manager",
+      "employment_dates_proposed": "1993–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Leads support for older Meridian clinical and rehabilitation equipment.",
+      "author_only_note": "Knows external devices need periodic service and vendor procedures; not linked to hidden experiment by default.",
+      "proposed_record_links": [
+        "DOC-PRD-03",
+        "DOC-CON-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P015",
+      "name": "Nina Park",
+      "department": "Engineering",
+      "job_title": "Medical Equipment Engineer",
+      "employment_dates_proposed": "1995–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Works on calibration, spare-part compatibility and approved software maintenance for legacy devices.",
+      "author_only_note": "Previously warned about mixing experimental and commercial configuration formats; risk arises through actual vendor servicing, not magic internet implants.",
+      "proposed_record_links": [
+        "DOC-ENG-04",
+        "DOC-PRD-05"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P016",
+      "name": "Owen Keller",
+      "department": "Quality Assurance",
+      "job_title": "QA Technician",
+      "employment_dates_proposed": "2000–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Performs routine verification of refurbished equipment and service records.",
+      "author_only_note": "Mundane test entries, many successful.",
+      "proposed_record_links": [
+        "DOC-QA-03"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P017",
+      "name": "Rafael Costa",
+      "department": "Field Support",
+      "job_title": "Field-Service Engineer",
+      "employment_dates_proposed": "1996–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Visits hospitals and equipment customers for scheduled inspections.",
+      "author_only_note": "Ordinary service activity; location history is normal business data.",
+      "proposed_record_links": [
+        "DOC-SVC-08"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P018",
+      "name": "Naomi Reed",
+      "department": "Customer Support",
+      "job_title": "Service Scheduling Coordinator",
+      "employment_dates_proposed": "1998–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Schedules maintenance calls and maintains rotating coverage rosters.",
+      "author_only_note": "Mundane employee; supplies ordinary calendar records.",
+      "proposed_record_links": [
+        "DOC-SVC-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P019",
+      "name": "Leah Morgan",
+      "department": "Parts",
+      "job_title": "Warehouse and Parts Coordinator",
+      "employment_dates_proposed": "1997–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Coordinates equipment replacement parts, storage and shipping.",
+      "author_only_note": "Mundane employee; deliberately no hidden project or ominous file.",
+      "proposed_record_links": [
+        "DOC-PRC-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P020",
+      "name": "Victor Chen",
+      "department": "Information Systems",
+      "job_title": "Network Administrator",
+      "employment_dates_proposed": "1997–present",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Maintains Meridian's surviving office networks and remote service accounts.",
+      "author_only_note": "Owns current basic gateways but inherited many older systems. Why the hacker obtains an R-02 session remains OPEN, not explained by omnipotent access.",
+      "proposed_record_links": [
+        "DOC-SYS-04",
+        "DOC-OPS-09"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P021",
+      "name": "Miles Harper",
+      "department": "Communications",
+      "job_title": "Former Communications Technician",
+      "employment_dates_proposed": "1993–2000",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Installed and documented old dial-up, telephone-extension and service bridges.",
+      "author_only_note": "Created or serviced legacy bridge records. Specific BRIDGE-02 association remains a WORKING lead.",
+      "proposed_record_links": [
+        "DOC-COM-01",
+        "DOC-COM-03"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P022",
+      "name": "Gina Valdez",
+      "department": "Documentation",
+      "job_title": "Technical Documentation Editor",
+      "employment_dates_proposed": "1999–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Updates ordinary service guides, parts sheets and manuals.",
+      "author_only_note": "Mundane employee; writing style explains consistent help wording.",
+      "proposed_record_links": [
+        "DOC-HELP-02"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P023",
+      "name": "Thomas Keene",
+      "department": "Facilities",
+      "job_title": "Former Facilities Manager",
+      "employment_dates_proposed": "1990–2002",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Oversaw building access, inspections and site handovers during consolidation.",
+      "author_only_note": "May know how a restricted property remained serviced under a contractor; not an omniscient conspirator.",
+      "proposed_record_links": [
+        "DOC-OFF-03",
+        "DOC-OPS-07"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P024",
+      "name": "Andrew Bell",
+      "department": "Workshop",
+      "job_title": "Equipment Repair Technician",
+      "employment_dates_proposed": "1998–present",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Repairs returned legacy clinical monitoring units.",
+      "author_only_note": "Mundane employee; no hidden association.",
+      "proposed_record_links": [
+        "DOC-RMA-04"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P025",
+      "name": "Anna Voss",
+      "department": "Research",
+      "job_title": "Head Researcher, Advanced Neural Interfaces",
+      "employment_dates_proposed": "1989–1996; subsequent status restricted",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Led Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership.",
+      "author_only_note": "Ordinary role is searchable early. Medical incapacity, participation under AV-06 and current Site 6 association are separate protected records. Her ambition and experiment initiative are ESTABLISHED; exact override is OPEN.",
+      "proposed_record_links": [
+        "DOC-RSH-02",
+        "DOC-RSH-07",
+        "DOC-CLN-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P026",
+      "name": "Dr. Miriam Rao",
+      "department": "Clinical Research",
+      "job_title": "Clinical Research Physician",
+      "employment_dates_proposed": "1992–1998",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Served as a physician on Meridian neurological-interface research programs.",
+      "author_only_note": "Raised qualified concern about interpretation of patient responses. She did not conclusively know Anna's subjective state.",
+      "proposed_record_links": [
+        "DOC-RSH-06",
+        "DOC-CLN-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P027",
+      "name": "Elias Hart",
+      "department": "Research Engineering",
+      "job_title": "Lead Systems Architect",
+      "employment_dates_proposed": "1990–1999",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Designed experimental interface integration and analysis pipelines.",
+      "author_only_note": "Understood portions of MOTHER's research interfaces; exact 1996 warnings/sign-off OPEN.",
+      "proposed_record_links": [
+        "DOC-RSH-03",
+        "DOC-SYS-01"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P028",
+      "name": "Dr. Iris Bell",
+      "department": "Neuroscience",
+      "job_title": "Neuroscience Researcher",
+      "employment_dates_proposed": "1991–1997",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Studied sensory encoding, rehabilitative stimulation and measurement procedures.",
+      "author_only_note": "Historical scientific records may be technically useful but mostly ordinary.",
+      "proposed_record_links": [
+        "DOC-RSH-01",
+        "DOC-RSH-08"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P029",
+      "name": "Daniel Kessler",
+      "department": "Bioelectronics",
+      "job_title": "Bioelectronics Engineer",
+      "employment_dates_proposed": "1993–2000",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Worked on electrode arrays, signal conditioning and experimental controller testing.",
+      "author_only_note": "Can explain experimental hardware without knowing MOTHER's later corporate-wide faults.",
+      "proposed_record_links": [
+        "DOC-ENG-02",
+        "DOC-RSH-03"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P030",
+      "name": "Clara Weiss",
+      "department": "Research Administration",
+      "job_title": "Research Administrator",
+      "employment_dates_proposed": "1991–1998",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Maintained project staffing, approvals and equipment inventory for research programs.",
+      "author_only_note": "Her ordinary paperwork may establish dates and overlaps, but restricted study records remain separate.",
+      "proposed_record_links": [
+        "DOC-RSH-05",
+        "DOC-RSH-07"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P031",
+      "name": "Sophia Nadir",
+      "department": "Research Compliance",
+      "job_title": "Research Ethics Coordinator",
+      "employment_dates_proposed": "1994–1998",
+      "writer_depth": "Extended",
+      "normal_work_profile": "Coordinated research documentation and internal review meetings.",
+      "author_only_note": "Recorded consent boundaries and open questions; not necessarily aware of current clinical harm.",
+      "proposed_record_links": [
+        "DOC-LEG-01",
+        "DOC-RSH-06"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P032",
+      "name": "Robert Vale",
+      "department": "Laboratory Services",
+      "job_title": "Former Animal-Care Technician",
+      "employment_dates_proposed": "1992–1997",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Supported approved preclinical animal-care operations in historical research.",
+      "author_only_note": "Confirms historical animal work only; not evidence of a current animal experiment.",
+      "proposed_record_links": [
+        "DOC-RSH-04"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P033",
+      "name": "Helen Wu",
+      "department": "Research",
+      "job_title": "Former Research Assistant",
+      "employment_dates_proposed": "1994–1997",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Assisted with data preparation, instrument checks and laboratory scheduling.",
+      "author_only_note": "Mundane former research staff.",
+      "proposed_record_links": [
+        "DOC-RSH-05"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P034",
+      "name": "Grace Sato",
+      "department": "Research Data",
+      "job_title": "Research Statistician",
+      "employment_dates_proposed": "1993–1998",
+      "writer_depth": "Basic",
+      "normal_work_profile": "Worked on analysis of rehabilitation and neural-monitoring trials.",
+      "author_only_note": "Ordinary research-analysis records; no conspiratorial subplot.",
+      "proposed_record_links": [
+        "DOC-RSH-08"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P035",
+      "name": "Dr. Helen Marsh",
+      "department": "Clinical Contractors",
+      "job_title": "Contracted Supervising Physician",
+      "employment_dates_proposed": "2001–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Listed in protected vendor records as a contracted medical consultant for legacy care obligations.",
+      "author_only_note": "Responsible for periodic medical review, not necessarily permanent bedside presence or proof of Anna's awareness. Exact schedules OPEN.",
+      "proposed_record_links": [
+        "DOC-VEN-09",
+        "DOC-CLN-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P036",
+      "name": "Dana Wren",
+      "department": "Clinical Contractors",
+      "job_title": "Clinical Nurse",
+      "employment_dates_proposed": "2002–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Works through a contracted clinical staffing provider.",
+      "author_only_note": "Knows the supported patient's physical condition and routine care; no knowledge of MOTHER's broader corruption.",
+      "proposed_record_links": [
+        "DOC-VEN-09",
+        "DOC-CLN-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P037",
+      "name": "Pauline Cross",
+      "department": "Clinical Contractors",
+      "job_title": "Clinical Nurse",
+      "employment_dates_proposed": "2001–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Works through a contracted clinical staffing provider.",
+      "author_only_note": "Different shifts and observations may exist, but detailed case notes require clinical authorization.",
+      "proposed_record_links": [
+        "DOC-VEN-09",
+        "DOC-CLN-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P038",
+      "name": "Evan Brooks",
+      "department": "Facilities Contractors",
+      "job_title": "Facilities and Systems Technician",
+      "employment_dates_proposed": "2000–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Maintains legacy facilities and power-support equipment under contract.",
+      "author_only_note": "Knows site equipment reliability and which alarms recur, not biomedical meaning.",
+      "proposed_record_links": [
+        "DOC-VEN-12",
+        "DOC-OPS-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P039",
+      "name": "Amir Patel",
+      "department": "Biomedical Contractors",
+      "job_title": "Biomedical Equipment Contractor",
+      "employment_dates_proposed": "2002–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Services specialist legacy biomedical controllers and monitoring hardware.",
+      "author_only_note": "Understands hardware and maintenance errors without grasping Anna's inner experience.",
+      "proposed_record_links": [
+        "DOC-VEN-12",
+        "DOC-ENG-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "P040",
+      "name": "June Hargrove",
+      "department": "Laboratory Contractors",
+      "job_title": "Laboratory Preservation Technician",
+      "employment_dates_proposed": "2001–present",
+      "writer_depth": "Restricted",
+      "normal_work_profile": "Maintains biological sample storage and limited legacy laboratory systems.",
+      "author_only_note": "Supports sample preservation and old-device verification; current animal experimentation not established.",
+      "proposed_record_links": [
+        "DOC-VEN-12",
+        "DOC-LAB-RESTRICTED"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

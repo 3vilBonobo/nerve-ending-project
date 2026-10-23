@@ -1,5 +1,11 @@
 # Verification record
 
+## Complete continuation — 20 October 2026
+
+Current results and limitations: [IMPLEMENTATION_REPORT.md](IMPLEMENTATION_REPORT.md) and [DIALOGUE_COVERAGE.md](DIALOGUE_COVERAGE.md). The game passes 124 unit/component checks, three golden-path endings, every-step save round trips and the production build. Model results: 50/50 development, 32 answers plus four clarifications in 36 holdout cases, 24/24 continuation regressions, 1,638/1,638 catalogue cases. The 42 MB manifest is verified. Desktop and 390 × 844 viewport checks include loading, search, confirmation focus and cancellation. Playtime and physical-device usability are unmeasured.
+
+The remaining sections are historical opening-preview verification. Their old counts and scope do not describe the continuation.
+
 Revision date: 20 October 2026. Windows, Node 20.19, Angular 21, strict TypeScript.
 
 ## Revised investigation

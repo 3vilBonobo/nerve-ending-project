@@ -1,41 +1,50 @@
 # Architecture
 
-Nerve Ending is a static Angular standalone application using strict TypeScript, signals, ordinary CSS, and browser storage. There is no application backend or required model download.
+Static Angular 21, strict TypeScript, signals, ordinary CSS and local browser saves. No application backend, paid generation service or required model download.
 
-## Records and domain
+## Domain and transitions
 
-core/content.ts holds immutable authored records with stable IDs, virtual paths, short bodies, observation grants, attachment references, and an optional backup action. Eight records are immediately accessible; one receipt body is available only after a deliberate backup read. References represent source relationships rather than a quest checklist.
+The existing `engine/game.ts` remains the entry point for commands and questions. Mouse operation buttons submit the same command strings through `Session`; record inspection uses the same pure access checks. The 39 source records have stable IDs and virtual paths. Nine retained opening records are followed by 30 continuation records in `story-records.ts`. Historical text never changes with the ending; current telemetry and transport status are separate reducer output.
 
-engine/commands.ts parses commands and virtual paths. engine/game.ts handles inspection, search, authored interpretations and idempotent backup reading. Commands, questions and mouse controls share these rules. Search excludes the backup body until it has been loaded.
+State has three distinct layers:
 
-The split-prefix and slot reconstruction and evidence prerequisites no longer exist. Backup reading is an ordinary permission. deriveKnowledge retains its compatibility name but normalises this permission instead of unlocking it from reading counts. Evidence records observations only. The archive006Recovered flag tracks the loaded copy and legacy references. No real external connection is created and service 006 is not stopped.
+| Layer | Source | Meaning |
+| --- | --- | --- |
+| Observations | `viewedFileIds` / `discoveredEvidenceIds` | Records or source facts encountered; no inferred conclusion or authority |
+| Knowledge | `knowledge` / `Knowledge` | Conclusions established by an evidence encounter or explicit audit |
+| Capability | `permissions` / `Permission` | An operation delegated by archive provenance or retained review procedure |
+| Operating | `operating` / `OperatingState` | Actual support, relay, credentials, queue, isolation and final intervention state |
 
-## Query boundary
+`engine/continuation.ts` owns the operation catalogue, prerequisite functions, explicit-action grammar, pending confirmation and idempotent event IDs. Confirming rechecks prerequisites. Safe investigations never silently restore a vendor route. Read-only diagnostics and outbound vendor communications are separate capabilities and states. Temporary isolation can be reversed; revocation and final interventions cannot. Final state freezes further interventions while allowing records and questions.
 
-The deterministic interpreter covers the call, recipient, office, services, records and backup. It understands readable titles, aliases and limited pronouns. Unknown questions can match words in accessible records; no story facts are generated.
+Acts are derived from established knowledge and the ending rather than a single mutable act counter. `engine/investigation.ts` defines the two opening encounters, grounded source requirements, deterministic meaning checks, partial answers, explanations and defer/resume behavior. The first distinguishes administrative closure from operational release; the second corroborates the preservation controller's transfer acknowledgement through BRIDGE-02 and its lack of release authority. Completion delegates only a read-only audit. A separate audit request establishes Site 6 and Act II. No file inspection grants knowledge or permissions, in any act. 0417 remains a partial historical identifier.
 
-Optional provider results are validated against known intents, services and accessible files. They receive copied context and no mutation API. Even a validated request_backup is checked against the actual user input before restoring the copy. An informational question cannot become a restore because of an incorrect classifier.
+## Recognition and dialogue
 
-The optional browser provider loads the pinned all-MiniLM-L6-v2 q8 model in a Web Worker. semantic-catalog.ts contains 298 recognition examples, including ordinary human questions. semantic.ts compares sentence vectors, applies a similarity threshold and a margin between meanings, and resolves explicit subjects and selected-file follow-ups. Similarity scores are not calibrated probabilities. Borderline or competing matches ask for clarification. Explicit operations remain in the deterministic parser; informational questions containing words such as “show” do not become file operations.
+Explicit operations and commands precede file references, deterministic catalogue/guarded questions, optional sentence similarity, clarification and accessible-record fallback. Operational recognition is anchored to an explicit imperative; informational wording and question marks cannot enter the intervention reducer. Model output has no operation-ID field or mutation API. A forged stop intent cannot release a patient.
 
-local-language.ts manages opt-in, byte progress, cancellation, readiness, failure and a separate local preference. language.worker.ts streams same-origin assets into a dedicated Cache API store, imports the CPU runtime from saved bytes, and warms up inference before reporting Ready. Model data stays out of the initial app shell. Missing storage permits current-visit use. A five-second inference timeout terminates the worker and returns the request to basic interpretation. Context is copied, and the worker receives no hidden file bodies or later story.
+`dialogue-catalog.ts` holds intents with family, examples, reveal condition, sources, early/revealed answers and easter egg marker. The retained semantic catalogue supplies opening subjects. Exact examples, conservative overlap and compositional guards work offline. `dialogue-matching.ts` resolves recent-subject follow-ups, with clarification when context is absent. Source requests preserve the recent subject. Repetition counters and hint escalation are harmless conversational memory.
 
-The engine remains the authority for every reply and knowledge gate. It answers human questions from the currently available records and explicitly identifies missing information. Receipt fields require the actual backup-read flag. The later identity is not unlocked by this preview. A development-only Ollama adapter remains available for comparison.
+`engine/dialogue.ts` selects authored responses and current-state additions. Administrative, clinical, defensive, cooperative, conflicted and preservation-critical profiles derive from evidence, subject and pending intervention. Trust, preservation conflicts, repeated greetings and completed interventions have additional responses. No anomalous output is a deliberate message from Anna.
 
-## Session and presentation
+The optional pinned all-MiniLM-L6-v2 q8 model runs in a worker with same-origin WASM and reference vectors. It classifies against 1,638 questions across 205 categories. It receives examples and copied conversation context, not a dialogue-generation prompt or record bodies. Similarity scores are not calibrated probabilities. Nearby meanings clarify unless their authored answers are substantively equivalent. Production hides the retained loopback-only Ollama adapter.
 
-Session owns Angular state and persistence. Documents open once without echoing their bodies into the terminal. Mouse backup reads and explicit terminal requests use the same transition.
+Optional assets use manifest byte sizes/hashes, a separate browser cache, warmup, readiness, cancellation and inference timeout. There is no external model endpoint. Missing model assets do not block any ending.
 
-presentation/terminal-playback.ts separates processing and character reveal from saved state. A short minimum pause runs alongside interpretation. Complete replies are saved before printing finishes. Esc or SHOW FULL REPLY skips artificial pacing; an actual pending provider still has to return. Reduced motion receives instant replies. Request tokens prevent late results from changing a reset session.
+## Persistence and presentation
 
-Auto-scroll follows output only near the bottom. The older monochrome appearance and large local VT323 font remain. Records have closer line spacing and persistent attachment controls. Connection is skippable and lasts about 2.4 seconds.
+Schema 5 uses `nerve-ending.save.v5`. Pending encounter stage, attempts, partial findings and deferral survive reload. `pendingClarification` retains the original request and validated interpretation/options so a subject or first/second answer resolves that request. Schema-3/4 opening observations migrate without the former backup-derived inference. Advanced schema-4 investigations preserve their existing access with an explicit legacy marker; their originals are preserved. Schema-1/2 prototypes retain preferences. Decoding validates identifiers, availability, enums, booleans, history bounds and pending prerequisites, and normalizes ending invariants. Migration never replays operations or sends a package.
 
-## Save revisions
+The fixed clinical snapshot has one canonical source in `story-state.ts`; it does not fabricate a constantly advancing pain counter. Present transport output distinguishes none, queued and confirmed depot receipt. Receipt never proves installation or injury.
 
-Schema 3 uses nerve-ending.save.v3. The previous prototype's nerve-ending.save remains unchanged. Its display preferences are imported, but its old instructions and completed puzzle progress are not replayed into the rewritten opening.
+`TerminalPlayback` separates transient presentation from saved complete output. Esc skips printing; reduced motion is immediate. The monochrome terminal, local VT323, file windows and mobile tabs are retained. Record references and backup paths are plain text. The automatic operation menu is removed. The terminal shows persistent verification/clarification text, an input, ordinary controls and a reviewable safety confirmation panel with keyboard focus.
 
-Current saves preserve observation order, documents, queries, completion and display preferences. Loading validates IDs, paths, bounds and availability. Reset affects the current opening only and preserves the previous key. Restricted storage permits in-memory play with a warning.
+## Local QA telemetry
 
-## Extension
+`core/qa/` owns an independent IndexedDB database, persistent consent (off by default), anonymous investigation sessions, transactionally allocated event sequences/statistics, redaction and JSONL export. `Session` observes transitions and input lifecycles; it never invokes gameplay operations just to log them. Engine response traces describe the selected authored variant without adding fields to narrative saves. Before/after snapshots and interaction IDs connect recognition, exact output, actions, milestones, act changes and endings. Storage failures stop QA recording while gameplay continues. The production settings panel offers consent, current/all exports, current copy, feedback, statistics and separate QA deletion. See [QA_LOGGING.md](QA_LOGGING.md) for retention, privacy and event schema.
 
-Add source records and supported questions to the domain before presentation. Keep dated source facts distinct from system interpretation. A missing record should have a plausible availability condition or a native operation; reading unrelated files must not act as authorisation. Future acts can add facts and effects without converting observation IDs into a mandatory sequence.
+## Validation
+
+Unit/component checks cover the opening, all acts, permission/reveal boundaries, reversibility, confirmation/cancellation, endings, storage, unavailable models and post-ending review. `playthroughs.ts` supplies reproducible golden paths. `npm run game:validate` checks duplicate/conflicting phrases, conditions, references, reachable late variants, accidental operation recognition and save round trips at every golden-path step. JSON and Markdown reports live in `docs/`.
+
+Real-model development, holdout, continuation and catalogue checks are separate scripts. Evaluations write distinct temporary bundles so they cannot overwrite a shared recognition module.

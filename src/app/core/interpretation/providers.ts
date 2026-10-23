@@ -15,10 +15,13 @@ export function validateInterpretation(value: unknown, provider: Interpretation[
   if (intent === 'request_search' && (typeof candidate['searchTerm'] !== 'string' || candidate['searchTerm'].length > 150)) return undefined;
   return {
     intent, provider, needsClarification: candidate['needsClarification'],
+    ...(provider === 'browser-ai' ? { method: candidate['method'] === 'deterministic' ? 'deterministic' as const : 'semantic' as const } : provider === 'fallback' ? { method: 'deterministic' as const } : {}),
     entityId: candidate['entityId'] as string | undefined,
     fileId: candidate['fileId'] as string | undefined,
     searchTerm: typeof candidate['searchTerm'] === 'string' ? candidate['searchTerm'].slice(0, 150) : undefined,
-    ...(provider === 'browser-ai' && typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
+    ...(['identity','headquarters','server','local-save','biological','live-monitor','kell'].includes(String(candidate['subject'])) ? { subject: candidate['subject'] as Interpretation['subject'] } : {}),
+    ...(Array.isArray(candidate['choices']) ? { choices: candidate['choices'].filter(c => c && (INTENTS.includes(c.intent) || DIALOGUE_IDS.has(c.intent)) && typeof c.label === 'string').slice(0, 2).map(c => ({ intent: c.intent, label: c.label.slice(0, 150) })) } : {}),
+    ...(typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
     ...(typeof candidate['confidence'] === 'number' && Number.isFinite(candidate['confidence']) && candidate['confidence'] >= 0 && candidate['confidence'] <= 1 ? { confidence: candidate['confidence'] } : {}),
   };
 }
@@ -49,25 +52,27 @@ export class OllamaInterpreter implements IntentInterpreter {
   }
 }
 
-export interface InterpretationMetrics { elapsedMs: number; fallback: boolean; provider: string }
+export type FallbackReason = 'no-provider' | 'unavailable' | 'timeout' | 'invalid-result' | 'provider-error';
+export interface InterpretationMetrics { elapsedMs: number; fallback: boolean; provider: string; fallbackReason?: FallbackReason }
 export async function interpretSafely(input: string, context: QueryContext, provider?: IntentInterpreter, timeoutMs = 6500): Promise<{ interpretation: Interpretation; metrics: InterpretationMetrics }> {
   const started = performance.now();
   let timer: ReturnType<typeof setTimeout> | undefined;
   let interpretation: Interpretation;
+  let fallbackReason: FallbackReason = provider ? 'provider-error' : 'no-provider';
   try {
     if (!provider) throw new Error('Offline mode');
     interpretation = await Promise.race([
       (async () => {
-        if (!await provider.isAvailable()) throw new Error('Unavailable');
+        if (!await provider.isAvailable()) { fallbackReason = 'unavailable'; throw new Error('Unavailable'); }
         const value = await provider.interpret(input, { ...context });
         const validated = validateInterpretation(value, value.provider);
-        if (!validated || validated.intent === 'unknown' && validated.provider !== 'browser-ai') throw new Error('Invalid or unknown');
+        if (!validated || validated.intent === 'unknown' && validated.provider !== 'browser-ai') { fallbackReason = 'invalid-result'; throw new Error('Invalid or unknown'); }
         return validated;
       })(),
-      new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('Timeout')), timeoutMs); }),
+      new Promise<never>((_, reject) => { timer = setTimeout(() => { fallbackReason = 'timeout'; reject(new Error('Timeout')); }, timeoutMs); }),
     ]);
   } catch {
     interpretation = classify(input, context);
   } finally { clearTimeout(timer); }
-  return { interpretation, metrics: { elapsedMs: performance.now() - started, fallback: interpretation.provider === 'fallback', provider: interpretation.provider } };
+  return { interpretation, metrics: { elapsedMs: performance.now() - started, fallback: interpretation.provider === 'fallback', provider: interpretation.provider, ...(interpretation.provider === 'fallback' ? { fallbackReason } : {}) } };
 }

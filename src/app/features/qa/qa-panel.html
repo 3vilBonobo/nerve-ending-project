@@ -1,0 +1,47 @@
+<details class="qa-panel">
+  <summary>LOCAL PLAYTEST QA <span class="qa-status">{{ qa.enabled() ? 'RECORDING' : 'OFF' }}</span></summary>
+  <p>Optional developer / QA recording. Capture game questions, responses, actions and progression to help improve the game. Disabled until you opt in.</p>
+  <label class="check-label"><input #qaToggle id="qa-toggle" type="checkbox" [checked]="qa.enabled()" [disabled]="busy() || qa.loading() || !!qa.warning()" (change)="toggle(qaToggle.checked)"> Enable local QA logging</label>
+  <p class="muted">Your choice is remembered in this browser. Recording starts from the moment you enable it; earlier play is not collected. Turning it off keeps existing data.</p>
+  <details class="qa-retention"><summary>LOCAL RETENTION & EXPORT</summary>
+    <p>Recordings stay in this browser’s IndexedDB database <code>nerve-ending-qa</code>, across reloads and investigation restarts, until you clear QA data or site data. Your browser may also evict stored data. Export before changing browser or device.</p>
+    <p>Nothing is uploaded or used for training automatically. Export creates a readable <code>.jsonl</code> file in Downloads or your chosen save location. Each line is one event; sequence numbers preserve session order.</p>
+    <p>No account, passwords, authentication settings, tokens or device identifiers are collected. Common credential, email, phone and URL patterns in typed text are redacted before storage. Do not enter personal information or secrets in game questions or feedback; review exports before sharing.</p>
+  </details>
+  @if (qa.loading()) { <p role="status">Opening local QA storage…</p> }
+  @if (qa.warning()) { <p class="qa-warning" role="status">{{ qa.warning() }}</p> }
+  <dl class="qa-stats">
+    <div><dt>Current session</dt><dd class="qa-session-id">{{ qa.currentSession()?.id ?? 'No recording yet' }}</dd></div>
+    <div><dt>Events / questions</dt><dd>{{ qa.currentSession()?.eventCount ?? 0 }} / {{ qa.stats().questions }}</dd></div>
+    <div><dt>Unmatched / ambiguous / fallback</dt><dd>{{ qa.stats().unknown }} / {{ qa.stats().ambiguities }} / {{ qa.stats().fallbacks }}</dd></div>
+    <div><dt>Failures / file opens / comparisons</dt><dd>{{ qa.stats().failures }} / {{ qa.stats().files }} / {{ qa.stats().comparisons }}</dd></div>
+    <div><dt>Operations / challenges</dt><dd>{{ qa.stats().operations }} / {{ qa.stats().challengeAttempts }}</dd></div>
+    <div><dt>Milestones / act changes / endings</dt><dd>{{ qa.stats().milestones }} / {{ qa.stats().actTransitions }} / {{ qa.stats().endings }}</dd></div>
+    <div><dt>Response feedback</dt><dd>{{ qa.stats().feedback }}</dd></div>
+    <div><dt>All stored sessions / events</dt><dd>{{ qa.sessions().length }} / {{ qa.storedEvents() }}</dd></div>
+  </dl>
+  <div class="button-row qa-actions">
+    <button class="text-button" [disabled]="busy() || !qa.currentSession()" (click)="download('current')">EXPORT CURRENT SESSION</button>
+    <button class="text-button" [disabled]="busy() || !qa.storedEvents()" (click)="download('all')">EXPORT ALL SESSIONS</button>
+    <button class="text-button" [disabled]="busy() || !qa.currentSession()" (click)="copy()">COPY CURRENT JSONL</button>
+  </div>
+  @if (copyText()) { <label for="qa-copy">Select and copy this JSONL</label><textarea id="qa-copy" readonly rows="6" [value]="copyText()"></textarea> }
+  <details class="qa-feedback"><summary>MARK A RESPONSE</summary>
+    <p>Optional: mark a recent response from this investigation. Enable recording to save feedback. Notes are included in exports.</p>
+    <label for="qa-response">RESPONSE</label><select #response id="qa-response" [value]="selectedResponse()?.id ?? ''" [disabled]="!qa.responses().length" (change)="feedbackResponseId.set(response.value)">@for (event of qa.responses(); track event.id) { <option [value]="event.id">{{ responseLabel(event) }}</option> }</select>
+    @if (responsePreview()) { <p class="qa-response-preview">{{ responsePreview() }}</p> }
+    <label for="qa-feedback-tag">FEEDBACK</label><select #tag id="qa-feedback-tag">@for (tagName of feedbackTags; track tagName) { <option [value]="tagName">{{ tagName === 'effective' ? 'particularly effective' : tagName }}</option> }</select>
+    <label for="qa-feedback-note">OPTIONAL NOTE / NO PERSONAL INFORMATION</label><textarea #note id="qa-feedback-note" rows="3" maxlength="1000" placeholder="What was confusing, wrong, repetitive or helpful?"></textarea>
+    <button class="text-button" [disabled]="busy() || !qa.enabled() || !qa.responses().length" (click)="feedback(response.value, tag.value, note)">SAVE RESPONSE FEEDBACK</button>
+  </details>
+  <details class="qa-events"><summary>RECENT EVENTS / {{ qa.recent().length }}</summary>
+    <p class="muted">Last 200 events in the current session. Inspect the latest 20 below; exports include every stored event.</p>
+    @for (event of qa.recent().slice(-20).reverse(); track event.id) { <details><summary>#{{ event.sequence }} · {{ event.type }} · Act {{ event.state.act }}</summary><pre>{{ eventJson(event) }}</pre></details> }
+  </details>
+  <div class="qa-clear">
+    @if (!confirmClear()) { <button class="text-button" [disabled]="busy() || qa.loading() || !qa.storedEvents()" (click)="confirmClear.set(true)">CLEAR RECORDED QA DATA…</button> }
+    @else { <p>Delete all recorded QA sessions in this browser and turn recording off? Investigation progress is retained. Export first if you need a copy.</p><div class="button-row"><button class="text-button" [disabled]="busy()" (click)="clear()">DELETE ALL QA RECORDINGS</button><button class="text-button" [disabled]="busy()" (click)="confirmClear.set(false)">KEEP RECORDINGS</button></div> }
+  </div>
+  @if (message()) { <p class="qa-message" role="status">{{ message() }}</p> }
+  <p class="muted">Application {{ qa.version }} · QA schema 1</p>
+</details>

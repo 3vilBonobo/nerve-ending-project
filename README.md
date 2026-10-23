@@ -1,96 +1,77 @@
 # Nerve Ending
 
-A browser investigation inside **Meridian Systems — Remote Access Client**. The public office is closed, but its switchboard is still calling the night desk. Read short staff records, question the system, and inspect an attachment missing from the file list. This revised first-act preview has no reading-order or split-code puzzle. Its length and engagement have not been established by an independent human playtest.
+A browser investigation inside **Meridian Systems — Remote Access Client**, set on 6 November 2003. The revised opening uses two evidence encounters before a read-only audit leads to Site 6. Seven acts and three endings remain technically reachable; the later acts retain their existing gameplay and still need the investigation redesign. The olive terminal interface is retained.
 
-The game runs entirely in the browser. No backend, account, API key, or AI download is required. The offline interpreter and authored records ship with the application.
+All essential gameplay works without a model, account, backend or API key. The optional local sentence model recognizes questions; every story reply is authored. Duration and engagement require human playtesting; no measured 90–120-minute playtime is claimed.
 
-## Run on Windows
+## Run
 
-Use Node.js **20.19+ in the 20.x line, 22.12+ in the 22.x line, or 24.x**, and npm. Angular 21 was selected because it supports the installed Node 20.19 runtime; Angular 22 requires a newer Node runtime. See [Angular compatibility](https://angular.dev/reference/versions).
-
-Open PowerShell in this project folder:
+The existing Angular 21 project uses Node 20.19+, 22.12+ or a compatible later runtime. Dependencies are pinned in the lockfile.
 
 ```powershell
 npm ci
 npm start
 ```
 
-Open `http://127.0.0.1:4200/`. The dependency lockfile is committed for reproducible installs. The initial `npm install` has already been completed in this checkout.
+Development: [127.0.0.1:4200](http://127.0.0.1:4200/).
 
 ```powershell
-# Run all unit and component tests once
 npm test
-
-# Create the static production build, including offline app shell
+npm run game:validate
 npm run build
-
-# Serve the production output locally
 npm run preview
 ```
 
-Production preview: `http://127.0.0.1:4173/`. Deployable files: **`dist/client/`**. Do not open `index.html` with `file://`; use an HTTP server. Stop a local server with `Ctrl+C`.
+Production preview: [127.0.0.1:4173](http://127.0.0.1:4173/). Static output: `dist/client/`. Use an HTTP server rather than opening index.html directly. A different local port can be selected with `node scripts/serve.mjs --port 4174`.
 
-## Controls
+## Play
 
-- Start immediately with **Start session** in the simple connection dialog, and skip the connection sequence if desired. Returning players see **Resume session**.
-- Type `HELP`, `STATUS`, `DIR`, `CD`, `OPEN`, `SEARCH`, or `CLEAR`.
-- Questions accept ordinary wording. General HELP uses neutral company and interface examples.
-- Press Enter to submit, Up/Down for input history, or Esc to reveal a reply immediately. Replies otherwise pause briefly and arrive gradually.
-- Record names and attached-record links are clickable. **READ BACKUP COPY** opens a saved attachment; no special command or prior reading list is required.
-- Restore or minimize the terminal to expose desktop folders. On phones, use **TERMINAL / FILES / RECORDS** tabs. Open-record tabs switch between documents.
-- **Settings...** on the opening screen, or **DISPLAY & SETTINGS** in a session, controls CRT effects and font size. Motion follows the device preference.
-- After reading the backup, **SESSION STATUS** opens the preview's end report. Records remain available afterward.
+- Start or resume. Use the file browser or type `OPEN` / `READ` with a title or path. Record references are plain text.
+- Investigate the discrepancy between service 006 and its administrative closure. Apply evidence through terminal replies to two persistent verification prompts. Opening records supplies observations, never conclusions or authority.
+- During a verification, answer in your own words, ask `EXPLAIN`, continue reading and asking questions, or use `DEFER` and `RESUME INVESTIGATION`.
+- Consequential changes display a complete warning and require **CONFIRM OPERATION**. **CANCEL** leaves the system unchanged. Informational questions never perform an intervention.
+- Ask “What should I do next?”, “What have I discovered?”, “Explain that simply”, or “Show me the evidence”. Repeated hint requests give more direct guidance.
+- `HELP`, `DIR`, `OPEN`, `READ`, `SEARCH`, `CD`, `STATUS` and `CLEAR` remain available. Up/Down recalls input. Esc or **SHOW FULL REPLY** reveals output immediately. Investigation operations require typed requests; their former button menu is removed.
+- Use **TERMINAL / FILES / RECORDS** on mobile. The file browser searches available records. Display settings retain CRT controls, text size and reduced-motion support.
+- Final intervention reports show consequences. Records and questions remain available afterward; another outcome requires a new session.
 
-Progress, windows, and display settings save in this browser. Restricted or full storage produces a warning and play continues in memory. `CLEAR` only clears terminal text. **NEW SESSION → RESTART INVESTIGATION** resets the current opening and display settings. The revised opening uses `nerve-ending.save.v3`. Earlier saves remain unchanged under `nerve-ending.save`; their display preferences are imported, while obsolete instructions are kept out of the new opening.
+Progress saves in this browser under `nerve-ending.save.v5`, including pending verification, partial answers, deferral and question clarification. Earlier opening observations migrate without automatically solving the investigation. Already advanced schema-4 sessions retain their progress and are marked as legacy investigations. Original save keys are preserved. Restricted storage permits play in memory with a warning.
 
-## Project organization
+## Questions and optional model
 
-```text
-src/app/core/                 Shared typed domain
-  content.ts                 Immutable authored records
-  models.ts                  State, output, evidence, intent contracts
-  engine/                    Pure commands, filesystem and progression
-  interpretation/            Offline classifier and provider boundary
-  persistence/               Versioned save validation and migration
-  presentation/              Transient reply timing and text reveal
-  session.ts                 Angular state service
-src/app/features/            Terminal, file browser, document windows
-src/app/app.*                Setup, desktop, settings and completion shell
-public/                     Manifest and original local icons
-scripts/                    Production preview and icon generator
-docs/                       Architecture, deployment and playtest guides
+The catalogue contains **205 intent definitions**, **1,638 distinct examples**, **378 new early/revealed response variants**, plus the retained opening replies and live-state responses. Twenty unorthodox/easter egg intent triggers are gated by evidence. Sixteen explicit short-follow-up cases are checked.
+
+Enable **Improved questions** for the self-hosted all-MiniLM-L6-v2 q8 model. The ten model/runtime/reference assets total **41,906,219 bytes** (about 42 MB). Loading, cancellation, cache and failure remain separate from gameplay. Questions stay on the device. Optional recognition uses a background worker; it does not generate facts or execute operations.
+
+```powershell
+npm run model:verify
+npm run model:evaluate
+npm run model:holdout
+npm run model:continuation
+npm run model:catalogue
 ```
 
-There is no backend directory because this slice has no backend implementation. All mutable progress belongs to the local browser, and every world transition is a deterministic function. New features should go into the matching module rather than into a generic utilities folder.
+After editing examples, regenerate embeddings with `npm run model:references`, then repeat validation. `npm run game:validate` writes the current coverage and author catalogue. A development-only loopback Ollama comparison adapter remains available; production hides its controls.
 
-## AI status
+## Local playtest QA
 
-**Basic interpreter and optional browser model: implemented.** Enable **Question model** on the start page or **Improved questions** in Settings. The optional download is about 36.6 MB, including runtime and recognition examples. The start page and Settings show real byte progress and a percentage; play remains available while loading. Cancellation returns to basic questions.
+Open **Display & Settings → Local Playtest QA** (also available in Settings before starting). QA recording is **off by default**. Opt in to retain ordered questions, recognition results, exact selected replies, file access, operations, failures, milestones and endings in this browser's separate `nerve-ending-qa` IndexedDB database. The panel provides session statistics, response feedback, **Export current session**, **Export all sessions**, **Copy current JSONL**, and a separate **Clear recorded QA data** control.
 
-The pinned, quantized all-MiniLM-L6-v2 model runs in a background worker using CPU WebAssembly. It recognises meaning against 298 authored questions. It does not generate story facts or execute commands. Ambiguous inputs ask for clarification. All assets are served by this site and cached in the browser; player questions are not sent to a model server. The enabled preference survives visits. Browser storage eviction can require another download.
+Exports are readable `.jsonl` files in Downloads or your chosen save location. Recordings survive investigation restarts; turning logging off retains existing data. Clearing QA data turns logging off and keeps investigation progress. Nothing uploads or trains automatically. Do not enter personal information or credentials; common sensitive text patterns are redacted before storage. See [QA logging, event schema and privacy](docs/QA_LOGGING.md).
 
-See [the developer question catalogue](docs/QUESTION_CATALOG.md) for questions and actual initial replies. It contains spoilers and is not exposed in player HELP. See [AI implementation and measurements](docs/AI_EXPERIMENTS.md) for model preparation and evaluation commands.
+## Source and author documentation
 
-A development-only Ollama comparison adapter sends classifications to an explicitly selected loopback daemon. No daemon or model was available for end-to-end verification. Public production builds hide its settings. See [AI experiments](docs/AI_EXPERIMENTS.md).
+Narrative references: the [narrative index](docs/narrative/README.md) identifies authority and status for characters, corporate history, personnel, infrastructure and unfinished decisions. [MOTHER & Anna canon v0.3](docs/narrative/NERVE_ENDING_MOTHER_ANNA_CANON_v0_3.md) remains the author-reviewed character-and-causality reference; the supplied world/personnel v0.4 and infrastructure v0.5 documents retain their provisional status. See [canon conflicts](docs/narrative/CANON_CONFLICTS.md) and the [future implementation impact map](docs/narrative/IMPLEMENTATION_IMPACT_MAP.md). Reference ingestion does not change runtime or establish conformity; incident, authority and scenario decisions remain unfinished. Prior dated development documents remain historical records.
 
-## Visual references
+`src/app/core/engine/game.ts` remains the shared entry point. `story-state.ts` defines knowledge, permissions and operating state; `story-records.ts` adds the continuation records; `engine/continuation.ts` implements operations and endings; `interpretation/dialogue-catalog.ts` holds structured authored dialogue. The existing session, worker, playback, files and document windows remain in use.
 
-The outer client resembles an early-2000s connection utility. The retained system uses larger DEC-inspired terminal text, line borders, a thick underscore cursor, and optional phosphor softness. VT323 is served locally and cached for offline play; its SIL Open Font License is included in `public/fonts/OFL.txt`. There are no runtime font-CDN requests. See [period references and design choices](docs/VISUAL_REFERENCES.md).
-
-## Guides
-
+- [Implementation report and limitations](docs/IMPLEMENTATION_REPORT.md)
+- [Opening redesign, exact paths, tests and limitations](docs/OPENING_REDESIGN.md)
+- [Spoiler-marked gameplay paths](docs/GAMEPLAY_GUIDE.md)
+- [Generated dialogue coverage](docs/DIALOGUE_COVERAGE.md)
+- [Full question catalogue — spoilers](docs/QUESTION_CATALOG.md)
 - [Architecture](docs/ARCHITECTURE.md)
-- [Spoiler-marked solution and evidence](docs/GAMEPLAY_GUIDE.md)
-- [Static deployment](docs/DEPLOYMENT.md)
-- [AI implementation and limitations](docs/AI_EXPERIMENTS.md)
-- [Verification record](docs/VERIFICATION.md)
+- [Verification](docs/VERIFICATION.md)
+- [Deployment](docs/DEPLOYMENT.md)
 
-Shortest developer walkthrough (**spoilers**):
-
-```text
-OPEN Unanswered call
-OPEN Handover receipt
-OPEN backup
-```
-
-This is one route, not an unlock sequence. The attachment can also be reached through source links, search, or ordinary questions. Backup reads are ordinary records access and are idempotent. Opening a document does not print a second copy of its body in the terminal.
+The human playtest plan is in the gameplay guide. Automated routes establish reachability and consistency, not emotional effect or playtime.

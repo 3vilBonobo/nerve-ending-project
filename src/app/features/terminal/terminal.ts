@@ -1,13 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject, output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, computed, effect, inject } from '@angular/core';
 import { Session } from '../../core/session';
 import { TerminalEntry } from '../../core/models';
+import { investigationPrompt } from '../../core/engine/investigation';
 
 @Component({
   selector: 'ne-terminal', standalone: true, templateUrl: './terminal.html',
 })
 export class Terminal implements AfterViewInit, OnDestroy {
   readonly session = inject(Session);
-  readonly fileOpened = output<string>();
+  readonly investigationPrompt = computed(() => investigationPrompt(this.session.state()));
   readonly entries = computed<(TerminalEntry & { printing?: boolean })[]>(() => {
     const reply = this.session.playback.current();
     return this.session.state().terminalHistory.map(entry => reply?.phase === 'printing' && reply.entry === entry
@@ -16,6 +17,7 @@ export class Terminal implements AfterViewInit, OnDestroy {
   });
   @ViewChild('scrollback') private scrollback?: ElementRef<HTMLElement>;
   @ViewChild('command') private command?: ElementRef<HTMLInputElement>;
+  @ViewChild('operationPanel') private operationPanel?: ElementRef<HTMLElement>;
   input = '';
   caretColumn = 0;
   caretScroll = 0;
@@ -26,8 +28,17 @@ export class Terminal implements AfterViewInit, OnDestroy {
   private followTimer?: ReturnType<typeof setTimeout>;
   private caretTimer?: ReturnType<typeof setTimeout>;
   private destroyed = false;
+  private confirmationTimer?: ReturnType<typeof setTimeout>;
+  private lastPending?: string;
 
   constructor() {
+    effect(() => {
+      const pending = this.session.state().pendingOperation;
+      if (pending !== this.lastPending) {
+        this.lastPending = pending; clearTimeout(this.confirmationTimer);
+        if (pending) this.confirmationTimer = setTimeout(() => this.operationPanel?.nativeElement.focus());
+      }
+    });
     effect(() => {
       this.entries();
       this.session.playback.current();
@@ -70,5 +81,5 @@ export class Terminal implements AfterViewInit, OnDestroy {
     clearTimeout(this.caretTimer);
     this.caretTimer = setTimeout(() => { if (this.command) this.updateCaret(this.command.nativeElement); });
   }
-  ngOnDestroy(): void { this.destroyed = true; clearTimeout(this.followTimer); clearTimeout(this.caretTimer); }
+  ngOnDestroy(): void { this.destroyed = true; clearTimeout(this.followTimer); clearTimeout(this.caretTimer); clearTimeout(this.confirmationTimer); }
 }

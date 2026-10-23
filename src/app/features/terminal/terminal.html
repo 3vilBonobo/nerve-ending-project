@@ -6,7 +6,7 @@
       <button [attr.aria-label]="session.state().ui.terminalMode === 'maximized' ? 'Restore terminal' : 'Maximize terminal'" [title]="session.state().ui.terminalMode === 'maximized' ? 'Restore terminal' : 'Maximize terminal'" (click)="session.terminalMode(session.state().ui.terminalMode === 'maximized' ? 'restored' : 'maximized')">{{ session.state().ui.terminalMode === 'maximized' ? '▣' : '□' }}</button>
     </div>
   </header>
-  <div class="terminal-toolbar"><span>Folder: {{ session.state().currentDirectory }}</span><button class="record-link" (click)="session.submit('What have I discovered?')" [disabled]="session.busy()">EVIDENCE</button></div>
+  <div class="terminal-toolbar"><span>Folder: {{ session.state().currentDirectory }}</span><button class="record-link" (click)="session.submit('What have I discovered?', 'evidence-button')" [disabled]="session.busy()">EVIDENCE</button></div>
   <div class="scrollback" #scrollback (scroll)="scroll()" tabindex="0" aria-label="Terminal scrollback" [attr.aria-busy]="session.busy()">
     @for (entry of entries(); track $index) {
       <article class="terminal-entry" [class.initial-entry]="!entry.input" [class.entry-notice]="entry.code === 'denied' || entry.code === 'error' || entry.code === 'notice'" [attr.data-output]="entry.truth">
@@ -14,7 +14,7 @@
         @for (line of entry.lines; track $index; let lastLine = $last) { <div class="output-line">{{ line || ' ' }}@if (entry.printing && lastLine) { <span class="reply-caret" aria-hidden="true"></span> }</div> }
         @if (entry.links.length) {
           <div class="record-links">
-            @for (link of entry.links; track link.fileId) { <button class="record-link" (click)="fileOpened.emit(link.fileId)"><span aria-hidden="true">[OPEN]</span> {{ link.label }}</button> }
+            @for (link of entry.links; track link.fileId) { <code class="record-reference">{{ link.label }}</code> }
           </div>
         }
       </article>
@@ -24,14 +24,19 @@
     }
   </div>
   @if (session.pending(); as pending) {
-    <section class="operation-confirmation" role="alertdialog" aria-labelledby="operation-title" aria-describedby="operation-warning">
+    <section #operationPanel class="operation-confirmation" role="alertdialog" aria-labelledby="operation-title" aria-describedby="operation-warning" tabindex="-1">
       <strong id="operation-title">CONFIRM: {{ pending.label }}</strong><p id="operation-warning">{{ pending.warning }}</p>
-      <div><button class="primary-button" (click)="session.submit('CONFIRM OPERATION')" [disabled]="session.busy()">CONFIRM OPERATION</button><button class="text-button" (click)="session.submit('CANCEL')" [disabled]="session.busy()">CANCEL</button></div>
+      <div><button class="primary-button" (click)="session.submit('CONFIRM OPERATION', 'operation-button')" [disabled]="session.busy()">CONFIRM OPERATION</button><button class="text-button" (click)="session.submit('CANCEL', 'operation-button')" [disabled]="session.busy()">CANCEL</button></div>
     </section>
-  } @else if (session.state().archive006Recovered && !session.state().operating.endingId) {
-    <details class="operations-panel"><summary>AVAILABLE OPERATIONS / {{ session.operations().length }}</summary>
-      <div class="operation-list">@for (operation of session.operations(); track operation.id) { <button class="record-link" [disabled]="session.busy()" (click)="session.submit(operation.label)"><span>{{ operation.warning ? '[INTERVENE]' : '[OBSERVE]' }}</span> {{ operation.label }}</button> }</div>
-    </details>
+  }
+  @if (session.state().investigation.status === 'active' || session.state().investigation.status === 'deferred') {
+    <aside class="investigation-prompt" aria-label="Pending investigation verification">
+      @if (session.state().investigation.status === 'deferred') { <strong>REVIEW DEFERRED</strong><span>RESUME INVESTIGATION when ready.</span> }
+      @else { <strong>VERIFICATION PENDING</strong><span>{{ investigationPrompt() }}</span><small>Answer below, investigate further, EXPLAIN, or DEFER.</small> }
+    </aside>
+  }
+  @if (session.state().pendingClarification; as clarification) {
+    <aside class="investigation-prompt" aria-label="Pending question clarification"><strong>QUESTION CLARIFICATION</strong><span>{{ clarification.interpretation.clarification || 'Which service or record do you mean?' }}</span><small>@if (clarification.interpretation.choices?.length === 2) { Answer with the subject or first / second. } @else if (clarification.interpretation.choices?.length === 1) { Name the subject or confirm with YES. } @else { Name the service or record. } CANCEL CLARIFICATION dismisses this question.</small></aside>
   }
   <form class="command-row" (submit)="$event.preventDefault(); submit()">
     <label for="terminal-command">SYS<span aria-hidden="true">&gt;</span></label>

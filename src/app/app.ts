@@ -7,9 +7,11 @@ import { DocumentWindow } from './features/documents/document';
 import { OllamaInterpreter } from './core/interpretation/providers';
 import { endingText } from './core/engine/continuation';
 import { KNOWLEDGE_LABELS } from './core/engine/dialogue';
+import type { QaSource } from './core/qa/types';
+import { QaPanel } from './features/qa/qa-panel';
 
 interface InstallPromptEvent extends Event { prompt(): Promise<void>; userChoice: Promise<{ outcome: string }> }
-@Component({ selector: 'ne-root', standalone: true, imports: [Terminal, FileBrowser, DocumentWindow], templateUrl: './app.html' })
+@Component({ selector: 'ne-root', standalone: true, imports: [Terminal, FileBrowser, DocumentWindow, QaPanel], templateUrl: './app.html' })
 export class App implements OnDestroy {
   readonly session = inject(Session);
   readonly stage = signal<'setup' | 'connecting' | 'desktop'>('setup');
@@ -50,7 +52,7 @@ export class App implements OnDestroy {
     if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(registration => this.cached.set(!!registration.active)).catch(() => this.cached.set(false));
   }
   start(): void {
-    if (this.session.state().hasStarted) { this.stage.set('desktop'); return; }
+    if (this.session.state().hasStarted) { this.session.resume(); this.stage.set('desktop'); return; }
     this.session.start(); this.stage.set('connecting'); this.connectionStep.set(0);
     this.connectionTimer = setInterval(() => {
       if (this.connectionStep() >= 5) this.skipConnection();
@@ -58,16 +60,10 @@ export class App implements OnDestroy {
     }, 400);
   }
   skipConnection(): void { clearInterval(this.connectionTimer); this.stage.set('desktop'); }
-  openFile(id: string): void {
-    this.session.openFile(id); this.mobileTab.set('documents'); this.explorer.set(false);
+  openFile(id: string, source: QaSource = 'record-link'): void {
+    this.session.openFile(id, source); this.mobileTab.set('documents'); this.explorer.set(false);
     this.session.terminalMode('restored');
     setTimeout(() => document.querySelector<HTMLElement>(`[data-document="${id}"] .document-shell`)?.focus());
-  }
-  readBackup(): void {
-    this.session.readBackup();
-    this.mobileTab.set('documents'); this.explorer.set(false);
-    this.session.terminalMode('restored');
-    setTimeout(() => document.querySelector<HTMLElement>('[data-document="fragment"] .document-shell')?.focus());
   }
   terminal(): void {
     this.session.terminalMode(this.session.state().ui.terminalMode === 'minimized' ? 'restored' : this.session.state().ui.terminalMode);

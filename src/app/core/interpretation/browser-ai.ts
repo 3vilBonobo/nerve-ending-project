@@ -40,14 +40,14 @@ export class BrowserAIInterpreter implements IntentInterpreter {
       const request = this.pending.get(message.id);
       if (!request) return;
       this.pending.delete(message.id); clearTimeout(request.timer);
-      this.update({ lastQueryMs: message.elapsedMs }); request.resolve(message.interpretation);
+      this.update({ lastQueryMs: message.elapsedMs }); request.resolve({ ...message.interpretation, method: message.interpretation.method ?? 'semantic' });
     }
   }
   async isAvailable(): Promise<boolean> { return this.state.phase === 'ready'; }
   async interpret(input: string, context: QueryContext): Promise<Interpretation> {
     if (!await this.isAvailable() || !this.worker) throw new Error('Question model is not ready.');
     const direct = directInterpretation(input, context);
-    if (direct) return direct;
+    if (direct) return { ...direct, method: 'deterministic' };
     const id = ++this.nextId;
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => this.fail(), 5000);

@@ -48,11 +48,11 @@ describe('terminal controls and records', () => {
     expect(cleared.state.discoveredEvidenceIds).toEqual(state.discoveredEvidenceIds);
     expect(JSON.stringify(state)).toBe(snapshot);
   });
-  it('keeps locked backup text out of searches and guessed file names', () => {
+  it('keeps unread backup text out of searches while allowing an explicit read by path', () => {
     const state = newGame();
     for (const term of ['0417', 'BRIDGE-02', 'Preservation hold']) expect(runInput(state, `SEARCH ${term}`).output.links).toHaveLength(0);
     expect(accessibleFiles(state).some(file => file.id === 'fragment')).toBe(false);
-    expect(runInput(state, 'OPEN /ARCHIVE/HANDOVER_006.BAK').openFileId).toBeUndefined();
+    expect(runInput(state, 'READ /ARCHIVE/HANDOVER_006.BAK').openFileId).toBe('fragment');
     expect(inspectFile(state, 'fragment').state).toEqual(state);
   });
   it('keeps control help and default examples separate from the investigation', () => {
@@ -104,7 +104,7 @@ describe('the unanswered call investigation', () => {
     expect(result.recovered).toBe(true);
     expect(result.openFileId).toBe('fragment');
     expect(result.state.archive006Recovered).toBe(true);
-    expect(result.state.act01Complete).toBe(true);
+    expect(result.state.act01Complete).toBe(false);
     expect(JSON.stringify(FILES)).toBe(source);
   });
   it('makes repeated backup reads idempotent', () => {
@@ -115,24 +115,25 @@ describe('the unanswered call investigation', () => {
     expect(second.state.discoveredEvidenceIds).toEqual(first.state.discoveredEvidenceIds);
     expect(second.state.openFileIds.filter(id => id === 'fragment')).toHaveLength(1);
   });
-  it('can be followed entirely by document links and the backup action', () => {
+  it('can browse the attachment and backup without completing an investigation', () => {
     let state = inspectFile(newGame(), 'call').state;
     expect(FILES.find(file => file.id === 'call')!.references).toContain('ledger');
     state = inspectFile(state, 'ledger').state;
     const result = recover(state);
     expect(result.openFileId).toBe('fragment');
-    expect(result.state.act01Complete).toBe(true);
+    expect(result.state.act01Complete).toBe(false);
+    expect(result.state.permissions).toEqual([]);
   });
   it('answers ordinary curiosity without telling the player which steps to take', () => {
     let state = newGame();
     for (const question of ['Who is calling?', 'Who is supposed to answer?', 'Is anyone there?', 'What is 006?', 'Why did it restart?', 'Where is the receipt?']) {
       const result = runInput(state, question);
-      expect(result.output.code).toBe('ok');
+      expect(['ok', 'notice']).toContain(result.output.code);
       expect(result.output.lines.join(' ')).not.toMatch(/Type RECOVER|Read .* first|combine|You need to/i);
       state = result.state;
     }
     expect(state.archive006Recovered).toBe(false);
-    expect(runInput(state, 'Read the backup').state.act01Complete).toBe(true);
+    expect(runInput(state, 'Read the backup').state.act01Complete).toBe(false);
   });
   it('answers the question asked instead of repeating the entire call report', () => {
     const who = runInput(newGame(), 'Who is calling?').output;

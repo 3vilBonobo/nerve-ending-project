@@ -136,6 +136,10 @@ small { font-size: .85em; }
 .output-line { white-space: pre-wrap; overflow-wrap: anywhere; }
 .entry-notice .output-line { color: var(--medium); }
 .record-links { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 16px; }
+.record-reference, .document-references code { font: inherit; color: var(--medium); overflow-wrap: anywhere; user-select: text; }
+.investigation-prompt { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; border-top: 1px solid var(--line); padding: 10px 14px; font-size: .75em; max-height: 28%; overflow: auto; }
+.investigation-prompt strong { color: var(--green); }
+.investigation-prompt small { color: var(--medium); font-size: .9em; }
 .record-link { max-width: 100%; padding: 3px 0; font-size: .9em; text-align: left; color: var(--green); overflow-wrap: anywhere; line-height: 1.5; border: 0; }
 .record-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 .command-row { display: flex; align-items: center; gap: 12px; margin: 0 16px; padding: 12px 0; border-top: 1px solid var(--line); }
@@ -243,6 +247,27 @@ button:disabled { cursor: default; opacity: .5; }
 .setup-language { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; }
 .setup-language progress { width: 100%; height: 16px; accent-color: var(--bright); }
 .setup-language .text-button { font-size: 12px; padding: 6px 10px; }
+
+.qa-panel { border: 1px solid var(--line); padding: 16px; margin-bottom: 28px; }
+.qa-panel summary { cursor: pointer; line-height: 1.6; }
+.qa-status { float: right; color: var(--bright); font-size: .85em; padding-left: 12px; }
+.qa-panel p { line-height: 1.65; }
+.qa-panel details:not(.qa-panel) { margin-top: 18px; }
+.qa-panel code { overflow-wrap: anywhere; }
+.qa-panel label:not(.check-label) { display: block; margin: 16px 0 8px; font-size: .85em; }
+.qa-panel select, .qa-panel textarea { display: block; width: 100%; max-width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--bright); font: inherit; }
+.qa-panel select { text-overflow: ellipsis; }
+.qa-panel textarea { resize: vertical; margin-bottom: 12px; }
+.qa-stats { margin: 22px 0; font-size: .85em; line-height: 1.65; }
+.qa-stats > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.qa-stats dt { color: var(--medium); }
+.qa-stats dd { margin: 0; overflow-wrap: anywhere; }
+.qa-actions { gap: 10px; }
+.qa-actions button { flex: 1 1 180px; font-size: .85em; }
+.qa-events pre { max-height: 300px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8em; }
+.qa-clear { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+.qa-response-preview { border: 1px solid var(--line); padding: 12px; max-height: 200px; overflow: auto; white-space: pre-wrap; font-size: .9em; }
+.qa-warning, .qa-message { border-left: 2px solid var(--medium); padding-left: 12px; overflow-wrap: anywhere; }
 
 @media (max-width: 1100px) {
   .app-header { padding-inline: 18px; }

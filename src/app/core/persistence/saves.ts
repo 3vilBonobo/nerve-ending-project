@@ -1,11 +1,14 @@
 import { FILES, DIRECTORIES } from '../content';
 import { EVIDENCE, EvidenceId, GameState, INTENTS, TerminalEntry } from '../models';
 import { deriveKnowledge, newGame } from '../engine/game';
-import { canRead, learn, OPERATION_DEFINITIONS } from '../engine/continuation';
+import { canRead, OPERATION_DEFINITIONS } from '../engine/continuation';
 import { ENDINGS, KNOWLEDGE, OPERATIONS, PERMISSIONS, initialStory } from '../story-state';
 import { DIALOGUE_IDS } from '../interpretation/dialogue-catalog';
+import { initialInvestigation } from '../engine/investigation';
+import { validateInterpretation } from '../interpretation/providers';
 
-export const SAVE_KEY = 'nerve-ending.save.v4';
+export const SAVE_KEY = 'nerve-ending.save.v5';
+export const PREVIOUS_SAVE_KEY = 'nerve-ending.save.v4';
 export const OPENING_SAVE_KEY = 'nerve-ending.save.v3';
 export const LEGACY_SAVE_KEY = 'nerve-ending.save';
 export interface SaveStore { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem(key: string): void }
@@ -23,7 +26,7 @@ export function decodeSave(raw: string | null): LoadResult {
   if (!raw) return { state: newGame() };
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
-    if (!data || ![1, 2, 3, 4].includes(Number(data['schemaVersion']))) throw new Error('Unsupported save version');
+    if (!data || ![1, 2, 3, 4, 5].includes(Number(data['schemaVersion']))) throw new Error('Unsupported save version');
     if (typeof data['sessionId'] !== 'string' || !Array.isArray(data['discoveredEvidenceIds'])) throw new Error('Invalid save');
     const base = newGame();
     if (Number(data['schemaVersion']) < 3) return {
@@ -32,7 +35,7 @@ export function decodeSave(raw: string | null): LoadResult {
     };
     const recovered = data['archive006Recovered'] === true;
     let story = initialStory();
-    if (data['schemaVersion'] === 4) {
+    if (Number(data['schemaVersion']) >= 4) {
       story.knowledge = strings(data['knowledge']).filter((k): k is typeof KNOWLEDGE[number] => KNOWLEDGE.includes(k as typeof KNOWLEDGE[number]));
       story.permissions = strings(data['permissions']).filter((p): p is typeof PERMISSIONS[number] => PERMISSIONS.includes(p as typeof PERMISSIONS[number]));
       story.events = [...new Set(strings(data['events']).filter(e => OPERATIONS.some(id => e === `operation:${id}`)))];
@@ -58,27 +61,41 @@ export function decodeSave(raw: string | null): LoadResult {
       if (counts && typeof counts === 'object') for (const [id, count] of Object.entries(counts)) if (DIALOGUE_IDS.has(id) && typeof count === 'number' && Number.isFinite(count)) story.questionCounts[id] = Math.max(0, Math.min(1000, Math.floor(count)));
       story.hintLevel = typeof data['hintLevel'] === 'number' && Number.isFinite(data['hintLevel']) ? Math.min(3, Math.max(0, data['hintLevel'])) : 0;
     }
-    if (recovered && !story.knowledge.includes('clinicalHoldKnown')) story.knowledge.push('clinicalHoldKnown');
+    let investigation = initialInvestigation();
+    const legacyAdvanced = Number(data['schemaVersion']) < 5 && (story.permissions.includes('archiveAuditAccess') || story.knowledge.includes('site6Known') || !!story.operating.endingId);
+    if (legacyAdvanced) investigation = { ...investigation, stage: 'complete', status: 'complete', originEstablished: true, releaseBoundaryEstablished: true, legacy: true };
+    else if (data['schemaVersion'] === 5 && data['investigation'] && typeof data['investigation'] === 'object') {
+      const saved = data['investigation'] as Record<string, unknown>;
+      const attempts = saved['attempts'] as Record<string, unknown> | undefined;
+      const count = (key: string): number => typeof attempts?.[key] === 'number' && Number.isFinite(attempts[key]) ? Math.min(1000, Math.max(0, Math.floor(attempts[key] as number))) : 0;
+      investigation = { stage: ['closure','provenance','complete'].includes(String(saved['stage'])) ? saved['stage'] as typeof investigation.stage : 'closure', status: ['dormant','active','deferred','complete'].includes(String(saved['status'])) ? saved['status'] as typeof investigation.status : 'dormant', attempts: { closure: count('closure'), provenance: count('provenance') }, originEstablished: saved['originEstablished'] === true, releaseBoundaryEstablished: saved['releaseBoundaryEstablished'] === true, ...(saved['legacy'] === true ? { legacy: true } : {}) };
+      if (investigation.stage === 'complete') investigation.status = 'complete';
+      else if (investigation.status === 'complete') investigation.status = 'dormant';
+    }
+    if (Number(data['schemaVersion']) < 5 && !legacyAdvanced) {
+      // Old backup reads established this automatically; retain observations, not that inference.
+      story.knowledge = story.knowledge.filter(k => k !== 'clinicalHoldKnown');
+    }
     const allowedIds = FILES.filter(file => canRead({ ...base, ...story, archive006Recovered: recovered }, file)).map(file => file.id);
     const history: TerminalEntry[] = [];
     if (Array.isArray(data['terminalHistory'])) for (const item of data['terminalHistory'].slice(-80)) {
       if (!item || typeof item !== 'object' || typeof item.input !== 'string' || !Array.isArray(item.lines)) continue;
       history.push({
         input: item.input.slice(0, 1000), lines: strings(item.lines).map(line => line.slice(0, 16000)).slice(0, 50),
-        links: Array.isArray(item.links) ? item.links.filter((link: { fileId?: string }) => allowedIds.includes(link?.fileId ?? '')).map((link: { fileId: string }) => ({ fileId: link.fileId, label: FILES.find(file => file.id === link.fileId)!.title })) : [],
+        links: Array.isArray(item.links) ? item.links.filter((link: { fileId?: string }) => allowedIds.includes(link?.fileId ?? '')).map((link: { fileId: string }) => ({ fileId: link.fileId, label: FILES.find(file => file.id === link.fileId)!.path })) : [],
         code: ['ok', 'denied', 'error', 'notice'].includes(item.code) ? item.code : 'ok',
         truth: ['record', 'interpretation', 'withheld', 'system'].includes(item.truth) ? item.truth : 'system',
       });
     }
     const state = deriveKnowledge({
-      ...base, ...story, sessionId: data['sessionId'].slice(0, 30),
+      ...base, ...story, investigation, sessionId: data['sessionId'].slice(0, 30),
       startedAt: typeof data['startedAt'] === 'string' ? data['startedAt'] : base.startedAt,
       currentDirectory: DIRECTORIES.includes(data['currentDirectory'] as typeof DIRECTORIES[number]) ? data['currentDirectory'] as string : '/',
       discoveredEvidenceIds: [...new Set(strings(data['discoveredEvidenceIds']).filter((id): id is EvidenceId => EVIDENCE.includes(id as EvidenceId) && (recovered || !['EV_RECOVERED_FRAGMENT', 'EV_AUTHORIZATION'].includes(id))))],
       viewedFileIds: strings(data['viewedFileIds']).filter(id => allowedIds.includes(id)),
       openFileIds: strings(data['openFileIds']).filter(id => allowedIds.includes(id)).slice(-5),
       completedActions: recovered ? ['recover-006', 'restore-legacy-references'] : [],
-      archive006Recovered: recovered, act01Complete: recovered && data['act01Complete'] === true,
+      archive006Recovered: recovered, act01Complete: investigation.stage === 'complete',
       hasStarted: data['hasStarted'] === true,
       lastTopic: typeof data['lastTopic'] === 'string' ? data['lastTopic'].slice(0, 60) : undefined,
       lastFileId: typeof data['lastFileId'] === 'string' && allowedIds.includes(data['lastFileId']) ? data['lastFileId'] : undefined,
@@ -86,12 +103,20 @@ export function decodeSave(raw: string | null): LoadResult {
       terminalHistory: history.length ? history : base.terminalHistory,
       ui: display(data['ui']),
     });
+    const pending = data['pendingClarification'];
+    if (pending && typeof pending === 'object') {
+      const p = pending as Record<string, unknown>;
+      const rawQuery = p['interpretation'] as Record<string, unknown> | undefined;
+      const provider = rawQuery && ['fallback','browser-ai','ollama'].includes(String(rawQuery['provider'])) ? rawQuery['provider'] as 'fallback' | 'browser-ai' | 'ollama' : 'fallback';
+      const query = validateInterpretation(rawQuery, provider);
+      if (typeof p['input'] === 'string' && query?.needsClarification) state.pendingClarification = { input: p['input'].slice(0, 1000), interpretation: query };
+    }
     if (state.pendingOperation && !OPERATION_DEFINITIONS.find(o => o.id === state.pendingOperation)?.available(state)) state.pendingOperation = undefined;
-    return { state, ...(data['schemaVersion'] === 3 ? { warning: 'Opening session migrated. The handover investigation can now continue; your original save is preserved.' } : {}) };
+    return { state, ...(Number(data['schemaVersion']) < 5 ? { warning: legacyAdvanced ? 'Earlier investigation progress preserved. New sessions use the revised opening verification.' : 'Opening observations preserved. The revised handover investigation requires applying evidence through the terminal. Your original save is preserved.' } : {}) };
   } catch { return { state: newGame(), warning: 'The saved session could not be read. A new session is available.' }; }
 }
 export function loadSave(storage: SaveStore): LoadResult {
-  try { return decodeSave(storage.getItem(SAVE_KEY) ?? storage.getItem(OPENING_SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY)); }
+  try { return decodeSave(storage.getItem(SAVE_KEY) ?? storage.getItem(PREVIOUS_SAVE_KEY) ?? storage.getItem(OPENING_SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY)); }
   catch { return { state: newGame(), warning: 'Browser storage is restricted. You can play, but progress may not survive closing this page.' }; }
 }
 export function writeSave(storage: SaveStore, state: GameState): boolean {

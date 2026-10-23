@@ -1,9 +1,11 @@
 {
-  "intents": 200,
-  "recognitionExamples": 1583,
-  "newAuthoredVariants": 368,
-  "existingOpeningCategories": 22,
-  "easterEggTriggers": 16,
+  "intents": 205,
+  "recognitionExamples": 1638,
+  "newAuthoredVariants": 378,
+  "retainedOpeningIntentDefinitions": 16,
+  "records": 39,
+  "operations": 22,
+  "easterEggTriggers": 20,
   "contextAwareFollowupCases": 16,
   "families": {
     "System identity": {
@@ -23,7 +25,7 @@
     },
     "Preservation": {
       "intents": 8,
-      "examples": 56,
+      "examples": 58,
       "variants": 16
     },
     "Records and evidence": {
@@ -38,12 +40,12 @@
     },
     "Anna Voss": {
       "intents": 16,
-      "examples": 112,
+      "examples": 116,
       "variants": 32
     },
     "Biomedical technology": {
       "intents": 12,
-      "examples": 84,
+      "examples": 90,
       "variants": 24
     },
     "The accident": {
@@ -63,17 +65,17 @@
     },
     "Communications": {
       "intents": 10,
-      "examples": 70,
+      "examples": 74,
       "variants": 20
     },
     "External medical risk": {
       "intents": 10,
-      "examples": 70,
+      "examples": 72,
       "variants": 20
     },
     "Operations": {
       "intents": 10,
-      "examples": 70,
+      "examples": 72,
       "variants": 20
     },
     "Ethics and choices": {
@@ -82,14 +84,14 @@
       "variants": 24
     },
     "Personal and emotional": {
-      "intents": 10,
-      "examples": 70,
-      "variants": 20
+      "intents": 11,
+      "examples": 77,
+      "variants": 22
     },
     "Unorthodox and easter eggs": {
-      "intents": 16,
-      "examples": 112,
-      "variants": 32
+      "intents": 20,
+      "examples": 140,
+      "variants": 40
     },
     "Help and conversation": {
       "intents": 8,

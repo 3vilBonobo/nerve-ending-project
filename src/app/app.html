@@ -19,7 +19,7 @@
           <div class="setup-language" aria-label="Question model status">
             @let modelState = session.language.state();
             @switch (modelState.phase) {
-              @case ('off') { <span>Question model: off</span><button class="text-button" (click)="session.language.enable()">ENABLE / 36 MB</button> }
+              @case ('off') { <span>Question model: off</span><button class="text-button" (click)="session.language.enable()">ENABLE / 42 MB</button> }
               @case ('loading') { <label for="start-model-progress">Question model: {{ modelPercent() }}%</label><progress id="start-model-progress" max="100" [value]="modelPercent()"></progress><span>{{ (modelState.loaded / 1000000).toFixed(1) }} / {{ (modelState.total / 1000000).toFixed(1) }} MB — you can start playing.</span><button class="text-button" (click)="session.language.disable()">CANCEL</button> }
               @case ('initializing') { <span role="status">Question model: files loaded 100%. {{ modelState.detail }}</span><progress aria-label="Preparing question model"></progress><button class="text-button" (click)="session.language.disable()">CANCEL</button> }
               @case ('ready') { <span role="status">Question model: 100% / READY</span> }
@@ -33,7 +33,7 @@
           <button class="primary-button start-button" (click)="start()">{{ session.state().hasStarted ? 'Resume session' : 'Start session' }}</button>
         </footer>
       </div>
-      <p class="setup-caption">Nerve Ending / Revision 1.0</p>
+      <p class="setup-caption">Nerve Ending / Revision 1.1</p>
     </section>
   }
 
@@ -55,22 +55,22 @@
         @for (folderName of ['OPERATIONS', 'ARCHIVE', 'ADMIN', 'SYSTEM']; track folderName) { <button class="desktop-icon" (click)="folder('/' + folderName)"><span class="folder-icon large-folder" aria-hidden="true"></span><span>{{ folderName }}</span></button> }
       </div>
       <div class="desktop-note"><span>REMOTE MIRROR R-02</span><span>RECORDS RETAINED<br>SUPERVISION CONTINUES</span></div>
-      @if (session.state().ui.terminalMode !== 'minimized') { <ne-terminal class="terminal-window" [class.restored]="session.state().ui.terminalMode === 'restored'" (fileOpened)="openFile($event)" /> }
+      @if (session.state().ui.terminalMode !== 'minimized') { <ne-terminal class="terminal-window" [class.restored]="session.state().ui.terminalMode === 'restored'" /> }
       @if (explorer() || mobileTab() === 'files') {
-        <section class="explorer-window"><header class="window-titlebar"><div class="window-title"><span class="folder-icon" aria-hidden="true"></span> FILES</div><div class="window-controls"><button (click)="explorer.set(false); mobileTab.set('terminal')" aria-label="Close file browser">×</button></div></header><ne-file-browser (opened)="openFile($event)" /></section>
+        <section class="explorer-window"><header class="window-titlebar"><div class="window-title"><span class="folder-icon" aria-hidden="true"></span> FILES</div><div class="window-controls"><button (click)="explorer.set(false); mobileTab.set('terminal')" aria-label="Close file browser">×</button></div></header><ne-file-browser (opened)="openFile($event, 'file-browser')" /></section>
       }
       <div class="documents-area">
         @for (file of documents(); track file.id; let index = $index) {
-          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="terminal()" (opened)="openFile($event)" (backupRequested)="readBackup()" />
+          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="terminal()" />
         }
-        @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Select a file in the terminal or file browser to read it.</small></div> }
+        @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Use OPEN / READ or select a file in the file browser.</small></div> }
         @if (documents().length > 1) { <nav class="document-tabs" aria-label="Open records">@for (file of documents(); track file.id) { <button (click)="session.focusFile(file.id)" [class.selected]="file.id === documents().at(-1)?.id">{{ file.title }}</button> }</nav> }
       </div>
     </section>
-    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILES</button>@if (session.state().archive006Recovered) { <button (click)="openFile('fragment')">↳ RECOVERED 006</button> }<span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
+    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILES</button><span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
   }
 
-  @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
+  @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ session.qa.enabled() ? 'QA RECORDING / LOCAL · ' : '' }}{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
 
   @if (showEnding() && stage() === 'desktop') {
     <section class="ending-card" aria-label="Session report" role="region" tabindex="-1"><div class="eyebrow">MERIDIAN / INTERVENTION RECORD</div>
@@ -84,6 +84,7 @@
 <dialog #settings class="settings-dialog" [style.--font-scale]="session.state().ui.fontScale">
   <header class="window-titlebar"><h2 class="window-title">CLIENT SETTINGS</h2><div class="window-controls"><button (click)="settings.close()" aria-label="Close settings">×</button></div></header>
   <div class="settings-body">
+    <ne-qa-panel />
     <h3>DISPLAY</h3>
     <label class="check-label"><input #crtToggle type="checkbox" [checked]="session.state().ui.crtEnabled" (change)="session.display(crtToggle.checked, session.state().ui.fontScale)"> CRT scanlines & phosphor glow</label>
     <p class="muted">Motion effects follow your device’s reduced-motion preference.</p>
@@ -93,7 +94,7 @@
     <section class="language-settings" aria-label="Local question understanding">
       @let language = session.language.state();
       @switch (language.phase) {
-        @case ('off') { <div class="settings-status">IMPROVED QUESTIONS: OFF</div><p>Recognise more ways of asking about the records. Optional download: about 36 MB. Your questions stay on this device.</p><button class="primary-button" (click)="session.language.enable()">ENABLE IMPROVED QUESTIONS</button> }
+        @case ('off') { <div class="settings-status">IMPROVED QUESTIONS: OFF</div><p>Recognise more ways of asking about the records. Optional download: about 42 MB. Your questions stay on this device.</p><button class="primary-button" (click)="session.language.enable()">ENABLE IMPROVED QUESTIONS</button> }
         @case ('loading') { <div class="settings-status" role="status">{{ language.cached ? 'LOADING SAVED FILES' : 'LOADING QUESTION MODEL' }} / {{ modelPercent() }}%</div><progress aria-label="Question model loading" max="100" [value]="modelPercent()"></progress><p class="language-progress">{{ modelPercent() }}% — {{ (language.loaded / 1000000).toFixed(1) }} / {{ (language.total / 1000000).toFixed(1) }} MB</p><p>You can close Settings and keep playing.</p><button class="text-button" (click)="session.language.disable()">CANCEL LOADING</button> }
         @case ('initializing') { <div class="settings-status" role="status">PREPARING QUESTION MODEL / 100% FILES LOADED</div><progress aria-label="Preparing question model"></progress><p>{{ language.detail }} You can keep playing while this finishes.</p><button class="text-button" (click)="session.language.disable()">CANCEL LOADING</button> }
         @case ('ready') { <div class="settings-status" role="status">IMPROVED QUESTIONS: READY / LOCAL</div><p>Questions are processed on this device. {{ language.persistent ? 'Model files are saved in this browser for later visits.' : 'Model files could not be saved. Available for this visit.' }}</p><button class="text-button" (click)="session.language.disable()">USE BASIC QUESTIONS</button> }
@@ -110,7 +111,7 @@ FALLBACK RATE: {{ metricSummary().fallback }}%
 MODEL LOAD: {{ session.language.state().loadMs.toFixed(0) }} ms</pre></details>
     }
   </div>
-  <footer class="dialog-footer"><span>NERVE ENDING / PROTOTYPE 0.1</span><button class="text-button" (click)="settings.close()">DONE ↵</button></footer>
+  <footer class="dialog-footer"><span>NERVE ENDING / REVISION 1.0</span><button class="text-button" (click)="settings.close()">DONE ↵</button></footer>
 </dialog>
 
 <dialog #resetDialog class="reset-dialog"><header class="window-titlebar"><h2 class="window-title">RESET LOCAL SESSION?</h2></header><div class="settings-body"><p>This clears investigation progress and the saved session in this browser. Display settings also return to their defaults.</p><div class="button-row"><button class="primary-button" (click)="restart(); resetDialog.close()">RESTART INVESTIGATION</button><button class="text-button" (click)="resetDialog.close()">CANCEL</button></div></div></dialog>

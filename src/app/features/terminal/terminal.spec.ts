@@ -41,7 +41,8 @@ describe('terminal reply playback', () => {
     await pending; fixture.detectChanges();
     expect(session.busy()).toBe(false);
     expect(element.textContent).toContain('No staff terminal is connected.');
-    expect(element.querySelector('.terminal-entry:last-of-type .record-link')?.textContent).toContain('Terminal help');
+    expect(element.querySelector('.terminal-entry:last-of-type .record-link')).toBeNull();
+    expect(element.querySelector('.terminal-entry:last-of-type .record-reference')?.textContent).toContain('/SYSTEM/READ_FIRST.TXT');
     fixture.destroy();
   });
 

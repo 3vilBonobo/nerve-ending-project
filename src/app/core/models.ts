@@ -13,7 +13,10 @@ export interface Interpretation {
   needsClarification: boolean;
   confidence?: number;
   clarification?: string;
+  choices?: { intent: QueryIntent; label: string }[];
+  subject?: 'identity' | 'headquarters' | 'server' | 'local-save' | 'biological' | 'live-monitor' | 'kell';
   provider: 'fallback' | 'browser-ai' | 'ollama';
+  method?: 'deterministic' | 'semantic' | 'ollama';
 }
 export interface QueryContext { lastTopic?: string; lastFileId?: string; lastIntent?: QueryIntent }
 export interface IntentInterpreter {
@@ -31,6 +34,7 @@ export interface ArchiveFile {
   readonly locked?: boolean;
   readonly references?: readonly string[];
   readonly backupAvailable?: boolean;
+  readonly requiresBackup?: boolean;
   readonly access?: Permission;
   readonly requiresKnowledge?: Knowledge;
   readonly reveals?: readonly Knowledge[];
@@ -46,7 +50,9 @@ export interface TerminalOutput {
 }
 export interface TerminalEntry extends TerminalOutput { input: string }
 export interface GameState extends StoryState {
-  schemaVersion: 4;
+  schemaVersion: 5;
+  investigation: OpeningInvestigation;
+  pendingClarification?: { input: string; interpretation: Interpretation };
   sessionId: string;
   startedAt: string;
   currentDirectory: string;
@@ -64,4 +70,26 @@ export interface GameState extends StoryState {
   terminalHistory: TerminalEntry[];
   ui: { crtEnabled: boolean; fontScale: number; terminalMode: TerminalMode };
 }
-export interface Transition { state: GameState; output: TerminalOutput; openFileId?: string; clear?: boolean; recovered?: boolean }
+export interface OpeningInvestigation {
+  stage: 'closure' | 'provenance' | 'complete';
+  status: 'dormant' | 'active' | 'deferred' | 'complete';
+  attempts: { closure: number; provenance: number };
+  originEstablished: boolean;
+  releaseBoundaryEstablished: boolean;
+  legacy?: boolean;
+}
+export interface EncounterTrace {
+  id: 'closure-discrepancy' | 'handover-provenance';
+  action: 'prompted' | 'attempted' | 'explained' | 'deferred' | 'resumed' | 'completed';
+  outcome: 'pending' | 'incorrect' | 'partial' | 'missing-evidence' | 'accepted';
+  evidence: string[];
+  reason: string;
+}
+export interface DialogueSelection {
+  variantId: string;
+  intent: QueryIntent;
+  profile: string;
+  modifiers: string[];
+  conditions: { gate: string | null; gateSatisfied: boolean; questionCount: number | null; previousIntent: string | null; previousFileId: string | null };
+}
+export interface Transition { state: GameState; output: TerminalOutput; openFileId?: string; clear?: boolean; recovered?: boolean; dialogue?: DialogueSelection; encounters?: EncounterTrace[]; resolvedInterpretation?: Interpretation }

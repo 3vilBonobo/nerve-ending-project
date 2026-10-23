@@ -2,6 +2,7 @@ import { FILES, FILE_ALIASES } from '../content';
 import { Interpretation, IntentInterpreter, QueryContext, QueryIntent } from '../models';
 import { matchDialogue } from './dialogue-matching';
 import { SEMANTIC_CATALOG } from './semantic-catalog';
+import { openingQuestion } from './opening-questions';
 
 const openingExamples = new Map(SEMANTIC_CATALOG.filter(i => !i.intent.startsWith('q_')).flatMap(i => i.examples.map(e => [normalize(e), i.intent] as const)));
 export const isOpeningExample = (input: string): boolean => openingExamples.has(normalize(input));
@@ -10,12 +11,20 @@ export function normalize(input: string): string {
   return input.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9/. _-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 export function classify(input: string, context: QueryContext = {}): Interpretation {
+  const regression = openingQuestion(input);
+  if (regression) return regression;
   const text = normalize(input);
-  const result = (intent: QueryIntent, extra: Partial<Interpretation> = {}): Interpretation => ({ intent, needsClarification: false, provider: 'fallback', ...extra });
+  const result = (intent: QueryIntent, extra: Partial<Interpretation> = {}): Interpretation => ({ intent, needsClarification: false, provider: 'fallback', method: 'deterministic', ...extra });
   const code = text.match(/\b(004|005|006|007|4|5|6|7|four|five|six|seven)\b/)?.[1];
   const numbers: Record<string, string> = { '4': '004', '5': '005', '6': '006', '7': '007', four: '004', five: '005', six: '006', seven: '007' };
   const entity = code ? `service-${numbers[code] ?? code}` : context.lastTopic;
   const story = (intent: QueryIntent): Interpretation => result(intent, { entityId: entity ?? 'service-006' });
+  const fileRequest = /^(?:(?:can|could|would) (?:you|i) (?:please )?|please )?(?:open|read|show(?: me)?|view|display|bring up|look at|see)\s/.test(text);
+  if (fileRequest && !/^(?:please )?(?:read|open|show(?: me)?) (?:the |local )*backup(?: copy)?$/.test(text)) {
+    const requested = FILES.find(f => [f.path.toLowerCase(), f.path.split('/').pop()!.toLowerCase(), normalize(f.title)].some(name => text.includes(name)));
+    const alias = Object.keys(FILE_ALIASES).sort((a,b) => b.length - a.length).find(name => text.includes(name));
+    if (requested || alias) return result('request_file', { fileId: requested?.id ?? FILE_ALIASES[alias!], entityId: entity });
+  }
   // Keep the opening's concise clarification route; later dialogue can repeat its resolved subject.
   if (/^(what do you mean|explain|explain that|clarify|can you explain|what does that mean|tell me more)$/.test(text) && context.lastIntent && !context.lastIntent.startsWith('q_')) return result('ask_clarification', { entityId: entity });
   const catalogueIntent = openingExamples.get(text);

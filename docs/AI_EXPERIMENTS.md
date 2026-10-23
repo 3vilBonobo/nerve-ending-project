@@ -1,5 +1,9 @@
 # Local language model — implementation and verification
 
+## Complete-game revision — 20 October 2026
+
+The current catalogue has 205 intent definitions, 1,638 examples and 378 new early/revealed reply variants. Ten local assets total 41,906,219 bytes. Current checks: 50/50 development answers, 32 direct answers plus four clarifications in 36 retained holdout cases, 24/24 continuation regression cases, and 1,638/1,638 catalogue cases with context for short pronouns. `npm run model:continuation` runs the added suite. See [IMPLEMENTATION_REPORT.md](IMPLEMENTATION_REPORT.md) for scope and limitations. The sections below retain the original opening's measurements as development history, not current coverage totals.
+
 The game always includes its basic interpreter. The optional browser model is implemented and was exercised in the Chromium in-app browser. No model server, API key or Ollama installation is required by players.
 
 ## Model and assets

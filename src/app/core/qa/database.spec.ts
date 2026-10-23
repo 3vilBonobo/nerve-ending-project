@@ -1,0 +1,67 @@
+import { IDBFactory } from 'fake-indexeddb';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { newGame } from '../engine/game';
+import { openQaDatabase, QaStore } from './database';
+import { makeQaDraft } from './events';
+
+describe('local QA IndexedDB', () => {
+  let factory: IDBFactory;
+  const draft = (input = 'Why is the office closed?') => makeQaDraft('instance', { type: 'question_submitted', state: newGame(), data: { input } }, 'terminal');
+  beforeEach(() => { factory = new IDBFactory(); });
+
+  it('starts disabled and rejects recording without consent', async () => {
+    const db = await openQaDatabase(factory);
+    expect(await db.enabled()).toBe(false);
+    expect(await db.commit('game', [draft()])).toEqual([]);
+    expect(await db.events()).toEqual([]); expect(await db.sessions()).toEqual([]); db.close();
+  });
+  it('persists consent, anonymous identity, events and sequence across database reopen', async () => {
+    let db = await openQaDatabase(factory);
+    const [first] = await db.commit('game', [draft()], true); db.close();
+    db = await openQaDatabase(factory);
+    expect(await db.enabled()).toBe(true);
+    const [second] = await db.commit('game', [draft('What happened?')]);
+    expect(second.sessionId).toBe(first.sessionId); expect(second.sequence).toBe(2);
+    expect(second.order).toBeGreaterThan(first.order);
+    expect((await db.sessions())[0].stats.questions).toBe(2);
+    expect(await db.events(first.sessionId)).toEqual([first, second]); db.close();
+  });
+  it('serializes concurrent connections without duplicate or lost sequence numbers', async () => {
+    const db = await openQaDatabase(factory); const other = await openQaDatabase(factory);
+    await db.commit('game', [], true);
+    const jobs = Array.from({ length: 30 }, (_, n) => (n % 2 ? db : other).commit('game', [draft(String(n))]));
+    await Promise.all(jobs);
+    const rows = await db.events();
+    expect(rows).toHaveLength(30);
+    expect(rows.map(r => r.sequence)).toEqual(Array.from({ length: 30 }, (_, n) => n + 1));
+    expect(new Set(rows.map(r => r.order)).size).toBe(30);
+    expect(rows.map(r => r.data['input'])).toEqual(Array.from({ length: 30 }, (_, n) => String(n)));
+    expect((await db.sessions())[0].eventCount).toBe(30); db.close(); other.close();
+  });
+  it('keeps independent sessions and returns a correctly ordered recent window', async () => {
+    const db = await openQaDatabase(factory);
+    const a = await db.commit('game-a', [draft('a'), draft('b'), draft('c')], true);
+    const b = await db.commit('game-b', [draft('d')]);
+    expect(b[0].sessionId).not.toBe(a[0].sessionId); expect(b[0].sequence).toBe(1);
+    expect((await db.events(a[0].sessionId, 2)).map(r => r.data['input'])).toEqual(['b', 'c']);
+    expect(await db.events(b[0].sessionId)).toHaveLength(1);
+    expect(await db.sessions()).toHaveLength(2); db.close();
+  });
+  it('honors disable and clear in other open tabs', async () => {
+    const db = await openQaDatabase(factory); const other = await openQaDatabase(factory);
+    await db.commit('game', [draft()], true);
+    await other.commit('game', [], false);
+    expect(await db.commit('game', [draft('must not persist')])).toEqual([]);
+    expect(await db.events()).toHaveLength(1);
+    await other.clear(); expect(await db.enabled()).toBe(false);
+    expect(await db.events()).toEqual([]); expect(await db.sessions()).toEqual([]);
+    expect(await db.commit('game', [draft()])).toEqual([]); db.close(); other.close();
+  });
+  it('rolls back a failed batch without consuming session sequence or partial statistics', async () => {
+    const db: QaStore = await openQaDatabase(factory); const duplicate = draft();
+    await expect(db.commit('game', [duplicate, duplicate], true)).rejects.toBeTruthy();
+    expect(await db.enabled()).toBe(false); expect(await db.events()).toEqual([]);
+    expect(await db.sessions()).toEqual([]);
+    const [first] = await db.commit('game', [draft()], true); expect(first.sequence).toBe(1); db.close();
+  });
+});
