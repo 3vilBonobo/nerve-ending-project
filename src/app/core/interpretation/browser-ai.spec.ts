@@ -15,6 +15,27 @@ class FakeWorker implements LanguageWorker {
 }
 afterEach(() => vi.useRealTimers());
 describe('local model lifecycle', () => {
+  it('uses deterministic service subjects and follow-ups with a ready optional model', async () => {
+    const worker = new FakeWorker(); const provider = new BrowserAIInterpreter(() => {}, () => worker);
+    provider.load('http://localhost/language/v1/'); worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+    for (const input of ['What services are running?', 'What does Service 001 do?', 'What does Service 008 do?', 'What does standby mean?', 'Who maintains the records system?', 'Show me recent service warnings.', 'Is it working?', 'Show me its logs.']) {
+      const result = await interpretSafely(input, { lastTopic: 'service-003', lastIntent: 'ask_service_status' }, provider);
+      expect(result.metrics.fallback, input).toBe(false); expect(result.interpretation.method).toBe('deterministic');
+      if (/it|its/.test(input)) expect(result.interpretation.entityId).toBe('service-003');
+    }
+    expect(worker.sent.filter(message => message.type === 'query')).toEqual([]); provider.dispose();
+  });
+  it('uses the same public corporate routes while the optional model is ready', async () => {
+    const worker = new FakeWorker(); const provider = new BrowserAIInterpreter(() => {}, () => worker);
+    provider.load('http://localhost/language/v1/'); worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+    for (const input of ['Who founded Meridian?', 'What was the N-Series?', 'Who is Leah Morgan?', 'Who is Anna Voss?', 'Who is Bell?']) {
+      const result = await interpretSafely(input, {}, provider);
+      expect(result.metrics.fallback, input).toBe(false);
+      expect(result.interpretation.method).toBe('deterministic');
+    }
+    expect(worker.sent.filter(message => message.type === 'query')).toEqual([]);
+    provider.dispose();
+  });
   it('reports actual byte progress and waits for warmup before becoming available', async () => {
     const worker = new FakeWorker(); const states: LanguageState[] = [];
     const provider = new BrowserAIInterpreter(state => states.push(state), () => worker);

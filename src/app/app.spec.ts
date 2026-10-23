@@ -25,18 +25,19 @@ describe('Meridian investigation UI', () => {
     fixture.destroy();
   });
   beforeEach(() => { localStorage.clear(); TestBed.configureTestingModule({ imports: [App] }); });
-  it('opens a simple client and surfaces a real queued call without later story names', async () => {
+  it('opens a neutral client and lets the player request service status', async () => {
     const fixture = TestBed.createComponent(App); fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
     expect(element.querySelector('.setup-dialog')!.textContent).toContain('Read files and ask questions.');
     expect(element.querySelector('.setup-dialog')!.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE/);
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();
-    expect(element.textContent).toContain('Outgoing call to NIGHT DESK: NO ANSWER');
+    expect(element.textContent).toContain('REMOTE ACCESS CLIENT 2.04');
+    expect(element.textContent).not.toMatch(/Outgoing call|NIGHT DESK|NO ANSWER|006/);
     expect(element.textContent).not.toMatch(/MOTHER|Anna Voss|Site 6/);
     const session = TestBed.inject(Session);
     const reply = session.submit('STATUS'); session.playback.skip(); await reply; fixture.detectChanges();
-    expect(element.textContent).toContain('LIVE MONITOR');
+    expect(element.textContent).toContain('REGISTERED SERVICES');
     expect(session.state().discoveredEvidenceIds).toContain('EV_SERVICE_ACTIVE'); fixture.destroy();
   });
   it('keeps document references inert and browsing controls unable to solve the investigation', async () => {

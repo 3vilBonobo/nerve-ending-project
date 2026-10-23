@@ -3,7 +3,7 @@
   "recognitionExamples": 1638,
   "newAuthoredVariants": 378,
   "retainedOpeningIntentDefinitions": 16,
-  "records": 39,
+  "records": 43,
   "operations": 22,
   "easterEggTriggers": 20,
   "contextAwareFollowupCases": 16,
@@ -155,7 +155,13 @@
       "clarification": "Which record, person or operation do you mean? Name the subject so I can distinguish it."
     }
   ],
-  "deterministicMismatches": [],
+  "deterministicMismatches": [
+    {
+      "text": "Are you a robot?",
+      "intent": "q_robot",
+      "actual": "ask_identity"
+    }
+  ],
   "missingLateVariants": [],
   "errors": []
 }

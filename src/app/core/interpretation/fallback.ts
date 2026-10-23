@@ -3,6 +3,8 @@ import { Interpretation, IntentInterpreter, QueryContext, QueryIntent } from '..
 import { matchDialogue } from './dialogue-matching';
 import { SEMANTIC_CATALOG } from './semantic-catalog';
 import { openingQuestion } from './opening-questions';
+import { corporateInterpretation } from './corporate-questions';
+import { serviceInterpretation } from './service-questions';
 
 const openingExamples = new Map(SEMANTIC_CATALOG.filter(i => !i.intent.startsWith('q_')).flatMap(i => i.examples.map(e => [normalize(e), i.intent] as const)));
 export const isOpeningExample = (input: string): boolean => openingExamples.has(normalize(input));
@@ -11,6 +13,10 @@ export function normalize(input: string): string {
   return input.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9/. _-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 export function classify(input: string, context: QueryContext = {}): Interpretation {
+  const service = serviceInterpretation(input, context);
+  if (service) return service;
+  const corporate = corporateInterpretation(input, context);
+  if (corporate) return corporate;
   const regression = openingQuestion(input);
   if (regression) return regression;
   const text = normalize(input);

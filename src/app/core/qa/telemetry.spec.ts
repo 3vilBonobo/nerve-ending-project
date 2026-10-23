@@ -125,6 +125,15 @@ describe('opt-in playtest telemetry', () => {
     expect(outcomes.every(e => !!e.data['reason'])).toBe(true);
     expect(events.some(e => e.type === 'challenge_attempt')).toBe(false);
   });
+  it('records a public personnel search as successful even with zero document matches', async () => {
+    await qa.setEnabled(true, state); submit('SEARCH Leah Morgan'); submit('Who is Anna Voss?');
+    const events = await rows();
+    expect(events.filter(e => e.type === 'action_result').map(e => e.data['outcome'])).toEqual(['succeeded', 'succeeded']);
+    expect(events.filter(e => e.type === 'action_failed')).toEqual([]);
+    expect(events.filter(e => ['milestone_reached', 'act_transition', 'encounter_prompted'].includes(e.type))).toEqual([]);
+    expect(events.find(e => e.type === 'response_selected' && e.data['input'] === 'Who is Anna Voss?')?.data['variant']).toMatchObject({ variantId: 'corporate:personnel:P025' });
+    expect(state.knowledge).toEqual([]); expect(state.permissions).toEqual([]);
+  });
   it('keeps repeated intervention requests pending and records confirmation without a pending action as unsuccessful', async () => {
     state = INVESTIGATION_PATH.reduce((s, input) => runInput(s, input).state, state);
     await qa.setEnabled(true, state); submit('RELEASE PATIENT'); submit('RELEASE PATIENT'); submit('CANCEL'); submit('CONFIRM OPERATION');

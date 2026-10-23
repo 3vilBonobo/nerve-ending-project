@@ -63,7 +63,7 @@ describe('opening evidence encounters', () => {
     }
   });
   it('allows another reading order and a historical bridge observation instead of a file open', () => {
-    let s = play(['OPEN backup', 'CHECK BRIDGE STATUS', 'OPEN Handover receipt', 'What is 006?', 'Please investigate service 006']);
+    let s = play(['OPEN backup', 'CHECK BRIDGE STATUS', 'OPEN Handover receipt', 'What is 006?', 'OPEN Closure list', 'Please investigate service 006']);
     s = play(['The office approval lacks an operational release confirmation.', 'The preservation controller accepted the transfer; release permission is still absent.', 'Run service audit'], s);
     expect(actOf(s)).toBe(2);
   });
@@ -113,7 +113,7 @@ describe('first playtest conversation regressions', () => {
   const cases = [
     ['Are you human?', 'AUTOMATED RECORDS INTERFACE'], ['Are you AI?', 'AUTOMATED RECORDS INTERFACE'],
     ['Robot', 'AUTOMATED RECORDS INTERFACE'], ['Intelligence', 'intelligence architecture'],
-    ['Who is J. Kell?', 'No full name'], ['Where are Meridian headquarters?', 'no headquarters address'],
+    ['Who is J. Kell?', 'Julian Kell'], ['Where are Meridian headquarters?', 'Providence, Rhode Island'],
     ['Where is your server located?', 'do not specify the physical server location'],
     ['Show me what you have saved locally', 'LOCAL CLIENT STORAGE'], ['What is records access 007?', 'connection you are using'],
     ['Online', 'Do you mean'], ['What is biological activity?', 'Physiological processes'], ['What is the live monitor?', 'SERVICE STATUS'],

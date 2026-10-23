@@ -1,6 +1,6 @@
-export type CommandName = 'HELP' | 'DIR' | 'CD' | 'OPEN' | 'SEARCH' | 'STATUS' | 'CLEAR' | 'RECOVER' | 'DIAG';
+export type CommandName = 'HELP' | 'DIR' | 'CD' | 'OPEN' | 'SEARCH' | 'STATUS' | 'INFO' | 'LOG' | 'CLEAR' | 'RECOVER' | 'DIAG';
 export interface ParsedCommand { name: CommandName; args: string[]; error?: string }
-const ALIASES: Record<string, CommandName> = { HELP: 'HELP', DIR: 'DIR', LS: 'DIR', CD: 'CD', OPEN: 'OPEN', READ: 'OPEN', SEARCH: 'SEARCH', STATUS: 'STATUS', CLEAR: 'CLEAR', CLS: 'CLEAR', RECOVER: 'RECOVER', DIAG: 'DIAG' };
+const ALIASES: Record<string, CommandName> = { HELP: 'HELP', DIR: 'DIR', LS: 'DIR', CD: 'CD', OPEN: 'OPEN', READ: 'OPEN', SEARCH: 'SEARCH', STATUS: 'STATUS', INFO: 'INFO', LOG: 'LOG', CLEAR: 'CLEAR', CLS: 'CLEAR', RECOVER: 'RECOVER', DIAG: 'DIAG' };
 export function parseCommand(input: string): ParsedCommand | undefined {
   const word = input.trim().split(/\s+/)[0]?.toUpperCase();
   if (!word || !ALIASES[word]) return undefined;

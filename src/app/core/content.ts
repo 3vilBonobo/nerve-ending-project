@@ -1,5 +1,6 @@
 import { ArchiveFile } from './models';
 import { STORY_FILES } from './story-records';
+import { CORPORATE_FILES } from './corporate-records';
 
 export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM', '/COMMS', '/POLICY', '/FINANCE', '/STAFF', '/PERSONNEL', '/RESEARCH', '/INCIDENT', '/CLINICAL', '/VENDOR', '/CONTROL'] as const;
 export const FILES: readonly ArchiveFile[] = [
@@ -154,10 +155,13 @@ Esc shows a reply without waiting for it to finish.
 Original records cannot be edited.`,
   },
   ...STORY_FILES,
+  ...CORPORATE_FILES,
 ];
 export const fileById = (id: string): ArchiveFile | undefined => FILES.find(file => file.id === id);
 export const FILE_ALIASES: Readonly<Record<string, string>> = {
-  'about meridian': 'company', 'company profile': 'company', 'company information': 'company',
+  'about meridian': 'corporate-profile', 'company profile': 'corporate-profile', 'company information': 'corporate-profile',
+  'public directory': 'work-directory', 'work directory': 'work-directory', 'staff directory': 'work-directory',
+  'annex transfer': 'annex-transfer', 'office transfer': 'annex-transfer', 'equipment qa': 'equipment-qa',
   'staff notes': 'maintenance', 'last shift': 'maintenance', 'night desk note': 'maintenance',
   'service list': 'register', 'service register': 'register', 'program list': 'register', 'service 006': 'register',
   'call log': 'call', 'call queue': 'call', 'unanswered call': 'call',

@@ -26,7 +26,7 @@ describe('terminal controls and records', () => {
     state = run(state, 'CD ..');
     expect(state.currentDirectory).toBe('/');
     expect(runInput(state, 'OPEN Office notice').openFileId).toBe('company');
-    expect(runInput(state, 'OPEN About Meridian').openFileId).toBe('company');
+    expect(runInput(state, 'OPEN About Meridian').openFileId).toBe('corporate-profile');
   });
   it('opens documents without duplicating their whole contents in the terminal', () => {
     const result = runInput(newGame(), 'OPEN Last shift');
@@ -73,10 +73,11 @@ describe('terminal controls and records', () => {
 });
 
 describe('the unanswered call investigation', () => {
-  it('starts with an actual system event instead of a suggested solution', () => {
+  it('starts with the approved neutral client welcome, without announcing call evidence', () => {
     const opening = newGame().terminalHistory[0];
-    expect(opening.lines.join(' ')).toContain('NO ANSWER');
-    expect(opening.links.map(link => link.fileId)).toEqual(['call', 'company']);
+    expect(opening.lines.join(' ')).toContain('REMOTE ACCESS CLIENT 2.04');
+    expect(opening.lines.join(' ')).not.toMatch(/NO ANSWER|NIGHT DESK|006|MOTHER|clinical/i);
+    expect(opening.links).toEqual([]);
     expect(opening.lines.join(' ')).not.toMatch(/Try:|To begin|RECOVER|Read.*first/i);
   });
   it('has short source records, no split-code puzzle, and valid document references', () => {
@@ -153,7 +154,9 @@ describe('the unanswered call investigation', () => {
     const restored = run(newGame(), 'OPEN backup');
     expect(runInput(restored, 'Who is 0417?').output.lines.join(' ')).toContain('0417');
     expect(runInput(restored, 'SEARCH 0417').output.links.some(link => link.fileId === 'fragment')).toBe(true);
-    expect(accessibleFiles(restored).map(file => file.body).join(' ')).not.toMatch(/MOTHER|Anna Voss|Site 6|The Machine That Lies/i);
+    const publicBodies = accessibleFiles(restored).map(file => file.body).join(' ');
+    expect(publicBodies).toContain('Anna Voss — Head Researcher');
+    expect(publicBodies).not.toMatch(/MOTHER|AV-06|Site 6|The Machine That Lies/i);
   });
   it('reports the other known services without inventing a second mystery', () => {
     expect(runInput(newGame(), 'What is 005?').output.lines.join(' ')).toContain('stopped');

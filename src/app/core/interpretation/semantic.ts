@@ -2,6 +2,8 @@ import { FILES } from '../content';
 import { Interpretation, QueryContext, QueryIntent } from '../models';
 import { classify, isOpeningExample, normalize } from './fallback';
 import { SEMANTIC_CATALOG, SEMANTIC_EXAMPLES } from './semantic-catalog';
+import { corporateInterpretation } from './corporate-questions';
+import { serviceInterpretation } from './service-questions';
 
 export interface RankedIntent { intent: QueryIntent; score: number }
 export const MATCH_THRESHOLD = 0.42;
@@ -51,6 +53,10 @@ const entityOf = (input: string): string | undefined => {
 
 /** Exact operations stay in the deterministic parser. The model only selects factual question categories. */
 export function directInterpretation(input: string, context: QueryContext): Interpretation | undefined {
+  const service = serviceInterpretation(input, context);
+  if (service) return { ...service, provider: 'browser-ai' };
+  const corporate = corporateInterpretation(input, context);
+  if (corporate) return { ...corporate, provider: 'browser-ai' };
   const text = recognitionText(input);
   const direct = classify(text, context);
   if (direct.subject || direct.choices || direct.entityId === 'service-007' && /records access/.test(text) || /^what(?:s| is) (?:service )?(?:006|6|six)$/.test(text)) return { ...direct, provider: 'browser-ai' };

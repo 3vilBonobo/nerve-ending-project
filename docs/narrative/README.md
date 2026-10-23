@@ -1,8 +1,12 @@
 # Narrative reference index
 
-Updated 23 October 2026. Author-facing references and engineering analysis; spoilers. Reference ingestion and planning only. The current Angular prototype has not been reconciled to these documents.
+Updated 23 October 2026. Author-facing references and engineering analysis; spoilers. The supplied status labels are preserved. Implementation 01's narrower authorization is recorded below; the current prototype is not fully reconciled to this reference set.
+
+**Implementation 01 status:** a later explicit user brief approves v0.4 ordinary corporate facts, names, roles, headquarters, founders and products as working content for a limited read-only exploration layer. That pass implements 34 general work profiles and four selected sample records, while excluding the six contractor entries and protected associations. This changes the prior documentation-only restriction for that scope only; it does not alter the copied files' statuses, ratify all infrastructure proposals or establish full canon conformity. See the [implementation report](../IMPLEMENTATION_01_CORPORATE_EXPLORATION.md). The authority/index text below records the supplied references and their original provisional boundaries.
 
 ## Authority by subject
+
+**Implementation 02 status:** the subsequent explicit user brief authorizes infrastructure v0.5 as a working baseline only for eight service definitions and bounded read-only STATUS/INFO/LOG and factual questions. The [delivery report](../IMPLEMENTATION_02_OPERATIONAL_SERVICES.md) records 27 events, nine excluded samples, the Records Access public-history gap, and the narrow saved-versus-live evidence compatibility change. No source labels are upgraded. Network exposure, new control permissions, incident mechanisms, care and revised endings remain OPEN. Original reference-only restrictions below describe the ingestion phase, subject to these later explicit, limited authorizations.
 
 | Subject | Reference | Authority and limits |
 | --- | --- | --- |

@@ -106,7 +106,11 @@ describe('dialogue boundaries, reveals and follow-ups', () => {
       expect(r.output.links.every(l => canRead(s, FILES.find(f => f.id === l.fileId)!)), i.id).toBe(true);
       expect(r.state.operating).toEqual(s.operating);
     }
-    for (const term of ['MOTHER', 'Anna Voss', 'Site 6']) expect(runInput(s, `SEARCH ${term}`).output.links).toHaveLength(0);
+    for (const term of ['MOTHER', 'AV-06', 'Site 6']) expect(runInput(s, `SEARCH ${term}`).output.links).toHaveLength(0);
+    const publicAnna = runInput(s, 'SEARCH Anna Voss');
+    expect(publicAnna.output.lines.join(' ')).toContain('Head Researcher');
+    expect(publicAnna.output.lines.join(' ')).not.toMatch(/AV-06|Site 6|clinical|patient/i);
+    expect(publicAnna.state.knowledge).toEqual(s.knowledge);
     expect(runInput(s, 'OPEN /SYSTEM/CONTROLLER_ID.TXT').openFileId).toBeUndefined();
   });
   it('questions and model similarities cannot execute medical or network operations', () => {

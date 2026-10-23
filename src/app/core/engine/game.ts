@@ -3,16 +3,17 @@ import { ArchiveFile, EvidenceId, GameState, Interpretation, QueryIntent, Termin
 import { classify } from '../interpretation/fallback';
 import { parseCommand, resolvePath } from './commands';
 import { initialStory } from '../story-state';
-import { canRead, executeOperation, knows, nextHint, parseOperation, transportStatus } from './continuation';
+import { canRead, executeOperation, knows, nextHint, parseOperation } from './continuation';
 import { answerDialogue } from './dialogue';
 import { legacyResponseTrace } from './response-trace';
 import { initialInvestigation, openingInteraction } from './investigation';
+import { findPublicPersonnel, publicPersonnelLines } from '../corporate-records';
+import { answerCorporate } from './corporate';
+import { answerService, serviceCommand, serviceDetails, serviceRegistry } from './services';
 
 export const OPENING = [
-  'MERIDIAN SYSTEMS / RECORDS ACCESS', 'R-02 / 06 NOV 2003, 02:14', '',
-  'PUBLIC OFFICE: CLOSED', 'Remote records available.', '',
-  'SWITCHBOARD / 02:13', 'Outgoing call to NIGHT DESK: NO ANSWER',
-  'First queued: 18 Sep 2001.',
+  'MERIDIAN SYSTEMS', 'REMOTE ACCESS CLIENT 2.04', '', '06 NOV 2003', '',
+  'Connection established.', 'Records and service interface ready.', '', 'Type HELP for instructions.',
 ];
 export const output = (lines: string[], fileIds: string[] = [], code: TerminalOutput['code'] = 'ok', truth: TerminalOutput['truth'] = 'system'): TerminalOutput => ({
   lines, code, truth, links: fileIds.flatMap(id => { const file = fileById(id); return file ? [{ fileId: id, label: file.path }] : []; }),
@@ -21,7 +22,7 @@ export function newGame(now = new Date().toISOString(), sessionId = `MR-${Math.r
   return {
     ...initialStory(), schemaVersion: 5, investigation: initialInvestigation(), sessionId, startedAt: now, currentDirectory: '/', discoveredEvidenceIds: [], unlockedCapabilities: ['CAP_ARCHIVE_RECOVERY'], viewedFileIds: [], openFileIds: [], completedActions: [],
     archive006Recovered: false, act01Complete: false, hasStarted: false,
-    terminalHistory: [{ input: '', ...output(OPENING, ['call', 'company']) }], ui: { crtEnabled: true, fontScale: 1, terminalMode: 'maximized' },
+    terminalHistory: [{ input: '', ...output(OPENING) }], ui: { crtEnabled: true, fontScale: 1, terminalMode: 'maximized' },
   };
 }
 export const accessibleFiles = (state: GameState): readonly ArchiveFile[] => FILES.filter(file => canRead(state, file));
@@ -42,7 +43,8 @@ export function inspectFile(state: GameState, fileId: string): Transition {
     lastTopic: file.evidence.length ? 'service-006' : state.lastTopic,
     viewedFileIds: [...new Set([...state.viewedFileIds, file.id])],
     openFileIds: [...state.openFileIds.filter(id => id !== file.id), file.id].slice(-5),
-  }, file.evidence);
+  // A saved monitor reading is historical evidence, never a fresh controller query.
+  }, file.evidence.filter(id => id !== 'EV_SERVICE_ACTIVE'));
   return {
     state: next,
     output: output([`OPENED: ${file.title}`, `Saved: ${file.modified}`], [], 'ok', 'record'), openFileId: file.id,
@@ -62,7 +64,8 @@ function search(state: GameState, term: string): TerminalOutput {
   const needle = term.toUpperCase();
   const matches = accessibleFiles(state).filter(file => `${file.path} ${file.title} ${file.body}`.toUpperCase().includes(needle));
   const excerpts = matches.map(file => `${file.title}\n  ${file.body.split('\n').find(line => line.toUpperCase().includes(needle))?.trim() ?? file.title}`);
-  return output([`SEARCH: ${term} / FILES FOUND: ${matches.length}`, ...excerpts], matches.map(file => file.id));
+  const people = findPublicPersonnel(term);
+  return output([`SEARCH: ${term} / FILES FOUND: ${matches.length}`, ...excerpts, ...(people.length ? [`PUBLIC WORK PROFILES: ${people.length}`, ...publicPersonnelLines(people)] : [])], matches.map(file => file.id));
 }
 function answer(state: GameState, interpretation: Interpretation, input: string): Transition {
   let next = { ...state };
@@ -83,17 +86,18 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
   }
   const dialogue = answerDialogue(state, interpretation.intent);
   if (dialogue) return dialogue;
-  const other = interpretation.entityId?.match(/^service-(004|005|007)$/)?.[1];
+  const other = interpretation.entityId?.match(/^service-(00[1-8])$/)?.[1];
   if (other && ['ask_service_status', 'ask_retirement'].includes(interpretation.intent)) {
-    const services: Record<string, string[]> = { '004': ['004 / BILLING', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '005': ['005 / BUILDING SENSORS', 'Live state: stopped', 'Office record: closed, 18 Sep 2001'], '007': ['007 / RECORDS ACCESS', 'Live state: running', 'This is the connection you are using.'] };
-    next.lastTopic = interpretation.entityId;
-    return respond(services[other], other === '007' ? ['readme'] : ['authorization']);
+    if (other !== '006') return serviceDetails(state, other);
   }
   let intent: QueryIntent = interpretation.intent;
   if (intent === 'ask_clarification') {
     if (!state.lastIntent) return respond(['Which record do you mean?']);
     if (state.lastIntent === 'ask_calls') return respond(['The same call is retried at 02:13.', 'The night desk does not answer.', 'The last confirmation on file is from 2001.'], ['call']);
-    if (state.lastIntent === 'ask_service_status') return respond(['The live monitor shows 006 running.', 'The office paperwork lists it as closed.', 'These are separate records, made on different dates.'], ['register', 'authorization']);
+    if (state.lastIntent === 'ask_service_status') {
+      const id = state.lastTopic?.match(/^service-(00[1-8])$/)?.[1];
+      return id ? serviceDetails(state, id) : respond(['Which service are you referring to?']);
+    }
     intent = state.lastIntent;
   }
   if (!['ask_company', 'ask_identity', 'ask_office', 'ask_staff', 'ask_access', 'ask_dates', 'ask_record_integrity', 'ask_next', 'unknown', 'request_search'].includes(intent)) next.lastTopic = 'service-006';
@@ -114,7 +118,7 @@ function answer(state: GameState, interpretation: Interpretation, input: string)
     case 'ask_service_status':
       if (state.operating.endingId) return respond(['006 / CONTINUITY MONITOR', `Current state: ${state.operating.service006Running ? 'running' : 'stopped after confirmed release'}`, 'Historical monitor records remain unchanged.'], ['register']);
       return /restart|start.*again|back (?:on|online)|turned.*back|brought.*back/i.test(input)
-      ? respond(['LAST RESTART / 02 NOV 2003, 03:14:09', 'Started by: automatic monitor', 'Reason: handover not closed', 'Operator: none'], ['status-log'], ['EV_SERVICE_ACTIVE'])
+      ? respond(['LAST RESTART / 02 NOV 2003, 03:14:09', 'Started by: automatic monitor', 'Reason: handover not closed', 'Operator: none'], ['status-log'])
       : respond(['006 / CONTINUITY MONITOR', 'Function: overnight alarms', 'Live state: running', 'Office record: closed, 18 Sep 2001', 'Last connected operator: no entry'], ['register', 'authorization'], ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED']);
     case 'ask_retirement': return respond(['OFFICE RECORD / 18 SEP 2001', '006 is listed as closed. Shutdown was approved.', 'The automatic monitor restarted it on 02 Nov 2003.', 'Recorded reason: handover not closed.', ...(state.operating.endingId ? [`Present state after intervention: ${state.operating.service006Running ? 'running' : 'stopped'}.`] : [])], ['authorization', 'status-log'], ['EV_RETIREMENT_APPROVED']);
     case 'ask_transfer':
@@ -203,11 +207,15 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
   if (!input) return { state, output: output([]) };
   const command = parseCommand(input);
   const operation = parseOperation(input);
-  const clarification = !command && !operation ? resolveClarification(state, input) : undefined;
-  const encounter = clarification ? undefined : openingInteraction(state, input, !!command || !!operation);
+  const service = !command && !operation ? answerService(state, input, interpretation) : undefined;
+  const corporate = !service && !command && !operation ? answerCorporate(state, input, interpretation) : undefined;
+  const clarification = !corporate && !command && !operation ? resolveClarification(state, input) : undefined;
+  const encounter = service || corporate || clarification ? undefined : openingInteraction(state, input, !!command || !!operation);
   let result: Transition;
   const done = (out: TerminalOutput, next: GameState = state): Transition => ({ state: next, output: out });
   if (clarification) result = clarification;
+  else if (service) result = service;
+  else if (corporate) result = corporate;
   else if (encounter) result = encounter;
   else if (operation) result = executeOperation(state, operation);
   else if (command?.error) result = done(output([command.error], [], 'error'));
@@ -216,7 +224,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
     switch (command.name) {
       case 'HELP': result = done(output(argument.toUpperCase() === 'RECOVER'
         ? ['BACKUP READER', 'Reads a saved copy when the original attachment is unavailable.', 'It does not change the original or control running services.']
-        : ['TERMINAL HELP', '', 'Questions can be written in ordinary words.', 'What is Meridian Systems?', 'Is this an automatic system?', 'Show me the office notice.', '', 'Use the file browser or type a filename.', 'DIR                    List folders and files', 'OPEN / READ filename   Read a named file', 'SEARCH company         Search the records', 'STATUS                 View the live monitor', 'CLEAR                  Clear terminal text', 'EXPLAIN                Explain an active verification', 'DEFER / RESUME INVESTIGATION', '', 'CD /SYSTEM opens a folder. CD .. goes back.', 'Up/Down recalls earlier input. Esc shows a full reply.'], ['readme'])); break;
+        : ['TERMINAL HELP', '', 'Questions can be written in ordinary words.', 'Examples: What is Meridian Systems? / What does Service 002 do?', '', 'HELP                   Show these instructions', 'STATUS                 View all registered services', 'INFO <id>              Service details (001–008)', 'LOG <id>               Retained service events (001–008)', 'DIR / LS [path]        List folders and files', 'CD [path]              Change folder; CD .. goes back', 'OPEN / READ filename   Read a named file', 'SEARCH terms           Search permitted records and work profiles', 'DIAG                   Read-only connection diagnostics', 'RECOVER BACKUP         Read a listed local backup', 'CLEAR / CLS            Clear terminal text', 'EXPLAIN                Explain an active verification', 'DEFER / RESUME INVESTIGATION', '', 'INFO and LOG accept one identifier; no date filters or pagination.', 'Up/Down recalls earlier input. Esc shows a full reply.'], ['readme'])); break;
       case 'DIR': {
         const directory = resolvePath(argument || '.', state.currentDirectory);
         if (!DIRECTORIES.includes(directory as typeof DIRECTORIES[number])) { result = done(output([`FOLDER NOT FOUND: ${directory}`], [], 'error')); break; }
@@ -239,7 +247,8 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
         result = file ? file.id === 'fragment' ? recover(state) : inspectFile(state, file.id) : done(output([argument ? `FILE NOT FOUND: ${argument}` : 'Enter a file name after OPEN.', 'Example: OPEN Office notice'], [], 'error')); break;
       }
       case 'SEARCH': result = done(search(state, argument)); break;
-      case 'STATUS': result = done(output(['LIVE MONITOR / 06 NOV 2003, 02:14', '004  Billing               Stopped', '005  Building sensors      Stopped', `006  Continuity monitor    ${state.operating.service006Running ? 'Running' : 'Stopped'}`, '007  Records access        Running', '', 'No staff terminal connected.', ...(knows(state, 'annaAliveKnown') ? [`Biological support: ${state.operating.clinicalSupportActive ? 'ACTIVE' : 'ENDED'}`] : []), ...(knows(state, 'recoveryHandoffKnown') ? transportStatus(state) : [])], ['register']), discover({ ...state, lastTopic: 'service-006', lastIntent: 'ask_service_status' }, ['EV_SERVICE_ACTIVE'])); break;
+      case 'STATUS': result = command.args.length ? done(output(['Supported syntax: STATUS (no arguments).'], [], 'error')) : serviceRegistry(state); break;
+      case 'INFO': case 'LOG': result = serviceCommand(state, command.name, command.args); break;
       case 'CLEAR': result = { state, output: output(['SCREEN CLEARED.']), clear: true }; break;
       case 'RECOVER': result = /^(?:ARCHIVE\s+)?(?:006|BACKUP|RECEIPT|HANDOVER RECEIPT)$/i.test(argument) ? recover(state) : done(output(['No local backup matched that name.'], [], 'error')); break;
       case 'DIAG': result = done(output(['R-02 / RECORDS CONNECTION', 'Monitor: responding', 'Original records: read only', 'Control access: unavailable'], ['readme'])); break;

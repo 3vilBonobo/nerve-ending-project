@@ -37,7 +37,7 @@ export class App implements OnDestroy {
     const rows = this.session.metrics();
     return { count: rows.length, fallback: rows.length ? Math.round(rows.filter(row => row.fallback).length / rows.length * 100) : 0, ms: rows.length ? Math.round(rows.reduce((sum, row) => sum + row.elapsedMs, 0) / rows.length) : 0 };
   });
-  readonly connectionLines = ['CONNECTING...', 'REMOTE SYSTEM R-02 FOUND', 'CLIENT VERSION 3.14 CHECKED', 'EXTERNAL ACCESS ACCEPTED', 'LOADING COMPANY RECORDS', 'CONNECTION READY'];
+  readonly connectionLines = ['CONNECTING...', 'REMOTE SYSTEM R-02 FOUND', 'CLIENT VERSION 2.04 CHECKED', 'EXTERNAL ACCESS ACCEPTED', 'LOADING COMPANY RECORDS', 'CONNECTION READY'];
   private connectionTimer?: ReturnType<typeof setInterval>;
   private readonly clockTimer: ReturnType<typeof setInterval>;
   private readonly installListener = (event: Event): void => { event.preventDefault(); this.installPrompt.set(event as InstallPromptEvent); };

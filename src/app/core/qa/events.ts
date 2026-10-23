@@ -30,7 +30,7 @@ export function transitionObservations(before: GameState, transition: Transition
   const responseText = transition.output.lines.join('\n');
   const denied = transition.output.code === 'denied' || transition.output.code === 'error' || /^(?:CONTROL UNAVAILABLE|BLOCKED:|RECORD ACCESS NOT DELEGATED|ORIGINAL ATTACHMENT UNAVAILABLE|NO OPERATION AWAITING CONFIRMATION|SESSION INTERVENTION COMPLETE)/.test(responseText);
   const accessDenied = transition.output.truth === 'withheld' || /^(?:CONTROL UNAVAILABLE|BLOCKED:|RECORD ACCESS NOT DELEGATED|ORIGINAL ATTACHMENT UNAVAILABLE)/.test(responseText);
-  const noResults = /^SEARCH: .* \/ FILES FOUND: 0\b/.test(responseText);
+  const noResults = /^SEARCH: .* \/ FILES FOUND: 0\b/.test(responseText) && !/^PUBLIC WORK PROFILES: [1-9]\d*$/m.test(responseText);
   const unresolved = !encounter && !!query && (query.needsClarification || query.intent === 'unknown');
   const pending = /^AWAITING CONFIRMATION:/.test(responseText);
   const already = /^ALREADY COMPLETED/.test(responseText);

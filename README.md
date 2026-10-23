@@ -1,6 +1,6 @@
 # Nerve Ending
 
-A browser investigation inside **Meridian Systems — Remote Access Client**, set on 6 November 2003. The revised opening uses two evidence encounters before a read-only audit leads to Site 6. Seven acts and three endings remain technically reachable; the later acts retain their existing gameplay and still need the investigation redesign. The olive terminal interface is retained.
+A browser investigation inside **Meridian Systems — Remote Access Client**, set on 6 November 2003. A neutral welcome opens a read-only exploration layer: company information, 34 public work profiles, four ordinary records and eight operational services with permitted retained logs. The existing two opening evidence encounters and seven-act investigation remain available when the player pursues them. Three endings remain technically reachable; the later acts retain their existing gameplay and still need the investigation redesign. The olive terminal interface is retained.
 
 All essential gameplay works without a model, account, backend or API key. The optional local sentence model recognizes questions; every story reply is authored. Duration and engagement require human playtesting; no measured 90–120-minute playtime is claimed.
 
@@ -27,11 +27,13 @@ Production preview: [127.0.0.1:4173](http://127.0.0.1:4173/). Static output: `di
 ## Play
 
 - Start or resume. Use the file browser or type `OPEN` / `READ` with a title or path. Record references are plain text.
+- Ask “Who founded Meridian?”, “What was the N-Series?” or “Who is Leah Morgan?”. `SEARCH Bell`, `SEARCH Engineering` and `SEARCH staff` find public work profiles by name, department or role. The two Bell entries can be clarified by name, department or first/second. Anna's ordinary career is public; her medical association is protected. Ordinary browsing and questions grant no story knowledge or authority.
+- `STATUS` lists all eight services. `INFO 002` describes a service; `LOG 002` retrieves its permitted historical events. Ask “Is the message router working?” or “Show me recent service warnings.” Short follow-ups retain the selected service. INFO/LOG accept one three-digit identifier, without date filters or pagination. Records Access currently has no public event samples safe to display at the fixed 02:14 observation; the view explains that limitation.
 - Investigate the discrepancy between service 006 and its administrative closure. Apply evidence through terminal replies to two persistent verification prompts. Opening records supplies observations, never conclusions or authority.
 - During a verification, answer in your own words, ask `EXPLAIN`, continue reading and asking questions, or use `DEFER` and `RESUME INVESTIGATION`.
 - Consequential changes display a complete warning and require **CONFIRM OPERATION**. **CANCEL** leaves the system unchanged. Informational questions never perform an intervention.
 - Ask “What should I do next?”, “What have I discovered?”, “Explain that simply”, or “Show me the evidence”. Repeated hint requests give more direct guidance.
-- `HELP`, `DIR`, `OPEN`, `READ`, `SEARCH`, `CD`, `STATUS` and `CLEAR` remain available. Up/Down recalls input. Esc or **SHOW FULL REPLY** reveals output immediately. Investigation operations require typed requests; their former button menu is removed.
+- `HELP`, `DIR`, `OPEN`, `READ`, `SEARCH`, `CD`, `STATUS`, `INFO`, `LOG`, `DIAG`, `RECOVER` and `CLEAR` remain available. Up/Down recalls input. Esc or **SHOW FULL REPLY** reveals output immediately. Investigation operations require typed requests; their former button menu is removed.
 - Use **TERMINAL / FILES / RECORDS** on mobile. The file browser searches available records. Display settings retain CRT controls, text size and reduced-motion support.
 - Final intervention reports show consequences. Records and questions remain available afterward; another outcome requires a new session.
 
@@ -62,6 +64,8 @@ Exports are readable `.jsonl` files in Downloads or your chosen save location. R
 ## Source and author documentation
 
 Narrative references: the [narrative index](docs/narrative/README.md) identifies authority and status for characters, corporate history, personnel, infrastructure and unfinished decisions. [MOTHER & Anna canon v0.3](docs/narrative/NERVE_ENDING_MOTHER_ANNA_CANON_v0_3.md) remains the author-reviewed character-and-causality reference; the supplied world/personnel v0.4 and infrastructure v0.5 documents retain their provisional status. See [canon conflicts](docs/narrative/CANON_CONFLICTS.md) and the [future implementation impact map](docs/narrative/IMPLEMENTATION_IMPACT_MAP.md). Reference ingestion does not change runtime or establish conformity; incident, authority and scenario decisions remain unfinished. Prior dated development documents remain historical records.
+
+[Implementation 01](docs/IMPLEMENTATION_01_CORPORATE_EXPLORATION.md) documents the ordinary corporate facts, 34-profile public projection and four selected records. [Implementation 02](docs/IMPLEMENTATION_02_OPERATIONAL_SERVICES.md) separately documents the bounded eight-service registry, INFO/LOG, 27 permitted events, exclusions and saved-versus-live evidence compatibility fix. Protected access, consequential operations and ending logic retain their prior rules. The complete world and revised narrative remain unfinished.
 
 `src/app/core/engine/game.ts` remains the shared entry point. `story-state.ts` defines knowledge, permissions and operating state; `story-records.ts` adds the continuation records; `engine/continuation.ts` implements operations and endings; `interpretation/dialogue-catalog.ts` holds structured authored dialogue. The existing session, worker, playback, files and document windows remain in use.
 

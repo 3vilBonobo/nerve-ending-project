@@ -9,7 +9,7 @@ export const OPENING_ENCOUNTERS = {
     id: 'closure-discrepancy',
     prompt: 'R-02 / EXCEPTION REVIEW: The office lists 006 as closed, but the monitor reports it running. What is missing before that administrative closure can count as an operational release?',
     explanation: 'The closure list is a shutdown approval. I need evidence of acceptance by the system holding the service. Inspect the handover record; explain whether the office approval supplies that acceptance.',
-    sources: ['live-service-006', 'administrative-closure', 'handover-requirement'],
+    sources: ['service-state-source', 'administrative-closure', 'handover-requirement'],
   },
   provenance: {
     id: 'handover-provenance',
@@ -27,7 +27,9 @@ const normalized = (input: string): string => input.toLowerCase().replace(/[’'
 const observed = (s: GameState, id: string): boolean => s.viewedFileIds.includes(id);
 function evidence(s: GameState): string[] {
   return [
+    (s.discoveredEvidenceIds.includes('EV_SERVICE_ACTIVE') || observed(s, 'register') || observed(s, 'status-log')) && 'service-state-source',
     s.discoveredEvidenceIds.includes('EV_SERVICE_ACTIVE') && 'live-service-006',
+    (observed(s, 'register') || observed(s, 'status-log')) && 'archived-service-006',
     s.discoveredEvidenceIds.includes('EV_RETIREMENT_APPROVED') && 'administrative-closure',
     (s.discoveredEvidenceIds.includes('EV_TRANSFER_MISSING') || observed(s, 'fragment')) && 'handover-requirement',
     observed(s, 'fragment') && 'handover-backup',
@@ -70,7 +72,7 @@ export function openingInteraction(s: GameState, input: string, navigation: bool
   const next = { ...current, attempts };
   const missing = encounter.sources.filter(id => !sources.includes(id));
   if (missing.length) {
-    return result(next, ['VERIFICATION INCOMPLETE / SOURCE REQUIRED', ...missing.map(id => ({ 'live-service-006': 'Check STATUS or read the service monitor.', 'administrative-closure': 'Read the closure list or ask about the shutdown approval.', 'handover-requirement': 'Investigate the handover receipt and its missing release confirmation.', 'handover-backup': 'Read the local handover backup.', 'bridge-02-status': 'Read /COMMS/BRIDGE_02_STATUS.LOG, or request CHECK BRIDGE STATUS.' })[id]!), 'Your answer is retained as an attempt; no access changed.'], 'attempted', 'missing-evidence', `Required observations absent: ${missing.join(', ')}.`);
+    return result(next, ['VERIFICATION INCOMPLETE / SOURCE REQUIRED', ...missing.map(id => ({ 'service-state-source': 'Check STATUS or read the saved service monitor.', 'administrative-closure': 'Read the closure list or ask about the shutdown approval.', 'handover-requirement': 'Investigate the handover receipt and its missing release confirmation.', 'handover-backup': 'Read the local handover backup.', 'bridge-02-status': 'Read /COMMS/BRIDGE_02_STATUS.LOG, or request CHECK BRIDGE STATUS.' })[id]!), 'Your answer is retained as an attempt; no access changed.'], 'attempted', 'missing-evidence', `Required observations absent: ${missing.join(', ')}.`);
   }
   const releaseMissing = /(?:no|not|never|missing|lacks?|without|still|await|withheld|unconfirmed|requires?|needs?|must|only|pending|absent|didnt|doesnt|isnt|hasnt|wasnt|cannot|cant)\b.*(?:release|releas|confirm|acknowledg|reply|accept|holding|hold|operational|permission|authori)|(?:release|confirm|acknowledg|reply|permission|authori)\w*.*\b(?:missing|withheld|absent|pending|unconfirmed|not received|not granted|not confirmed)\b/.test(text)
     && /release|operational|holding (?:system|controller)|hold|authority|permission/.test(text);

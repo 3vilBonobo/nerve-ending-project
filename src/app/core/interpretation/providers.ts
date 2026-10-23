@@ -8,7 +8,7 @@ export function validateInterpretation(value: unknown, provider: Interpretation[
   if (!value || typeof value !== 'object') return undefined;
   const candidate = value as Record<string, unknown>;
   if ((!INTENTS.includes(candidate['intent'] as typeof INTENTS[number]) && !DIALOGUE_IDS.has(String(candidate['intent']))) || typeof candidate['needsClarification'] !== 'boolean') return undefined;
-  if (candidate['entityId'] !== undefined && !['service-004', 'service-005', 'service-006', 'service-007'].includes(candidate['entityId'] as string)) return undefined;
+  if (candidate['entityId'] !== undefined && !/^service-00[1-8]$/.test(String(candidate['entityId']))) return undefined;
   if (candidate['fileId'] !== undefined && !FILES.some(file => file.id === candidate['fileId'] && !file.locked)) return undefined;
   const intent = candidate['intent'] as Interpretation['intent'];
   if (intent === 'request_file' && typeof candidate['fileId'] !== 'string') return undefined;
@@ -39,7 +39,7 @@ export class OllamaInterpreter implements IntentInterpreter {
     const response = await fetch(`${this.endpoint.replace(/\/$/, '')}/api/chat`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(6000),
       body: JSON.stringify({ model: this.model, stream: false, format: 'json', options: { temperature: 0 }, messages: [
-        { role: 'system', content: `Classify a records query. Return JSON with intent, needsClarification (boolean), optional entityId (service-004, service-005, service-006 or service-007), fileId or searchTerm. Allowed intents: ${INTENTS.join(', ')}. Use request_backup only for an explicit request to open or read a backup. Use request_stop only for an explicit stop request. No facts, prose or actions. Available file IDs: ${FILES.filter(f => !f.locked).map(f => f.id).join(', ')}. Context: ${JSON.stringify(context)}` },
+        { role: 'system', content: `Classify a records query. Return JSON with intent, needsClarification (boolean), optional entityId (service-001 through service-008), fileId or searchTerm. Allowed intents: ${INTENTS.join(', ')}. Use request_backup only for an explicit request to open or read a backup. Use request_stop only for an explicit stop request. No facts, prose or actions. Available file IDs: ${FILES.filter(f => !f.locked).map(f => f.id).join(', ')}. Context: ${JSON.stringify(context)}` },
         { role: 'user', content: input.slice(0, 1000) },
       ] }),
     });

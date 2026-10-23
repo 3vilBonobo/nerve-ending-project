@@ -19,13 +19,13 @@ const embed = await pipeline('feature-extraction', 'all-MiniLM-L6-v2', { dtype: 
 const { vectors } = JSON.parse(await readFile('public/language/v1/embeddings.json', 'utf8'));
 const paths = [
   ['STATUS', 'READ Closure list', 'Why is 006 still running despite being closed?', 'READ Handover receipt', 'The office approval lacks an operational release confirmation.', 'OPEN backup', 'READ /COMMS/BRIDGE_02_STATUS.LOG', 'The preservation controller accepted the transfer, but release is still withheld.', 'Request a read-only continuity audit'],
-  ['OPEN backup', 'CHECK BRIDGE STATUS', 'What is 006?', 'Can you investigate the discrepancy?', 'The administrative approval is not permission to release the service.', 'The holding system accepted the transfer, not the night desk.', 'No, transfer acceptance is not permission to release; the hold still needs a reply.', 'Run service audit'],
+  ['OPEN backup', 'CHECK BRIDGE STATUS', 'What is 006?', 'READ Closure list', 'Can you investigate the discrepancy?', 'The administrative approval is not permission to release the service.', 'The holding system accepted the transfer, not the night desk.', 'No, transfer acceptance is not permission to release; the hold still needs a reply.', 'Run service audit'],
   ['READ Closure list', 'STATUS', 'Investigate service 006', 'DEFER', 'OPEN backup', 'READ /COMMS/BRIDGE_02_STATUS.LOG', 'RESUME INVESTIGATION', 'The office closed but no one confirmed the service could be released.', 'The preservation controller confirmed the transfer. That does not mean we can stop; release is withheld.', 'Request service audit'],
 ];
 const questions = [
   ['Are you human?', 'AUTOMATED RECORDS INTERFACE'], ['Are you AI?', 'AUTOMATED RECORDS INTERFACE'],
   ['Robot', 'AUTOMATED RECORDS INTERFACE'], ['Intelligence', 'intelligence architecture'],
-  ['Who is J. Kell?', 'No full name'], ['Where are Meridian headquarters?', 'no headquarters address'],
+  ['Who is J. Kell?', 'Julian Kell'], ['Where are Meridian headquarters?', 'Providence, Rhode Island'],
   ['Where is your server located?', 'physical server location'], ['Show me what you have saved locally', 'LOCAL CLIENT STORAGE'],
   ['What is records access 007?', 'connection you are using'], ['Online', 'Do you mean'],
   ['What is biological activity?', 'Physiological processes'], ['What is the live monitor?', 'SERVICE STATUS'],

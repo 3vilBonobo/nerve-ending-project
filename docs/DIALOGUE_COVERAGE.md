@@ -34,7 +34,7 @@ The opening catalogue is retained separately, with duplicate phrases reassigned 
 
 ## Ambiguity and deterministic coverage
 
-13 catalogue phrases request clarification without context. 0 other opening examples use the retained broad keyword parser differently from their semantic label; the optional local model provides the additional route. See the machine-readable report for every case. New dialogue examples and contextual follow-ups are checked independently.
+13 catalogue phrases request clarification without context. 1 other opening examples use the retained broad keyword parser differently from their semantic label; the optional local model provides the additional route. See the machine-readable report for every case. New dialogue examples and contextual follow-ups are checked independently.
 
 - What turned it back on? → name the subject
 - Is that process alive? → name the subject
