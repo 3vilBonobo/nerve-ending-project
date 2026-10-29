@@ -1,0 +1,35 @@
+<dialog #panel class="settings-dialog" [style.--font-scale]="session.state().ui.fontScale">
+  <header class="window-titlebar"><h2 class="window-title">CLIENT SETTINGS</h2><div class="window-controls"><button (click)="close()" aria-label="Close settings">×</button></div></header>
+  <div class="settings-body">
+    <h3>LOCAL SAVES</h3>
+    <p>Progress is saved in this browser when storage is available. Reloading never confirms a pending operation.</p>
+    @defer (on viewport) { <ne-qa-panel /> } @placeholder { <p>Local playtest QA</p> }
+    <h3>DISPLAY</h3>
+    <label class="check-label"><input #crtToggle type="checkbox" [checked]="session.state().ui.crtEnabled" (change)="session.display(crtToggle.checked, session.state().ui.fontScale)"> CRT scanlines & phosphor glow</label>
+    <p class="muted">Motion effects follow your device’s reduced-motion preference.</p>
+    <label class="range-label" for="font-scale">TEXT SIZE <span>{{ (session.state().ui.fontScale * 100).toFixed(0) }}%</span></label><input #fontScale id="font-scale" type="range" min="0.9" max="1.25" step="0.05" [value]="session.state().ui.fontScale" (input)="session.display(session.state().ui.crtEnabled, +fontScale.value)">
+    <h3>QUESTIONS</h3>
+
+    <p>Basic questions and commands are always available.</p>
+    <section class="language-settings" aria-label="Local question understanding">
+      @let language = session.language.state();
+      @switch (language.phase) {
+        @case ('off') { <div class="settings-status">IMPROVED QUESTIONS: OFF</div><p>Recognise more ways of asking about the records. Optional download: about 42 MB. Your questions stay on this device.</p><button class="primary-button" (click)="session.language.enable()">ENABLE IMPROVED QUESTIONS</button> }
+        @case ('loading') { <div class="settings-status" role="status">{{ language.cached ? 'LOADING SAVED FILES' : 'LOADING QUESTION MODEL' }} / {{ modelPercent() }}%</div><progress aria-label="Question model loading" max="100" [value]="modelPercent()"></progress><p class="language-progress">{{ modelPercent() }}% — {{ (language.loaded / 1000000).toFixed(1) }} / {{ (language.total / 1000000).toFixed(1) }} MB</p><p>You can close Settings and keep playing.</p><button class="text-button" (click)="session.language.disable()">CANCEL LOADING</button> }
+        @case ('initializing') { <div class="settings-status" role="status">PREPARING QUESTION MODEL / 100% FILES LOADED</div><progress aria-label="Preparing question model"></progress><p>{{ language.detail }} You can keep playing while this finishes.</p><button class="text-button" (click)="session.language.disable()">CANCEL LOADING</button> }
+        @case ('ready') { <div class="settings-status" role="status">IMPROVED QUESTIONS: READY / LOCAL</div><p>Questions are processed on this device. {{ language.persistent ? 'Model files are saved in this browser for later visits.' : 'Model files could not be saved. Available for this visit.' }}</p><button class="text-button" (click)="session.language.disable()">USE BASIC QUESTIONS</button> }
+        @case ('error') { <div class="settings-status" role="status">QUESTION MODEL COULD NOT LOAD</div><p>Basic questions and all file controls still work. Check your connection or try again.</p><div class="button-row"><button class="primary-button" (click)="session.language.enable()">TRY AGAIN</button><button class="text-button" (click)="session.language.disable()">USE BASIC QUESTIONS</button></div> }
+        @case ('unsupported') { <div class="settings-status" role="status">BASIC QUESTIONS: READY</div><p>This browser cannot run the optional model. All records and game controls remain available.</p> }
+      }
+      <details class="language-details"><summary>MODEL DETAILS</summary><p>all-MiniLM-L6-v2 / quantized / English<br>Runs in a background worker on your device. No account or API key.</p>@if (language.phase === 'ready') { <p>Load time: {{ (language.loadMs / 1000).toFixed(1) }} s<br>Last model query: {{ language.lastQueryMs.toFixed(0) }} ms</p> }@if (language.phase === 'error' && language.detail) { <p>{{ language.detail }}</p> }<p>Saved files may be removed by your browser when storage is needed.</p></details>
+    </section>
+    <h3>OPTIONAL INSTALLATION</h3><p>{{ installMessage() }}</p>@if (installPrompt()) { <button class="primary-button" (click)="install()">INSTALL NERVE ENDING</button> }<p class="muted">{{ cached() ? 'Offline support is active. Offline play requires a completed first download.' : 'The published game supports offline play after a full first load.' }}</p>
+    @if (session.developerMode) {
+      <details class="developer-settings"><summary>DEVELOPER / INTENT CLASSIFIER</summary><p>Ollama is a separate local daemon. Public builds omit these controls. Queries fail back to the offline interpreter.</p><label for="ollama-endpoint">LOOPBACK ENDPOINT</label><input #endpoint id="ollama-endpoint" value="http://localhost:11434"><label for="ollama-model">INSTALLED MODEL NAME</label><input #model id="ollama-model" placeholder="Your installed model ID"><div class="button-row"><button class="text-button" (click)="setProvider(endpoint.value, model.value)">USE OLLAMA</button><button class="text-button" (click)="fallback()">USE OFFLINE</button></div><p role="status">{{ developerStatus() }}</p><pre>QUERIES: {{ metricSummary().count }}
+MEAN INTERPRETATION: {{ metricSummary().ms }} ms
+FALLBACK RATE: {{ metricSummary().fallback }}%
+MODEL LOAD: {{ session.language.state().loadMs.toFixed(0) }} ms</pre></details>
+    }
+  </div>
+  <footer class="dialog-footer"><span>NERVE ENDING / REVISION 1.0</span><button class="text-button" (click)="close()">DONE ↵</button></footer>
+</dialog>

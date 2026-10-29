@@ -1,0 +1,5 @@
+.scenario-pending { display: block; max-height: 13rem; overflow: auto; } .scenario-pending summary { cursor: pointer; } .scenario-pending pre { white-space: pre-wrap; font: inherit; margin: .75rem 0 0; }
+
+/* The welcome sits outside the retained remote client. */
+.is-setup { background: #080808; }
+.is-setup.crt:after { display: none; }

@@ -1,0 +1,21 @@
+<dialog #panel class="journal-panel" aria-labelledby="journal-title" (cancel)="closed.emit()">
+    <header class="window-titlebar"><h2 id="journal-title" class="window-title">INVESTIGATION JOURNAL</h2><button autofocus type="button" (click)="closed.emit()" aria-label="Close investigation journal">×</button></header>
+    <div class="journal-body">
+      <details><summary>What can I investigate from here?</summary><p>{{ hint()[0] }}</p><button type="button" (click)="help()">More guidance</button></details>
+      @for (section of sections(); track section.title) {
+        <section [attr.aria-label]="section.title"><h3>{{ section.title }}</h3>
+          @for (entry of section.entries; track entry.id) {
+            <article><p>{{ entry.text }}</p>
+              @for (reference of entry.references; track $index) { <small>{{ reference }}</small> }
+              <div class="journal-actions">
+                @for (id of entry.fileIds; track id) { <button type="button" (click)="opened.emit(id)">Open {{ id }}</button> }
+                @if (entry.command) { <button type="button" (click)="inspect(entry.command)">Inspect {{ entry.command }}</button> }
+              </div>
+            </article>
+          } @empty { <p class="muted">No entries.</p> }
+        </section>
+      }
+      <p class="muted">Review status is read-only. Opening sources does not submit a referral or authorize an operation.</p>
+    </div>
+    <footer class="dialog-footer"><button type="button" (click)="closed.emit()">RETURN TO RECORDS</button></footer>
+  </dialog>

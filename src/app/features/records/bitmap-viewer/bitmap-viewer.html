@@ -1,0 +1,30 @@
+<figure class="bitmap-record">
+  <figcaption>
+    @if (bitmap().artwork === 'placeholder') { <strong>DEMONSTRATION / PLACEHOLDER</strong> }
+    <span>{{ bitmap().description }}</span>
+  </figcaption>
+  <dl class="bitmap-metadata">
+    <dt>TYPE</dt><dd>BITMAP / {{ category() }}</dd>
+    <dt>NATIVE SIZE</dt><dd>{{ bitmap().width }} × {{ bitmap().height }} PIXELS</dd>
+    @if (bitmap().department) { <dt>DEPARTMENT</dt><dd>{{ bitmap().department }}</dd> }
+    @if (bitmap().archivedAt) { <dt>ARCHIVED</dt><dd>{{ bitmap().archivedAt }}</dd> }
+    @if (bitmap().sourceId) { <dt>SOURCE ID</dt><dd>{{ bitmap().sourceId }}</dd> }
+  </dl>
+  <div class="bitmap-controls" role="group" aria-label="Bitmap magnification">
+    <button type="button" [attr.aria-pressed]="zoom() === 0" (click)="zoom.set(0)" [disabled]="!valid() || failed()">FIT</button>
+    @for (factor of [1, 2, 3, 4]; track factor) {
+      <button type="button" [attr.aria-pressed]="zoom() === factor" (click)="zoom.set(factor)" [disabled]="!valid() || failed()">{{ factor }}×</button>
+    }
+    <span>NEAREST PIXEL / {{ scale() }}×</span>
+  </div>
+  <div #viewport class="bitmap-screen" [class.crt-enabled]="crtEnabled()" tabindex="0" role="region" aria-label="Bitmap image viewport; enlarged images can be scrolled">
+    @if (!valid() || failed()) {
+      <div class="bitmap-unavailable" role="status"><strong>BITMAP UNAVAILABLE</strong><p>The image could not be read. Its record remains available.</p><p>{{ bitmap().alt }}</p></div>
+    } @else {
+      @for (image of [bitmap()]; track image.asset) {
+        <img [src]="image.asset.slice(1)" [alt]="image.alt" [width]="image.width" [height]="image.height" [style.width.px]="image.width * scale()" [style.height.px]="image.height * scale()" decoding="async" (load)="loaded($event)" (error)="failed.set(true)">
+      }
+    }
+  </div>
+  <p class="bitmap-caption">{{ bitmap().alt }}</p>
+</figure>

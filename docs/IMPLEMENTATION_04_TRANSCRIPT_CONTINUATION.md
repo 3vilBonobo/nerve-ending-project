@@ -57,6 +57,25 @@ LOG 006
 Case clock: 06 NOV 2003 / 02:14
 
 ```text
+/ADMIN/CLOSURE_LIST.TXT
+SOURCE DATE: 2001-09-18 17:04
+MERIDIAN / OPERATIONS OFFICE
+SERVICE CLOSURES                      18 SEP 2001
+Filed by: J. Kell
+
+004   Billing                 Closed
+005   Building sensors        Closed
+006   Continuity monitor      Closed
+
+Shutdown approved: 18 Sep 2001.
+Records transferred to the local archive.
+
+Attached: handover receipt / service 006
+INFO 006
+OBSERVED: 06 NOV 2003 / 02:14
+006 / Continuity Monitor / RUNNING
+Watches designated equipment that requires uninterrupted service.
+Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.
 SOURCE COMPARISON / 006
 2001 OPERATIONS REPORT: SERVICE 006 ENTERED IN CLOSURE BATCH
 CURRENT CONTROLLER: SERVICE 006 RUNNING
@@ -65,7 +84,6 @@ These statements do not describe the same observation.
 The historical filing does not include a confirmed controller stop.
 I cannot explain the remaining operational obligation from this records view.
 Sources: STATUS / INFO 006 (06 NOV 02:14 controller observation); /ADMIN/CLOSURE_LIST.TXT (18 SEP 2001).
-TRACE NOTIFICATIONS compares the available origin and delivery records.
 ```
 
 ## Compare 003 and 006
@@ -73,6 +91,47 @@ TRACE NOTIFICATIONS compares the available origin and delivery records.
 Case clock: 06 NOV 2003 / 02:14
 
 ```text
+LOG 003
+2003-11-06T02:13 / Message to EXT 214 received no acknowledgement / svc-003-20031106-0213
+2003-11-05T02:13 / Message to EXT 214 received no acknowledgement / svc-003-20031105-0213
+2003-10-29T12:20 / Support mailbox route test successful / svc-003-20031029-1220
+LOG 006
+2003-11-06T02:13 / Scheduled alert to EXT 214 not acknowledged / svc-006-20031106-0213
+2003-11-05T02:13 / Scheduled alert to EXT 214 not acknowledged / svc-006-20031105-0213
+2003-11-04T02:13 / Scheduled alert to EXT 214 not acknowledged / svc-006-20031104-0213
+2003-11-02T03:14:09 / Service restarted automatically / svc-006-20031102-031409
+2003-11-02T03:14:08 / Service stopped / svc-006-20031102-031408
+2003-11-02T03:14:07 / Stop requested / scheduled maintenance / svc-006-20031102-031407
+2003-11-01T02:13 / Scheduled alert to EXT 214 not acknowledged / svc-006-20031101-0213
+2001-09-18 / Service included in administrative closure batch / svc-006-20010918-closure
+/OPERATIONS/CALL_QUEUE.LOG
+SOURCE DATE: 2003-11-06 02:13
+MERIDIAN / SWITCHBOARD
+TO       Night desk / extension 214
+FROM     Service 006
+LATEST   06 Nov 2003, 02:13 / No answer
+QUEUED   18 Sep 2001, 23:59
+
+04 Nov / 02:13   No answer
+05 Nov / 02:13   No answer
+
+Confirmed: 18 Sep 2001, 23:59:41
+By: not in current directory
+Attachment: handover receipt
+/OPERATIONS/SHIFT_HANDOVER.TXT
+SOURCE DATE: 2001-09-19 08:10
+MERIDIAN / STAFF MAIL
+19 Sep 2001, 08:10
+From: E. Lin
+To: Operations
+Subject: Night desk
+
+The night desk phone was removed at 17:00 yesterday.
+There is no night shift from this week.
+
+The switchboard printed another alarm at 02:13.
+Please don't forward it to my home number.
+I'm no longer on call.
 NOTIFICATION TRACE / 006 -> 003
 ORIGIN: CONTINUITY MONITOR
 DELIVERY SERVICE: MESSAGE ROUTER
@@ -83,7 +142,6 @@ RECENT ACKNOWLEDGEMENT: NONE IN AVAILABLE LOG
 A failed acknowledgement does not establish that no care team exists.
 This session cannot change notification routing.
 Sources: LOG 003; LOG 006; CALL_QUEUE.LOG; last shift note.
-REPORT DISCREPANCY submits a read-only integrity referral.
 ```
 
 ## Report the discrepancy

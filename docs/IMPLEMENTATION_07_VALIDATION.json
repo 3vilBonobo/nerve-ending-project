@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-29",
+  "checks": [
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "result": "636 passed / 30 files"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "result": "745.45 kB initial; 550 kB warning / 750 kB error unchanged"
+    },
+    {
+      "command": "node scripts/validation/validate-game.mjs --check",
+      "exitCode": 0,
+      "result": "zero errors, retained legacy and fresh paths"
+    },
+    {
+      "command": "node scripts/validation/validate-scenario.mjs --model",
+      "exitCode": 0,
+      "result": "16 records; 14 message groups; 2 endings; 53 paraphrases; per-input reload"
+    },
+    {
+      "command": "node scripts/validation/validate-opening.mjs --model",
+      "exitCode": 0,
+      "result": "12 questions; 3 paths in each mode; 40 actual inferences"
+    },
+    {
+      "command": "node scripts/validation/validate-corporate.mjs --dist --model",
+      "exitCode": 0,
+      "result": "34 profiles / 6 excluded / 48 inferences / 16 production files"
+    },
+    {
+      "command": "node scripts/validation/validate-services.mjs --model",
+      "exitCode": 0,
+      "result": "8 services / 27 events / 27 inferences"
+    },
+    {
+      "command": "node scripts/validation/validate-bitmaps.mjs --dist",
+      "exitCode": 0,
+      "result": "3 fixtures / 1878 public bytes / production packaging passed"
+    },
+    {
+      "command": "npm run model:verify",
+      "exitCode": 0,
+      "result": "10 assets / 48628056 bytes"
+    },
+    {
+      "command": "npm run mother:ingest",
+      "exitCode": 0,
+      "result": "166 topics / 1583 references / 419 anchors"
+    },
+    {
+      "command": "npm run model:evaluate",
+      "exitCode": 0,
+      "result": "50/50"
+    },
+    {
+      "command": "npm run model:holdout",
+      "exitCode": 0,
+      "result": "32/36 plus 4 clarifications, 0 wrong"
+    },
+    {
+      "command": "npm run model:continuation",
+      "exitCode": 0,
+      "result": "24/24"
+    },
+    {
+      "command": "npm run model:catalogue",
+      "exitCode": 1,
+      "result": "3174/3322; 148 known strict label mismatches"
+    },
+    {
+      "command": "npm run conversation:evaluate",
+      "exitCode": 0,
+      "result": "60/70 off; 70/70 on; zero safety failures"
+    },
+    {
+      "command": "node scripts/conversation/evaluate-mother-conversations.mjs --output tmp/implementation07/mother-evaluation.json",
+      "exitCode": 0,
+      "result": "550 adversarial cases zero failures; 2/32 strict scripts; 10/32 behavior; zero safety failures"
+    },
+    {
+      "command": "npm run investigation:evaluate",
+      "exitCode": 0,
+      "result": "25/25 observed; 48/48 new; 12/12 complete scripts, both modes"
+    }
+  ],
+  "browserSmoke": {
+    "verified": true,
+    "browser": "Codex in-app browser",
+    "url": "http://127.0.0.1:4187/nerve-ending-project/",
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "checks": [
+      "Fresh start and natural directory guidance",
+      "Mouse file browsing and source focus",
+      "Observed / unresolved / reviewed separation",
+      "Tab scrolling and Enter to open source",
+      "Escape restores journal-button focus",
+      "Natural comparison and explicit referral",
+      "Reload/resume retains sources and events",
+      "No horizontal overflow at 390px",
+      "No console warnings/errors"
+    ],
+    "narrowMeasurements": {
+      "dialogWidth": 348,
+      "bodyWidth": 329,
+      "bodyScrollWidth": 329,
+      "bodyHeight": 684,
+      "bodyScrollHeight": 1001,
+      "keyboardScrollTop": 29
+    },
+    "initialBlockers": [
+      "Sandboxed loopback server unreachable",
+      "Chrome access not approved"
+    ],
+    "resolution": "Production preview outside network sandbox; in-app browser succeeded",
+    "notVerified": [
+      "Physical mobile device",
+      "Screen reader",
+      "Browser model lifecycle",
+      "Complete endings in real browser"
+    ],
+    "screenshots": [
+      "docs/screenshots/implementation07/journal-desktop.png",
+      "docs/screenshots/implementation07/journal-narrow.png",
+      "docs/screenshots/implementation07/journal-after-resume.png"
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 # Nerve Ending
 
+For source navigation, start with the [developer guide](DEVELOPERS.md). The [refactor map](docs/REFACTOR_MAP.md) translates older file paths to the current folders.
+
 Implementation 05 repairs fresh-session conversation dispatch, negation/confirmation, interruptions, source questions, clarification, record IDs and outcome reporting. It adds 28 bounded ordinary topics. [Report and validation](docs/IMPLEMENTATION_05_CONVERSATIONAL_INTELLIGENCE.md) · [Reviewable dialogue proposal](docs/narrative/IMPLEMENTATION_05_PROPOSED_DIALOGUE.md) · [Fresh inventory](docs/IMPLEMENTATION_05_CONVERSATION_INVENTORY.json). Run `npm run conversation:evaluate` for model-on/off visible-answer checks. Legacy catalogue counts do not describe fresh playable dialogue.
 
 Implementation 04 adds the complete revised playable investigation and both v1.0 outcomes for fresh sessions. [Delivery report, commands and local playtest instructions](docs/IMPLEMENTATION_04_PLAYABLE_STORY.md) · [Severance transcript](docs/IMPLEMENTATION_04_TRANSCRIPT_SEVERANCE.md) · [Continuation transcript](docs/IMPLEMENTATION_04_TRANSCRIPT_CONTINUATION.md). Existing prototype saves remain separately resumable; NEW SESSION starts v1.0 without deleting earlier save keys or local QA recordings.
@@ -26,7 +28,7 @@ npm run build
 npm run preview
 ```
 
-Production preview: [127.0.0.1:4173](http://127.0.0.1:4173/). Static output: `dist/client/`. Use an HTTP server rather than opening index.html directly. A different local port can be selected with `node scripts/serve.mjs --port 4174`.
+Production preview: [127.0.0.1:4173](http://127.0.0.1:4173/). Static output: `dist/client/`. Use an HTTP server rather than opening index.html directly. A different local port can be selected with `node scripts/preview/serve.mjs --port 4174`.
 
 ## Play
 
@@ -72,7 +74,7 @@ Narrative references: the [narrative index](docs/narrative/README.md) identifies
 
 [Implementation 01](docs/IMPLEMENTATION_01_CORPORATE_EXPLORATION.md) documents the ordinary corporate facts, 34-profile public projection and four selected records. [Implementation 02](docs/IMPLEMENTATION_02_OPERATIONAL_SERVICES.md) separately documents the bounded eight-service registry, INFO/LOG, 27 permitted events, exclusions and saved-versus-live evidence compatibility fix. Protected access, consequential operations and ending logic retain their prior rules. The complete world and revised narrative remain unfinished.
 
-`src/app/core/engine/game.ts` remains the shared entry point. `story-state.ts` defines knowledge, permissions and operating state; `story-records.ts` adds the continuation records; `engine/continuation.ts` implements operations and endings; `interpretation/dialogue-catalog.ts` holds structured authored dialogue. The existing session, worker, playback, files and document windows remain in use.
+`src/app/shell/` composes the desktop and `src/app/features/` contains one folder per UI component, including its template and tests. `src/app/core/engine/game.ts` is the shared gameplay entry point. Within `core/`, `content/` owns records, `state/` owns session and story state, `investigation/` owns observations and journal projections, `engine/scenario/` owns the fresh v1.0 investigation, `engine/story/` retains prototype behavior for older saves, and `interpretation/` separates deterministic recognition, authored topics, semantic ranking and local model runtime. `persistence/`, `presentation/` and `qa/` handle saves, gradual output and opt-in recordings. Tooling is grouped under `scripts/`; global CSS is grouped under `src/styles/`. See the [developer guide](DEVELOPERS.md) for the full tree, data flow and change-specific checks.
 
 [Implementation 03](docs/IMPLEMENTATION_03_LEGACY_BITMAPS.md) documents the reusable bitmap contract/viewer, three ordinary placeholder assets, deterministic processing, access and static-asset security boundaries, tests and the browser-validation limitation. Their original sources and regeneration instructions are in [the artwork notes](docs/artwork/implementation-03/README.md). No clinical image, new progression or character association is added.
 

@@ -1,0 +1,8 @@
+.journal-panel { width:min(46rem,calc(100vw - 24px)); max-height:calc(100dvh - 32px); padding:0; background:var(--paper,#d9ded0); color:var(--ink,#152219); border:2px solid currentColor; }
+  .window-titlebar, .dialog-footer {color:var(--bright,#d1dfad);background:#14220f;}
+  .journal-body .muted {color:#4d5e48;}
+  .journal-panel::backdrop {background:#0019;}
+  .journal-body {padding:1rem; overflow:auto; max-height:calc(100dvh - 10rem); overflow-wrap:anywhere;}
+  h3 {margin:1.4rem 0 .6rem;} article {border-top:1px solid #79877a;padding:.65rem 0;} p {margin:.5rem 0;}
+  small {display:block;line-height:1.5;} button,summary {cursor:pointer;} button {min-height:36px;} .journal-actions {display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.6rem;}
+  button:focus-visible,summary:focus-visible {outline:3px solid currentColor;outline-offset:2px;}

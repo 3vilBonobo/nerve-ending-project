@@ -1,0 +1,48 @@
+/* Browser-side dialogs use the newer access client's classic controls. */
+.settings-dialog, .reset-dialog { width: min(680px, calc(100% - 28px)); max-height: 88dvh; padding: 3px; background: var(--face); color: var(--green); border: 2px solid; border-color: var(--face-light) var(--face-dark) var(--face-dark) var(--face-light); font-size: calc(18px * var(--font-scale, 1)); }
+.settings-dialog::backdrop, .reset-dialog::backdrop { background: #000a; }
+.settings-dialog > .window-titlebar, .reset-dialog > .window-titlebar { background: #3d4d30; border-bottom: 0; }
+.settings-body { padding: 24px; }
+.settings-body h3 { margin: 28px 0 18px; padding-top: 22px; border-top: 1px solid var(--line); font-size: .9em; }
+.settings-body h3:first-child { margin-top: 0; padding-top: 0; border: 0; }
+.settings-body p { font-size: .95em; color: var(--green); }
+.settings-status { margin: 18px 0 10px; font-size: .9em; color: var(--bright); }
+.check-label { display: flex; align-items: center; gap: 12px; line-height: 1.5; }
+.range-label { display: flex; justify-content: space-between; gap: 12px; font-size: .9em; margin: 24px 0 14px; }
+.dialog-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 24px; border-top: 1px solid var(--line); font-size: .8em; }
+.developer-settings { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 20px; }
+.developer-settings summary { cursor: pointer; font-size: .9em; line-height: 1.5; }
+.developer-settings label { display: block; font-size: .85em; margin: 18px 0 10px; }
+.developer-settings input { width: 100%; }
+.developer-settings pre { font-size: .85em; line-height: 1.7; white-space: pre-wrap; }
+.button-row { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+.language-settings { border: 1px solid var(--line); padding: 16px; }
+.language-settings progress { display: block; width: 100%; height: 20px; accent-color: var(--bright); }
+.language-progress { font-variant-numeric: tabular-nums; }
+.language-details { margin-top: 20px; font-size: .9em; }
+.language-details summary { cursor: pointer; }
+.setup-language { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; }
+.setup-language progress { width: 100%; height: 16px; accent-color: var(--bright); }
+.setup-language .text-button { font-size: 12px; padding: 6px 10px; }
+
+.qa-panel { border: 1px solid var(--line); padding: 16px; margin-bottom: 28px; }
+.qa-panel summary { cursor: pointer; line-height: 1.6; }
+.qa-status { float: right; color: var(--bright); font-size: .85em; padding-left: 12px; }
+.qa-panel p { line-height: 1.65; }
+.qa-panel details:not(.qa-panel) { margin-top: 18px; }
+.qa-panel code { overflow-wrap: anywhere; }
+.qa-panel label:not(.check-label) { display: block; margin: 16px 0 8px; font-size: .85em; }
+.qa-panel select, .qa-panel textarea { display: block; width: 100%; max-width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--bright); font: inherit; }
+.qa-panel select { text-overflow: ellipsis; }
+.qa-panel textarea { resize: vertical; margin-bottom: 12px; }
+.qa-stats { margin: 22px 0; font-size: .85em; line-height: 1.65; }
+.qa-stats > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.qa-stats dt { color: var(--medium); }
+.qa-stats dd { margin: 0; overflow-wrap: anywhere; }
+.qa-actions { gap: 10px; }
+.qa-actions button { flex: 1 1 180px; font-size: .85em; }
+.qa-events pre { max-height: 300px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8em; }
+.qa-clear { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+.qa-response-preview { border: 1px solid var(--line); padding: 12px; max-height: 200px; overflow: auto; white-space: pre-wrap; font-size: .9em; }
+.qa-warning, .qa-message { border-left: 2px solid var(--medium); padding-left: 12px; overflow-wrap: anywhere; }
+

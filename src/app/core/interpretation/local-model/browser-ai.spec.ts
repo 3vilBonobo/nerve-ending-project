@@ -1,0 +1,106 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { BrowserAIInterpreter, LanguageWorker } from './browser-ai';
+import { LanguageRequest, LanguageResponse, LanguageState } from './language-protocol';
+import { interpretSafely } from '../providers';
+class FakeWorker implements LanguageWorker {
+    onmessage: ((event: MessageEvent<LanguageResponse>) => void) | null = null;
+    onerror: ((event: ErrorEvent) => void) | null = null;
+    sent: LanguageRequest[] = [];
+    terminated = false;
+    postMessage(message: LanguageRequest): void { this.sent.push(message); }
+    terminate(): void { this.terminated = true; }
+    emit(message: LanguageResponse): void { this.onmessage?.({ data: message } as MessageEvent<LanguageResponse>); }
+}
+afterEach(() => vi.useRealTimers());
+describe('local model lifecycle', () => {
+    it('uses deterministic service subjects and follow-ups with a ready optional model', async () => {
+        const worker = new FakeWorker();
+        const provider = new BrowserAIInterpreter(() => { }, () => worker);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+        for (const input of ['What services are running?', 'What does Service 001 do?', 'What does Service 008 do?', 'What does standby mean?', 'Who maintains the records system?', 'Show me recent service warnings.', 'Is it working?', 'Show me its logs.']) {
+            const result = await interpretSafely(input, { lastTopic: 'service-003', lastIntent: 'ask_service_status' }, provider);
+            expect(result.metrics.fallback, input).toBe(false);
+            expect(result.interpretation.method).toBe('deterministic');
+            if (/it|its/.test(input))
+                expect(result.interpretation.entityId).toBe('service-003');
+        }
+        expect(worker.sent.filter(message => message.type === 'query')).toEqual([]);
+        provider.dispose();
+    });
+    it('uses the same public corporate routes while the optional model is ready', async () => {
+        const worker = new FakeWorker();
+        const provider = new BrowserAIInterpreter(() => { }, () => worker);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+        for (const input of ['Who founded Meridian?', 'What was the N-Series?', 'Who is Leah Morgan?', 'Who is Anna Voss?', 'Who is Bell?']) {
+            const result = await interpretSafely(input, {}, provider);
+            expect(result.metrics.fallback, input).toBe(false);
+            expect(result.interpretation.method).toBe('deterministic');
+        }
+        expect(worker.sent.filter(message => message.type === 'query')).toEqual([]);
+        provider.dispose();
+    });
+    it('reports actual byte progress and waits for warmup before becoming available', async () => {
+        const worker = new FakeWorker();
+        const states: LanguageState[] = [];
+        const provider = new BrowserAIInterpreter(state => states.push(state), () => worker);
+        expect(await provider.isAvailable()).toBe(false);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'progress', loaded: 9, total: 20, cached: false });
+        expect(states.at(-1)).toMatchObject({ phase: 'loading', loaded: 9, total: 20 });
+        worker.emit({ type: 'initializing', detail: 'Preparing processor' });
+        expect(await provider.isAvailable()).toBe(false);
+        worker.emit({ type: 'ready', loadMs: 1200, persistent: true });
+        expect(await provider.isAvailable()).toBe(true);
+        expect(states.at(-1)?.loadMs).toBe(1200);
+        provider.dispose();
+    });
+    it('routes answers by request ID and passes a copy of the current context', async () => {
+        const worker = new FakeWorker();
+        const provider = new BrowserAIInterpreter(() => { }, () => worker);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'ready', loadMs: 50, persistent: false });
+        const context = { lastTopic: 'service-005' };
+        const query = provider.interpret('Did everyone leave for good?', context);
+        await Promise.resolve();
+        const sent = worker.sent.at(-1);
+        expect(sent).toMatchObject({ type: 'query', context });
+        worker.emit({ type: 'result', id: (sent as {
+                id: number;
+            }).id, interpretation: { intent: 'ask_office', needsClarification: false, provider: 'browser-ai' }, elapsedMs: 18 });
+        expect((await query).intent).toBe('ask_office');
+        provider.dispose();
+    });
+    it('cancels the worker, rejects pending work and ignores late results', async () => {
+        const worker = new FakeWorker();
+        const provider = new BrowserAIInterpreter(() => { }, () => worker);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+        const query = provider.interpret('Who is employed here nowadays?', {});
+        await Promise.resolve();
+        const checked = expect(query).rejects.toThrow('stopped');
+        provider.dispose();
+        await checked;
+        worker.emit({ type: 'ready', loadMs: 10, persistent: true });
+        expect(await provider.isAvailable()).toBe(false);
+        expect(worker.terminated).toBe(true);
+    });
+    it('returns the basic interpreter after an actual provider timeout', async () => {
+        vi.useFakeTimers();
+        const worker = new FakeWorker();
+        const provider = new BrowserAIInterpreter(() => { }, () => worker);
+        provider.load('http://localhost/language/v1/');
+        worker.emit({ type: 'ready', loadMs: 50, persistent: true });
+        const result = interpretSafely('Is anyone there?', {}, provider);
+        await vi.advanceTimersByTimeAsync(5001);
+        expect((await result).interpretation.intent).toBe('ask_office');
+        expect((await result).metrics.fallback).toBe(true);
+        expect(worker.terminated).toBe(true);
+    });
+    it('keeps a deliberate unknown local result instead of applying a broad keyword fallback', async () => {
+        const result = await interpretSafely('What does a new phone cost?', {}, { id: 'browser-ai', isAvailable: async () => true, interpret: async () => ({ intent: 'unknown', needsClarification: false, provider: 'browser-ai' }) });
+        expect(result.interpretation.intent).toBe('unknown');
+        expect(result.metrics.fallback).toBe(false);
+    });
+});

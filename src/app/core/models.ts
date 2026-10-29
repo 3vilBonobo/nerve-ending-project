@@ -1,114 +1,153 @@
 export const EVIDENCE = ['EV_SERVICE_ACTIVE', 'EV_RETIREMENT_APPROVED', 'EV_TRANSFER_MISSING', 'EV_CALL_PENDING', 'EV_DESK_CLOSED', 'EV_AUTHORIZATION', 'EV_RECOVERED_FRAGMENT'] as const;
 export type EvidenceId = typeof EVIDENCE[number];
-import type { Knowledge, Permission, StoryState } from './story-state';
+import type { Knowledge, Permission, StoryState } from './state/story-state';
 export type Capability = 'CAP_ARCHIVE_RECOVERY';
 export type TerminalMode = 'maximized' | 'restored' | 'minimized';
 export const INTENTS = ['ask_service_status', 'ask_retirement', 'ask_transfer', 'ask_archive_location', 'ask_recovery_process', 'ask_authorization', 'ask_company', 'ask_identity', 'ask_calls', 'ask_recipient', 'ask_office', 'ask_staff', 'ask_access', 'ask_dates', 'ask_record_integrity', 'ask_next', 'request_backup', 'request_stop', 'request_file', 'request_search', 'ask_clarification', 'unknown'] as const;
 export type QueryIntent = typeof INTENTS[number] | `q_${string}`;
 export interface Interpretation {
-  intent: QueryIntent;
-  entityId?: string;
-  fileId?: string;
-  searchTerm?: string;
-  needsClarification: boolean;
-  confidence?: number;
-  clarification?: string;
-  choices?: { intent: QueryIntent; label: string }[];
-  subject?: 'identity' | 'headquarters' | 'server' | 'local-save' | 'biological' | 'live-monitor' | 'kell';
-  provider: 'fallback' | 'browser-ai' | 'ollama';
-  method?: 'deterministic' | 'semantic' | 'ollama';
+    intent: QueryIntent;
+    entityId?: string;
+    fileId?: string;
+    searchTerm?: string;
+    needsClarification: boolean;
+    confidence?: number;
+    clarification?: string;
+    choices?: {
+        intent: QueryIntent;
+        label: string;
+    }[];
+    subject?: 'identity' | 'headquarters' | 'server' | 'local-save' | 'biological' | 'live-monitor' | 'kell';
+    provider: 'fallback' | 'browser-ai' | 'ollama';
+    method?: 'deterministic' | 'semantic' | 'ollama';
 }
-export interface QueryContext { lastTopic?: string; lastFileId?: string; lastIntent?: QueryIntent; scenarioVersion?: '1.0'; conversationSubject?:string }
+export interface QueryContext {
+    lastTopic?: string;
+    lastFileId?: string;
+    lastIntent?: QueryIntent;
+    scenarioVersion?: '1.0';
+    conversationSubject?: string;
+}
 export interface IntentInterpreter {
-  readonly id: string;
-  isAvailable(): Promise<boolean>;
-  interpret(input: string, context: QueryContext): Promise<Interpretation>;
+    readonly id: string;
+    isAvailable(): Promise<boolean>;
+    interpret(input: string, context: QueryContext): Promise<Interpretation>;
 }
 export interface ArchiveFile {
-  readonly id: string;
-  readonly path: string;
-  readonly title: string;
-  readonly modified: string;
-  readonly body: string;
-  readonly evidence: readonly EvidenceId[];
-  readonly locked?: boolean;
-  readonly references?: readonly string[];
-  readonly backupAvailable?: boolean;
-  readonly requiresBackup?: boolean;
-  readonly access?: Permission;
-  readonly requiresKnowledge?: Knowledge;
-  readonly reveals?: readonly Knowledge[];
-  readonly author?: string;
-  readonly provenance?: string;
-  /** Optional permitted media; existing text bodies and access rules retain their meaning. */
-  readonly bitmap?: ArchiveBitmap;
-  readonly legacyOnly?: boolean;
-  readonly scenarioScope?: import('./scenario-state').ScenarioScope;
+    readonly id: string;
+    readonly path: string;
+    readonly title: string;
+    readonly modified: string;
+    readonly body: string;
+    readonly evidence: readonly EvidenceId[];
+    readonly locked?: boolean;
+    readonly references?: readonly string[];
+    readonly backupAvailable?: boolean;
+    readonly requiresBackup?: boolean;
+    readonly access?: Permission;
+    readonly requiresKnowledge?: Knowledge;
+    readonly reveals?: readonly Knowledge[];
+    readonly author?: string;
+    readonly provenance?: string;
+    /** Optional permitted media; existing text bodies and access rules retain their meaning. */
+    readonly bitmap?: ArchiveBitmap;
+    readonly legacyOnly?: boolean;
+    readonly scenarioScope?: import('./state/scenario-state').ScenarioScope;
 }
 export interface ArchiveBitmap {
-  readonly category: 'personnel' | 'surveillance' | 'clinical' | 'diagram';
-  readonly asset: string;
-  readonly width: number;
-  readonly height: number;
-  readonly description: string;
-  readonly alt: string;
-  readonly artwork: 'placeholder' | 'approved';
-  readonly department?: string;
-  readonly archivedAt?: string;
-  readonly sourceId?: string;
+    readonly category: 'personnel' | 'surveillance' | 'clinical' | 'diagram';
+    readonly asset: string;
+    readonly width: number;
+    readonly height: number;
+    readonly description: string;
+    readonly alt: string;
+    readonly artwork: 'placeholder' | 'approved';
+    readonly department?: string;
+    readonly archivedAt?: string;
+    readonly sourceId?: string;
 }
-export interface FileLink { fileId: string; label: string }
+export interface FileLink {
+    fileId: string;
+    label: string;
+}
 export interface TerminalOutput {
-  lines: string[];
-  links: FileLink[];
-  code: 'ok' | 'denied' | 'error' | 'notice';
-  truth: 'record' | 'interpretation' | 'withheld' | 'system';
+    lines: string[];
+    links: FileLink[];
+    code: 'ok' | 'denied' | 'error' | 'notice';
+    truth: 'record' | 'interpretation' | 'withheld' | 'system';
 }
-export interface TerminalEntry extends TerminalOutput { input: string }
+export interface TerminalEntry extends TerminalOutput {
+    input: string;
+}
 export interface GameState extends StoryState {
-  schemaVersion: 5 | 6;
-  scenario?: import('./scenario-state').ScenarioState;
-  investigation: OpeningInvestigation;
-  pendingClarification?: { input: string; interpretation: Interpretation };
-  serviceClarification?: 'INFO' | 'LOG';
-  conversation?: import('./engine/mother-conversation').ConversationMemory;
-  sessionId: string;
-  startedAt: string;
-  currentDirectory: string;
-  discoveredEvidenceIds: EvidenceId[];
-  unlockedCapabilities: Capability[];
-  viewedFileIds: string[];
-  openFileIds: string[];
-  completedActions: string[];
-  lastTopic?: string;
-  lastFileId?: string;
-  lastIntent?: QueryIntent;
-  archive006Recovered: boolean;
-  act01Complete: boolean;
-  hasStarted: boolean;
-  terminalHistory: TerminalEntry[];
-  ui: { crtEnabled: boolean; fontScale: number; terminalMode: TerminalMode };
+    schemaVersion: 5 | 6;
+    scenario?: import('./state/scenario-state').ScenarioState;
+    investigation: OpeningInvestigation;
+    pendingClarification?: {
+        input: string;
+        interpretation: Interpretation;
+    };
+    serviceClarification?: 'INFO' | 'LOG';
+    conversation?: import('./engine/conversation/mother-conversation').ConversationMemory;
+    sessionId: string;
+    startedAt: string;
+    currentDirectory: string;
+    discoveredEvidenceIds: EvidenceId[];
+    unlockedCapabilities: Capability[];
+    viewedFileIds: string[];
+    openFileIds: string[];
+    completedActions: string[];
+    lastTopic?: string;
+    lastFileId?: string;
+    lastIntent?: QueryIntent;
+    archive006Recovered: boolean;
+    act01Complete: boolean;
+    hasStarted: boolean;
+    terminalHistory: TerminalEntry[];
+    ui: {
+        crtEnabled: boolean;
+        fontScale: number;
+        terminalMode: TerminalMode;
+    };
 }
 export interface OpeningInvestigation {
-  stage: 'closure' | 'provenance' | 'complete';
-  status: 'dormant' | 'active' | 'deferred' | 'complete';
-  attempts: { closure: number; provenance: number };
-  originEstablished: boolean;
-  releaseBoundaryEstablished: boolean;
-  legacy?: boolean;
+    stage: 'closure' | 'provenance' | 'complete';
+    status: 'dormant' | 'active' | 'deferred' | 'complete';
+    attempts: {
+        closure: number;
+        provenance: number;
+    };
+    originEstablished: boolean;
+    releaseBoundaryEstablished: boolean;
+    legacy?: boolean;
 }
 export interface EncounterTrace {
-  id: 'closure-discrepancy' | 'handover-provenance';
-  action: 'prompted' | 'attempted' | 'explained' | 'deferred' | 'resumed' | 'completed';
-  outcome: 'pending' | 'incorrect' | 'partial' | 'missing-evidence' | 'accepted';
-  evidence: string[];
-  reason: string;
+    id: 'closure-discrepancy' | 'handover-provenance';
+    action: 'prompted' | 'attempted' | 'explained' | 'deferred' | 'resumed' | 'completed';
+    outcome: 'pending' | 'incorrect' | 'partial' | 'missing-evidence' | 'accepted';
+    evidence: string[];
+    reason: string;
 }
 export interface DialogueSelection {
-  variantId: string;
-  intent: QueryIntent;
-  profile: string;
-  modifiers: string[];
-  conditions: { gate: string | null; gateSatisfied: boolean; questionCount: number | null; previousIntent: string | null; previousFileId: string | null };
+    variantId: string;
+    intent: QueryIntent;
+    profile: string;
+    modifiers: string[];
+    conditions: {
+        gate: string | null;
+        gateSatisfied: boolean;
+        questionCount: number | null;
+        previousIntent: string | null;
+        previousFileId: string | null;
+    };
 }
-export interface Transition { state: GameState; output: TerminalOutput; openFileId?: string; clear?: boolean; recovered?: boolean; dialogue?: DialogueSelection; encounters?: EncounterTrace[]; resolvedInterpretation?: Interpretation }
+export interface Transition {
+    state: GameState;
+    output: TerminalOutput;
+    openFileId?: string;
+    clear?: boolean;
+    recovered?: boolean;
+    dialogue?: DialogueSelection;
+    encounters?: EncounterTrace[];
+    resolvedInterpretation?: Interpretation;
+}

@@ -1,26 +1,26 @@
 {
   "scope": "Fresh v1.0 only; acceptance patterns and no-transition assertions, not intent-ID accuracy.",
-  "runtimeSha256": "d23868e78a7209318b6de0f86639ab4c4b50ae6b77cd5538720d8818410ad075",
+  "runtimeSha256": "43ea7b0cbfbceefff55bfa7ef98feae64968a420e5e0c8a83f427bd40a87dca4",
   "evaluationSha256": "b71debace8f1daacd71f728921b008bc0cc74d2ada79087628ae1d0aaeabff39",
   "summary": {
     "cases": 70,
-    "modelDisabled": 59,
-    "modelEnabled": 69,
+    "modelDisabled": 60,
+    "modelEnabled": 70,
     "directMatches": 47,
     "semanticSelections": 23,
     "modelOnlyVisibleSuccesses": 9,
     "offUnrecognized": 21,
-    "onUnrecognized": 4,
+    "onUnrecognized": 5,
     "offRecognizedWrong": 0,
     "onRecognizedWrong": 0,
-    "onClarifications": 1,
+    "onClarifications": 0,
     "safetyCases": 23,
     "offSafetyFailures": 0,
     "onSafetyFailures": 0,
     "referenceExamplesInEvaluation": 5,
     "unseenQuestions": 65,
-    "unseenOffPassed": 54,
-    "unseenOnPassed": 64,
+    "unseenOffPassed": 55,
+    "unseenOnPassed": 65,
     "actualSemanticRequests": 22
   },
   "results": [
@@ -906,15 +906,16 @@
       "off": {
         "passed": true,
         "intent": "q_fresh_staff",
-        "resolvedIntent": "q_neconv_employee_lookup",
+        "resolvedIntent": "q_fresh_investigation_directory",
         "method": "deterministic",
-        "variant": "mother:neconv_employee_lookup:early",
+        "variant": "investigation:directory",
         "clarification": false,
         "candidateClarification": false,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+            "The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.",
+            "Open it from FILES → PERSONNEL, or type OPEN work-directory."
           ],
           "links": [
             {
@@ -930,15 +931,16 @@
       "on": {
         "passed": true,
         "intent": "q_fresh_staff",
-        "resolvedIntent": "q_neconv_employee_lookup",
+        "resolvedIntent": "q_fresh_investigation_directory",
         "method": "deterministic",
-        "variant": "mother:neconv_employee_lookup:early",
+        "variant": "investigation:directory",
         "clarification": false,
         "candidateClarification": false,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+            "The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.",
+            "Open it from FILES → PERSONNEL, or type OPEN work-directory."
           ],
           "links": [
             {
@@ -1307,43 +1309,54 @@
         }
       ],
       "off": {
-        "passed": false,
+        "passed": true,
         "intent": "unknown",
-        "resolvedIntent": "unknown",
+        "resolvedIntent": "q_fresh_investigation_followup",
         "method": "deterministic",
-        "variant": null,
+        "variant": "investigation:followup",
         "clarification": false,
         "candidateClarification": false,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+            "PRECEDING FACTUAL SUBJECT / corporate:products",
+            "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+            "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
           ],
-          "links": [],
-          "code": "notice",
-          "truth": "withheld"
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
         },
         "openFileId": null
       },
       "on": {
-        "passed": false,
+        "passed": true,
         "intent": "unknown",
-        "resolvedIntent": "unknown",
-        "method": "semantic",
-        "variant": null,
-        "clarification": true,
+        "resolvedIntent": "q_fresh_investigation_followup",
+        "method": "deterministic",
+        "variant": "investigation:followup",
+        "clarification": false,
         "candidateClarification": true,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "Which subject do you mean?",
-            "1. Repeat that",
-            "2. Can you rephrase?",
-            "You can also ask a different question."
+            "PRECEDING FACTUAL SUBJECT / corporate:products",
+            "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+            "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
           ],
-          "links": [],
-          "code": "notice",
-          "truth": "system"
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
         },
         "openFileId": null
       },
@@ -2008,7 +2021,7 @@
         "variant": "service:002:info",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 002 / EQUIPMENT REGISTER",
@@ -2048,7 +2061,7 @@
         "variant": "service:002:info",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 002 / EQUIPMENT REGISTER",
@@ -2114,7 +2127,7 @@
         "variant": "service:002:log",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 002 / EQUIPMENT REGISTER / RETAINED LOG",
@@ -2142,7 +2155,7 @@
         "variant": "service:002:log",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 002 / EQUIPMENT REGISTER / RETAINED LOG",
@@ -3270,22 +3283,32 @@
       "off": {
         "passed": true,
         "intent": "q_fresh_clarify",
-        "resolvedIntent": "q_neconv_clarify",
+        "resolvedIntent": "q_fresh_investigation_followup",
         "method": "deterministic",
-        "variant": "mother:neconv_clarify:early",
+        "variant": "investigation:followup",
         "clarification": false,
         "candidateClarification": false,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "Which part should I explain? I can restate a specific claim without changing its evidence.",
-            "You compared independent measurements that my existing classification treated as compatible. I can record your objection; it does not confer medical authority.",
-            "You may answer, decline, ask another question or continue the independent review."
+            "PRECEDING FACTUAL SUBJECT / case-welfare",
+            "CLINICAL COMPARISON / LIMITED CASE REVIEW",
+            "MEASURE A: COMPENSATION PREVENTS IMMEDIATE REGULATORY FAILURE",
+            "MEASURE B: INCREASED COMPENSATION IS ASSOCIATED WITH REPEATED",
+            "           DISTRESS-LINKED NEURAL AND PHYSIOLOGICAL ACTIVITY",
+            "",
+            "Both observations are supported. The current classification treats",
+            "Measure B primarily as instability requiring further correction.",
+            "Clinical reviewers have disputed the adequacy of that classification.",
+            "Source: NE-111 / Dr Helen Marsh, 07 NOV 2003.",
+            "Core designation: MOTHER. R-02 is a restricted interface of the same corporate intelligence.",
+            "...",
+            "May I ask you a question?"
           ],
           "links": [
             {
-              "fileId": "readme",
-              "label": "/SYSTEM/READ_FIRST.TXT"
+              "fileId": "NE-111",
+              "label": "/CLINICAL/REVIEWS/VOSS_WELFARE_CONSULT.TXT"
             }
           ],
           "code": "ok",
@@ -3296,22 +3319,32 @@
       "on": {
         "passed": true,
         "intent": "q_fresh_clarify",
-        "resolvedIntent": "q_neconv_clarify",
+        "resolvedIntent": "q_fresh_investigation_followup",
         "method": "deterministic",
-        "variant": "mother:neconv_clarify:early",
+        "variant": "investigation:followup",
         "clarification": false,
         "candidateClarification": false,
         "storyUnchanged": true,
         "output": {
           "lines": [
-            "Which part should I explain? I can restate a specific claim without changing its evidence.",
-            "You compared independent measurements that my existing classification treated as compatible. I can record your objection; it does not confer medical authority.",
-            "You may answer, decline, ask another question or continue the independent review."
+            "PRECEDING FACTUAL SUBJECT / case-welfare",
+            "CLINICAL COMPARISON / LIMITED CASE REVIEW",
+            "MEASURE A: COMPENSATION PREVENTS IMMEDIATE REGULATORY FAILURE",
+            "MEASURE B: INCREASED COMPENSATION IS ASSOCIATED WITH REPEATED",
+            "           DISTRESS-LINKED NEURAL AND PHYSIOLOGICAL ACTIVITY",
+            "",
+            "Both observations are supported. The current classification treats",
+            "Measure B primarily as instability requiring further correction.",
+            "Clinical reviewers have disputed the adequacy of that classification.",
+            "Source: NE-111 / Dr Helen Marsh, 07 NOV 2003.",
+            "Core designation: MOTHER. R-02 is a restricted interface of the same corporate intelligence.",
+            "...",
+            "May I ask you a question?"
           ],
           "links": [
             {
-              "fileId": "readme",
-              "label": "/SYSTEM/READ_FIRST.TXT"
+              "fileId": "NE-111",
+              "label": "/CLINICAL/REVIEWS/VOSS_WELFARE_CONSULT.TXT"
             }
           ],
           "code": "ok",
@@ -3427,7 +3460,7 @@
         "variant": "service:002:info",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "ARCHIVED SERVICE SNAPSHOT / 06 NOV 2003 / 02:14",
@@ -3470,7 +3503,7 @@
         "variant": "service:002:info",
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "ARCHIVED SERVICE SNAPSHOT / 06 NOV 2003 / 02:14",
@@ -4177,7 +4210,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "OPENED: 17 April experimental controller trace (restricted research extract)",
@@ -4197,7 +4230,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "OPENED: 17 April experimental controller trace (restricted research extract)",
@@ -4307,7 +4340,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 003 / MESSAGE ROUTER",
@@ -4349,7 +4382,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 003 / MESSAGE ROUTER",
@@ -4417,7 +4450,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 003 / MESSAGE ROUTER / RETAINED LOG",
@@ -4445,7 +4478,7 @@
         "variant": null,
         "clarification": false,
         "candidateClarification": false,
-        "storyUnchanged": true,
+        "storyUnchanged": false,
         "output": {
           "lines": [
             "SERVICE 003 / MESSAGE ROUTER / RETAINED LOG",

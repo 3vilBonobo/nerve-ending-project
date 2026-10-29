@@ -5,7 +5,7 @@
     "recognitionExamples": 112,
     "uniqueProposedAnswerLines": 28,
     "authoredLinesReachedByInitialExamples": 3,
-    "uniqueInitialOutputPackages": 35,
+    "uniqueInitialOutputPackages": 38,
     "totalModelExamples": 3322,
     "totalModelIntents": 399
   },
@@ -630,9 +630,10 @@
         },
         {
           "input": "Show the public staff directory",
-          "variant": "mother:neconv_employee_lookup:early",
+          "variant": "investigation:directory",
           "lines": [
-            "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+            "The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.",
+            "Open it from FILES → PERSONNEL, or type OPEN work-directory."
           ]
         },
         {
@@ -881,16 +882,16 @@
       "initialExampleOutputs": [
         {
           "input": "Explain that",
-          "variant": "mother:neconv_clarify:early",
+          "variant": "investigation:clarification",
           "lines": [
-            "Which part should I explain? I can restate a specific claim without changing its evidence."
+            "Which subject do you mean: the selected record or the preceding answer?"
           ]
         },
         {
           "input": "What do you mean?",
-          "variant": "mother:neconv_clarify:early",
+          "variant": "investigation:clarification",
           "lines": [
-            "Which part should I explain? I can restate a specific claim without changing its evidence."
+            "Which subject do you mean: the selected record or the preceding answer?"
           ]
         },
         {
@@ -1058,10 +1059,9 @@
         },
         {
           "input": "What can I ask?",
-          "variant": "fresh:help",
+          "variant": "investigation:hint",
           "lines": [
-            "Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.",
-            "Use records, STATUS, INFO and LOG to examine company information."
+            "A dated filing and an operating observation answer different questions. What would let you check a recorded status?"
           ]
         },
         {

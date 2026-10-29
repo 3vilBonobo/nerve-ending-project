@@ -1,0 +1,84 @@
+@media (max-width: 1100px) {
+  .app-header { padding-inline: 18px; }
+  .desktop-folders { grid-template-columns: repeat(2, 112px); gap: 10px; right: 18px; }
+  .desktop-icon { font-size: .78em; }
+  .window-title { font-size: .78em; }
+  .scrollback, .document-content { padding: 18px 14px; }
+  .taskbar-label { display: none; }
+}
+
+@media (max-width: 900px) {
+  :root { --header-height: 96px; --navigation-height: 34px; --taskbar-height: 44px; }
+  .app-surface { font-size: calc(18px * var(--font-scale, 1)); }
+  .app-header { flex-wrap: wrap; align-content: center; gap: 10px; padding: 10px 16px; }
+  .brand { font-size: 18px; gap: 10px; }
+  .brand div > span { display: none; }
+  .brand .meridian-mark { width: 26px; height: 26px; }
+  .brand .meridian-mark:before { font-size: 22px; }
+  .app-header nav { width: 100%; gap: 10px; }
+  .app-header .text-button { font-size: 14px; padding: 5px 10px; min-height: 30px; }
+  .session-strip { padding: 8px 14px; font-size: .78em; gap: 12px; }
+  .desktop-navigation { padding: 0 14px; font-size: .8em; }
+  .desktop-navigation > span > span.muted, .desktop-navigation .clock { display: none; }
+  .mobile-tabs { display: flex; gap: 5px; padding: 0 10px; height: 44px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  .mobile-tabs button { flex: 1; padding: 10px 4px; font-size: .85em; color: var(--medium); border: 1px solid transparent; white-space: nowrap; }
+  .mobile-tabs button.selected { color: var(--bright); border: 1px solid var(--medium); border-bottom: 0; background: var(--bg); }
+  .desktop { min-height: 280px; }
+  .desktop-folders, .taskbar { display: none; }
+  .terminal-window, .terminal-window.restored, .desktop:has(.document-window) .terminal-window.restored { display: none; inset: 8px 10px 12px; width: auto; height: auto; min-height: 0; }
+  .desktop.tab-terminal .terminal-window, .desktop.tab-terminal .terminal-window.restored, .desktop.tab-terminal:has(.document-window) .terminal-window.restored { display: block; }
+  .window-titlebar { min-height: 38px; padding-left: 9px; gap: 6px; }
+  .window-title { font-size: .85em; gap: 8px; }
+  .window-title .muted { display: none; }
+  .window-controls { gap: 4px; }
+  .window-controls > button { width: 28px; height: 28px; }
+  .terminal-toolbar { font-size: .85em; padding: 8px 10px; }
+  .scrollback { padding: 18px 12px; }
+  .terminal-entry { line-height: 1.65; }
+  .terminal-shell, .document-shell, .explorer-window, .connection-screen, .desktop-folders, .document-tabs, .taskbar { font-size: calc(22px * var(--font-scale, 1)); }
+  .record-link { font-size: .9em; }
+  .command-row { gap: 8px; margin: 0 10px; padding: 10px 0; }
+  .terminal-input > input { font-size: 1em; }
+  .terminal-input > input::placeholder { font-size: .85em; }
+  .command-row > button { font-size: .8em; padding: 7px; }
+  .terminal-footer { font-size: .8em; padding: 9px 10px; }
+  .explorer-window { display: none; inset: 8px 10px 12px; width: auto; height: auto; min-height: 0; }
+  .tab-files .explorer-window { display: flex; }
+  .document-window { display: none; inset: 8px 10px 12px; width: auto; height: auto; }
+  .tab-documents .document-window.front-document { display: block; }
+  .document-content { padding: 18px 12px; }
+  .document-content pre { font-size: 1em; }
+  .document-toolbar, .document-footer { font-size: .8em; padding: 9px 10px; }
+  .document-tabs { display: none; bottom: 14px; left: 12px; right: 12px; width: auto; }
+  .tab-documents .document-tabs { display: flex; }
+  .document-tabs button { font-size: .8em; padding: 8px; }
+  .tab-documents:has(.document-tabs) .document-window { bottom: 62px; }
+  .tab-documents .empty-documents { display: flex; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; padding: 28px; text-align: center; color: var(--medium); }
+  .empty-documents .page-icon { width: 26px; height: 33px; margin-bottom: 20px; }
+  .empty-documents small { max-width: 290px; line-height: 1.65; }
+  .ending-card { bottom: 52px; padding: 20px; }
+  .settings-dialog, .reset-dialog { font-size: calc(16px * var(--font-scale, 1)); }
+  .settings-body { padding: 20px; }
+  .connection-log { font-size: .9em; }
+}
+
+@media (max-width: 520px) {
+  .setup-screen { width: calc(100% - 28px); padding: 28px 0; }
+  .setup-dialog .window-title { font-size: 16px; }
+  .setup-body { padding: 26px 18px 18px; }
+  .setup-identity { gap: 14px; margin-bottom: 26px; align-items: flex-start; }
+  .setup-identity .meridian-mark.large { width: 38px; height: 42px; border-width: 2px; }
+  .setup-identity .meridian-mark.large:before { font-size: 34px; }
+  .setup-identity h1 { font-size: 21px; }
+  .setup-identity p { font-size: 17px; line-height: 1.5; }
+  .setup-description { font-size: 18px; }
+  .setup-note { font-size: 15px; line-height: 1.5; }
+  .setup-actions { padding: 16px; gap: 12px; }
+  .setup-actions button { font-size: 16px; padding: 9px 12px; }
+  .start-button { min-width: 148px; }
+  .setup-caption { font-size: 14px; }
+  .session-strip { font-size: 12px; }
+  .desktop-navigation { font-size: 12px; }
+  .terminal-footer { font-size: 12px; }
+}
+

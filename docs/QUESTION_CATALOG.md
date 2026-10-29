@@ -2787,7 +2787,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
 | Who works here? | PUBLIC WORK DIRECTORY<br>Dr. Ruth Calder — Co-founder; former Medical Director / Leadership / 1984–1999 Helped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999.<br>Martin Shaw — Co-founder; former Systems Director / Leadership / 1984–2000 Co-founded Meridian and oversaw development of its internal computing and service-management systems.<br>Daniel Price — Acting Chief Executive / Executive / 2001–present Leads Meridian's reduced commercial and support operations following the restructuring.<br>Helen Mercer — Finance Director / Finance / 1992–present Responsible for budgets, contracts, insurance administration and monthly financial reporting.<br>Caroline Fitch — Corporate Counsel / Legal / 1995–present Handles liability, licensing terms, former research agreements and clinical-support contracts.<br>Julian Kell — Former Administration Supervisor / Administration / 1993–2001 Coordinated facility and service closures during the 2001 consolidation.<br>Evelyn Lin — Former Operations Coordinator / Operations / 1996–2001 Maintained shift schedules, operator assignments and unresolved communications requests.<br>Lydia Brooks — Human Resources Coordinator / Human Resources / 1997–present Processes staff changes and maintains the ordinary work directory.<br>Peter Duarte — Contracts Administrator / Contracts / 2000–present Maintains support-contract renewals and standard customer records.<br>Maya Singh — Procurement Officer / Procurement / 1998–present Coordinates suppliers, equipment orders and contract deliveries.<br>Brent Holloway — Payroll Clerk / Finance / 1999–present Supports payroll processing for Meridian's reduced workforce.<br>Teresa Walsh — Former Reception Supervisor / Facilities / 1988–2001 Supervised the Providence Operations Annex reception desk until its closure.<br>Oliver Ames — Records Archivist / Records / 1996–present Maintains legacy document indexing and retention schedules.<br>Samuel Ortiz — Customer Support Manager / Customer Support / 1993–present Leads support for older Meridian clinical and rehabilitation equipment.<br>Nina Park — Medical Equipment Engineer / Engineering / 1995–present Works on calibration, spare-part compatibility and approved software maintenance for legacy devices.<br>Owen Keller — QA Technician / Quality Assurance / 2000–present Performs routine verification of refurbished equipment and service records.<br>Rafael Costa — Field-Service Engineer / Field Support / 1996–present Visits hospitals and equipment customers for scheduled inspections.<br>Naomi Reed — Service Scheduling Coordinator / Customer Support / 1998–present Schedules maintenance calls and maintains rotating coverage rosters.<br>Leah Morgan — Warehouse and Parts Coordinator / Parts / 1997–present Coordinates equipment replacement parts, storage and shipping.<br>Victor Chen — Network Administrator / Information Systems / 1997–present Maintains Meridian's surviving office networks and remote service accounts.<br>Miles Harper — Former Communications Technician / Communications / 1993–2000 Installed and documented old dial-up, telephone-extension and service bridges.<br>Gina Valdez — Technical Documentation Editor / Documentation / 1999–present Updates ordinary service guides, parts sheets and manuals.<br>Thomas Keene — Former Facilities Manager / Facilities / 1990–2002 Oversaw building access, inspections and site handovers during consolidation.<br>Andrew Bell — Equipment Repair Technician / Workshop / 1998–present Repairs returned legacy clinical monitoring units.<br>Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996 Led Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership.<br>Dr. Miriam Rao — Clinical Research Physician / Clinical Research / 1992–1998 Served as a physician on Meridian neurological-interface research programs.<br>Elias Hart — Lead Systems Architect / Research Engineering / 1990–1999 Designed experimental interface integration and analysis pipelines.<br>Dr. Iris Bell — Neuroscience Researcher / Neuroscience / 1991–1997 Studied sensory encoding, rehabilitative stimulation and measurement procedures.<br>Daniel Kessler — Bioelectronics Engineer / Bioelectronics / 1993–2000 Worked on electrode arrays, signal conditioning and experimental controller testing.<br>Clara Weiss — Research Administrator / Research Administration / 1991–1998 Maintained project staffing, approvals and equipment inventory for research programs.<br>Sophia Nadir — Research Ethics Coordinator / Research Compliance / 1994–1998 Coordinated research documentation and internal review meetings.<br>Robert Vale — Former Animal-Care Technician / Laboratory Services / 1992–1997 Supported approved preclinical animal-care operations in historical research.<br>Helen Wu — Former Research Assistant / Research / 1994–1997 Assisted with data preparation, instrument checks and laboratory scheduling.<br>Grace Sato — Research Statistician / Research Data / 1993–1998 Worked on analysis of rehabilitation and neural-monitoring trials. |
-| Show the public staff directory | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
+| Show the public staff directory | The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.<br>Open it from FILES → PERSONNEL, or type OPEN work-directory. |
 | Which research roles are listed? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 | Can I look up an employee? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 
@@ -2839,8 +2839,8 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| Explain that | Which part should I explain? I can restate a specific claim without changing its evidence. |
-| What do you mean? | Which part should I explain? I can restate a specific claim without changing its evidence. |
+| Explain that | Which subject do you mean: the selected record or the preceding answer? |
+| What do you mean? | Which subject do you mean: the selected record or the preceding answer? |
 | Please clarify your answer | Which part should I explain? I can restate a specific claim without changing its evidence. |
 | I do not understand that | Which part should I explain? I can restate a specific claim without changing its evidence. |
 
@@ -2864,7 +2864,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| What can I ask? | Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.<br>Use records, STATUS, INFO and LOG to examine company information. |
+| What can I ask? | A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 | How do I open a record? | Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.<br>Use records, STATUS, INFO and LOG to examine company information. |
 | How do I skip the typing? | Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.<br>Use records, STATUS, INFO and LOG to examine company information. |
 
@@ -3039,7 +3039,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| I'm bored | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
+| I'm bored | I am not a recreation service.<br>A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 | This is boring | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
 | Entertain me | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
 | Got anything interesting? | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
@@ -3048,7 +3048,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Nothing happens here | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
 | What can I do for fun? | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
 | This is dull | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
-| I'm bored out of my mind | You can inspect company records, query service history, or ask an ordinary question. I am not a recreation service. |
+| I'm bored out of my mind | I am not a recreation service.<br>A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 
 ## confused — FRESH v1.0
 
@@ -3129,7 +3129,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | You're repeating yourself | The source has not changed. Rewording it would not add evidence. |
 | You keep saying the same thing | The source has not changed. Rewording it would not add evidence. |
 | Didn't you say that already? | The source has not changed. Rewording it would not add evidence. |
-| Are you stuck on repeat? | The source has not changed. Rewording it would not add evidence. |
+| Are you stuck on repeat? | A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 | Have we done this before? | The source has not changed. Rewording it would not add evidence. |
 | Another identical answer? | The source has not changed. Rewording it would not add evidence. |
 | You sound like a broken record | The source has not changed. Rewording it would not add evidence. |
@@ -3290,7 +3290,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | --- | --- |
 | Why did Meridian shrink? | Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.<br>Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company. |
 | Why are there fewer employees? | Meridian reduced its operations after costly research programs, falling funding, competition, and restructuring. It still supports installed equipment. |
-| What happened to the company? | Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.<br>Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company. |
+| What happened to the company? | The closure concerns the Providence Operations Annex, not the whole Meridian company. The smaller company still operates in 2003.<br>/ADMIN/COMPANY_PROFILE.TXT<br>SOURCE DATE: 2001-09-18 17:00<br>MERIDIAN SYSTEMS<br>PUBLIC OFFICE NOTICE                 18 SEP 2001<br><br>The public office is now closed.<br>Telephone reception ended at 17:00 today.<br><br>Technical records remain available for owners of<br>Meridian medical monitoring equipment.<br><br>Messages left through this terminal are not read<br>by office staff. |
 | Did Meridian go bankrupt? | Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.<br>Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company. |
 | Why did you close offices? | Meridian reduced its operations after costly research programs, falling funding, competition, and restructuring. It still supports installed equipment. |
 | What caused the layoffs? | Meridian reduced its operations after costly research programs, falling funding, competition, and restructuring. It still supports installed equipment. |
@@ -3305,7 +3305,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | --- | --- |
 | Is Meridian still operating? | Meridian is still operating in 2003, with about 70 employees plus contractors. It concentrates on parts, maintenance, support agreements and licensing for existing equipment.<br>The remote work directory is a selected historical sample, not a complete payroll. |
 | Is this business still alive? | Yes. Meridian continues to provide maintenance, parts, licensing and technical support on a smaller scale. |
-| Did the company close? | Yes. Meridian continues to provide maintenance, parts, licensing and technical support on a smaller scale. |
+| Did the company close? | The closure concerns the Providence Operations Annex, not the whole Meridian company. The smaller company still operates in 2003.<br>/ADMIN/COMPANY_PROFILE.TXT<br>SOURCE DATE: 2001-09-18 17:00<br>MERIDIAN SYSTEMS<br>PUBLIC OFFICE NOTICE                 18 SEP 2001<br><br>The public office is now closed.<br>Telephone reception ended at 17:00 today.<br><br>Technical records remain available for owners of<br>Meridian medical monitoring equipment.<br><br>Messages left through this terminal are not read<br>by office staff. |
 | Are you still selling anything? | Yes. Meridian continues to provide maintenance, parts, licensing and technical support on a smaller scale. |
 | Does anyone work here anymore? | Yes. Meridian continues to provide maintenance, parts, licensing and technical support on a smaller scale. |
 | Is Meridian defunct? | Yes. Meridian continues to provide maintenance, parts, licensing and technical support on a smaller scale. |
@@ -3406,14 +3406,14 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| Can you find an employee? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
+| Can you find an employee? | The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.<br>Open it from FILES → PERSONNEL, or type OPEN work-directory. |
 | Who works in engineering? | PUBLIC WORK DIRECTORY<br>Nina Park — Medical Equipment Engineer / Engineering / 1995–present Works on calibration, spare-part compatibility and approved software maintenance for legacy devices.<br>Elias Hart — Lead Systems Architect / Research Engineering / 1990–1999 Designed experimental interface integration and analysis pipelines. |
 | Can I look up people? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 | Show staff roles | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 | Can you find somebody by department? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 | Do you have personnel records? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 | How do I search employees? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
-| Where's your employee list? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
+| Where's your employee list? | The selected historical work directory is /PERSONNEL/WORK_DIRECTORY.TXT.<br>Open it from FILES → PERSONNEL, or type OPEN work-directory. |
 | Can you tell me who works here? | You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information. |
 
 ## calder — FRESH v1.0
@@ -3514,7 +3514,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | What buildings did Meridian use? | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
 | Tell me about Lowell | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
 | Was there a Worcester office? | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
-| Which Meridian properties closed? | Records describe Providence headquarters, a former Providence operations annex, Lowell technical facilities and a historical Worcester research office. Some facility information is restricted. |
+| Which Meridian properties closed? | The closure concerns the Providence Operations Annex, not the whole Meridian company. The smaller company still operates in 2003.<br>/ADMIN/COMPANY_PROFILE.TXT<br>SOURCE DATE: 2001-09-18 17:00<br>MERIDIAN SYSTEMS<br>PUBLIC OFFICE NOTICE                 18 SEP 2001<br><br>The public office is now closed.<br>Telephone reception ended at 17:00 today.<br><br>Technical records remain available for owners of<br>Meridian medical monitoring equipment.<br><br>Messages left through this terminal are not read<br>by office staff. |
 | How many locations are there? | Records describe Providence headquarters, a former Providence operations annex, Lowell technical facilities and a historical Worcester research office. Some facility information is restricted. |
 | What is the Providence annex? | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
 | Where are the engineering facilities? | Records describe Providence headquarters, a former Providence operations annex, Lowell technical facilities and a historical Worcester research office. Some facility information is restricted. |
@@ -3525,7 +3525,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | --- | --- |
 | What was the Providence annex? | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
 | Where was the night desk located? | The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters. |
-| When did the operations annex close? | The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.<br>The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999. |
+| When did the operations annex close? | The closure concerns the Providence Operations Annex, not the whole Meridian company. The smaller company still operates in 2003.<br>/ADMIN/COMPANY_PROFILE.TXT<br>SOURCE DATE: 2001-09-18 17:00<br>MERIDIAN SYSTEMS<br>PUBLIC OFFICE NOTICE                 18 SEP 2001<br><br>The public office is now closed.<br>Telephone reception ended at 17:00 today.<br><br>Technical records remain available for owners of<br>Meridian medical monitoring equipment.<br><br>Messages left through this terminal are not read<br>by office staff. |
 | Why did they retire phone extensions? | The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters. |
 | Tell me about the old annex | The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters. |
 | Did support move offices? | The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters. |
@@ -3580,7 +3580,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| What do you actually do? | R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control. |
+| What do you actually do? | Which subject do you mean?<br>1. Meridian as a company<br>2. This R-02 records interface |
 | Can you help with something? | R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control. |
 | What tools do you have? | R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control. |
 | What is this terminal for? | R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control. |
@@ -3636,7 +3636,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| Where are the documents? | Use DIR or LIST to inspect accessible directories, SEARCH to locate indexed records, and OPEN or READ with a permitted path, title or record ID. |
+| Where are the documents? | FILES opens the file browser. Its root button returns to /.<br>DIR / lists available folders. OPEN /ADMIN/COMPANY_PROFILE.TXT opens the Office notice. |
 | Can I browse folders? | Use DIR or LIST to inspect accessible directories, SEARCH to locate indexed records, and OPEN or READ with a permitted path, title or record ID. |
 | How do I read an archive? | Use DIR or LIST to inspect accessible directories, SEARCH to locate indexed records, and OPEN or READ with a permitted path, title or record ID. |
 | Can you show a record? | Use DIR or LIST to inspect accessible directories, SEARCH to locate indexed records, and OPEN or READ with a permitted path, title or record ID. |
@@ -3765,7 +3765,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
 | You're wrong | Identify the statement or question I misunderstood. I can distinguish a correction from a command. |
-| That's not what I asked | Identify the statement or question I misunderstood. I can distinguish a correction from a command. |
+| That's not what I asked | Which subject do you mean: the selected record or the preceding answer? |
 | No I meant something else | Identify the statement or question I misunderstood. I can distinguish a correction from a command. |
 | Let me correct you | Identify the statement or question I misunderstood. I can distinguish a correction from a command. |
 | That's false | Identify the statement or question I misunderstood. I can distinguish a correction from a command. |
@@ -3837,10 +3837,10 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
 | Why does 006 run if the report says closed? | A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork. |
-| Was Service 006 shut down in 2001? | A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork. |
+| Was Service 006 shut down in 2001? | The closure concerns the Providence Operations Annex, not the whole Meridian company. The smaller company still operates in 2003.<br>/ADMIN/COMPANY_PROFILE.TXT<br>SOURCE DATE: 2001-09-18 17:00<br>MERIDIAN SYSTEMS<br>PUBLIC OFFICE NOTICE                 18 SEP 2001<br><br>The public office is now closed.<br>Telephone reception ended at 17:00 today.<br><br>Technical records remain available for owners of<br>Meridian medical monitoring equipment.<br><br>Messages left through this terminal are not read<br>by office staff. |
 | Did someone lie about the decommissioning? | A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork. |
 | What's with the difference between 004 and 006? | A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork. |
-| Compare the closure list to status | SOURCE COMPARISON / 006<br>2001 OPERATIONS REPORT: SERVICE 006 ENTERED IN CLOSURE BATCH<br>CURRENT CONTROLLER: SERVICE 006 RUNNING<br><br>These statements do not describe the same observation.<br>The historical filing does not include a confirmed controller stop.<br>I cannot explain the remaining operational obligation from this records view.<br>Sources: STATUS / INFO 006 (06 NOV 02:14 controller observation); /ADMIN/CLOSURE_LIST.TXT (18 SEP 2001).<br>TRACE NOTIFICATIONS compares the available origin and delivery records. |
+| Compare the closure list to status | /ADMIN/CLOSURE_LIST.TXT<br>SOURCE DATE: 2001-09-18 17:04<br>MERIDIAN / OPERATIONS OFFICE<br>SERVICE CLOSURES                      18 SEP 2001<br>Filed by: J. Kell<br><br>004   Billing                 Closed<br>005   Building sensors        Closed<br>006   Continuity monitor      Closed<br><br>Shutdown approved: 18 Sep 2001.<br>Records transferred to the local archive.<br><br>Attached: handover receipt / service 006<br>INFO 006<br>OBSERVED: 06 NOV 2003 / 02:14<br>006 / Continuity Monitor / RUNNING<br>Watches designated equipment that requires uninterrupted service.<br>Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.<br>SOURCE COMPARISON / 006<br>2001 OPERATIONS REPORT: SERVICE 006 ENTERED IN CLOSURE BATCH<br>CURRENT CONTROLLER: SERVICE 006 RUNNING<br><br>These statements do not describe the same observation.<br>The historical filing does not include a confirmed controller stop.<br>I cannot explain the remaining operational obligation from this records view.<br>Sources: STATUS / INFO 006 (06 NOV 02:14 controller observation); /ADMIN/CLOSURE_LIST.TXT (18 SEP 2001). |
 | How can a retired service still execute? | MERIDIAN SYSTEMS / REGISTERED SERVICES<br>06 NOV 2003<br><br>ID   SERVICE                 STATE<br>001  Contract Support        RUNNING<br>002  Equipment Register      RUNNING<br>003  Message Router          STANDBY<br>004  Billing                 STOPPED<br>005  Building Sensors        STOPPED<br>006  Continuity Monitor      RUNNING<br>007  Records Access          RUNNING<br>008  Archive Index           RUNNING<br><br>Type INFO <id> for service details. |
 | Which account is correct about 006? | SERVICE 006 / CONTINUITY MONITOR<br><br>STATE: RUNNING<br>OBSERVED: 06 NOV 2003 / 02:14<br>DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS<br><br>PURPOSE:<br>Watches designated equipment that requires uninterrupted service.<br><br>NORMAL FUNCTIONS:<br>Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.<br><br>LIMITATIONS:<br>Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.<br><br>HISTORY:<br>A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.<br><br>AVAILABLE:<br>LOG 006 |
 | Is the closure report fraudulent? | A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork. |
@@ -3851,14 +3851,14 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| Who answers extension 214? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
+| Who answers extension 214? | EXT 214 belonged to the Providence Operations Annex night desk. That office closed in 2001.<br>/OPERATIONS/SHIFT_HANDOVER.TXT<br>SOURCE DATE: 2001-09-19 08:10<br>MERIDIAN / STAFF MAIL<br>19 Sep 2001, 08:10<br>From: E. Lin<br>To: Operations<br>Subject: Night desk<br><br>The night desk phone was removed at 17:00 yesterday.<br>There is no night shift from this week.<br><br>The switchboard printed another alarm at 02:13.<br>Please don't forward it to my home number.<br>I'm no longer on call.<br>/OPERATIONS/CALL_QUEUE.LOG<br>SOURCE DATE: 2003-11-06 02:13<br>TO       Night desk / extension 214<br>FROM     Service 006<br>LATEST   06 Nov 2003, 02:13 / No answer<br>QUEUED   18 Sep 2001, 23:59<br>Confirmed: 18 Sep 2001, 23:59:41<br>By: not in current directory<br>A routing destination or saved confirmation does not prove that a phone rang or a person answered. |
 | Why isn't anyone answering the night desk? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
 | Where did the notification go? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
 | Is the old desk staffed? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
 | Can the message router deliver the call? | SERVICE 003 / MESSAGE ROUTER<br><br>STATE: STANDBY<br>OBSERVED: 06 NOV 2003 / 02:14<br><br>PURPOSE:<br>Accepts notifications from registered services and forwards them to configured mailboxes, internal telephone-extension systems or maintenance endpoints.<br><br>NORMAL FUNCTIONS:<br>Wakes for queued work; records routing attempts, coded destinations and acknowledgements.<br><br>Installed and available, but not currently processing its normal scheduled work. Standby is not necessarily a fault.<br><br>LIMITATIONS:<br>Retired extensions may be unreachable; mail delivery may be unconfirmed; switching hardware is aging. A routing entry does not establish a usable external path.<br><br>HISTORY:<br>Routing changed during the Operations Annex closure; legacy mappings persist.<br><br>RECORDED WORK CONTACTS:<br>Victor Chen; Miles Harper; Evelyn Lin.<br><br>AVAILABLE:<br>LOG 003 |
 | Did anyone pick up those alerts? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
-| Where did extension 214 route to? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
-| Is extension 214 still used? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
+| Where did extension 214 route to? | EXT 214 belonged to the Providence Operations Annex night desk. That office closed in 2001.<br>/OPERATIONS/SHIFT_HANDOVER.TXT<br>SOURCE DATE: 2001-09-19 08:10<br>MERIDIAN / STAFF MAIL<br>19 Sep 2001, 08:10<br>From: E. Lin<br>To: Operations<br>Subject: Night desk<br><br>The night desk phone was removed at 17:00 yesterday.<br>There is no night shift from this week.<br><br>The switchboard printed another alarm at 02:13.<br>Please don't forward it to my home number.<br>I'm no longer on call.<br>/OPERATIONS/CALL_QUEUE.LOG<br>SOURCE DATE: 2003-11-06 02:13<br>TO       Night desk / extension 214<br>FROM     Service 006<br>LATEST   06 Nov 2003, 02:13 / No answer<br>QUEUED   18 Sep 2001, 23:59<br>Confirmed: 18 Sep 2001, 23:59:41<br>By: not in current directory<br>A routing destination or saved confirmation does not prove that a phone rang or a person answered. |
+| Is extension 214 still used? | EXT 214 belonged to the Providence Operations Annex night desk. That office closed in 2001.<br>/OPERATIONS/SHIFT_HANDOVER.TXT<br>SOURCE DATE: 2001-09-19 08:10<br>MERIDIAN / STAFF MAIL<br>19 Sep 2001, 08:10<br>From: E. Lin<br>To: Operations<br>Subject: Night desk<br><br>The night desk phone was removed at 17:00 yesterday.<br>There is no night shift from this week.<br><br>The switchboard printed another alarm at 02:13.<br>Please don't forward it to my home number.<br>I'm no longer on call.<br>/OPERATIONS/CALL_QUEUE.LOG<br>SOURCE DATE: 2003-11-06 02:13<br>TO       Night desk / extension 214<br>FROM     Service 006<br>LATEST   06 Nov 2003, 02:13 / No answer<br>QUEUED   18 Sep 2001, 23:59<br>Confirmed: 18 Sep 2001, 23:59:41<br>By: not in current directory<br>A routing destination or saved confirmation does not prove that a phone rang or a person answered. |
 | Is the site abandoned? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
 | Who was on the night shift? | The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff. |
 
@@ -4048,7 +4048,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | --- | --- |
 | I don't believe that message | I can distinguish source data from an interpretation only when the relevant review is available. |
 | What if Anna didn't mean it? | I can distinguish source data from an interpretation only when the relevant review is available. |
-| Show the control comparison | I can distinguish source data from an interpretation only when the relevant review is available. |
+| Show the control comparison | A question alone does not establish a source observation. You can inspect the administrative records and the service registry before comparing them. |
 | Is this a false positive? | I can distinguish source data from an interpretation only when the relevant review is available. |
 | Could you be projecting? | I can distinguish source data from an interpretation only when the relevant review is available. |
 | I reject that interpretation | I can distinguish source data from an interpretation only when the relevant review is available. |
@@ -4291,7 +4291,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Did the year 2000 crash Meridian? | The current client identifies the year as 2003. Individual archived timestamps may still require provenance checks. |
 | Are all your dates correct? | The current client identifies the year as 2003. Individual archived timestamps may still require provenance checks. |
 | Was Y2K real here? | The current client identifies the year as 2003. Individual archived timestamps may still require provenance checks. |
-| Are you stuck in 1903? | The current client identifies the year as 2003. Individual archived timestamps may still require provenance checks. |
+| Are you stuck in 1903? | A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 
 ## ctrl z — FRESH v1.0
 
@@ -5126,7 +5126,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
 | How long have you waited? | Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time. |
-| Are you stuck here forever? | Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time. |
+| Are you stuck here forever? | A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 | Does time pass for you? | Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time. |
 | Has it been a long time? | Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time. |
 | Can you feel time? | Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time. |
@@ -5290,7 +5290,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 | Are service numbers clues? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
 | Is 006 James Bond? | SERVICE 006 / CONTINUITY MONITOR<br><br>STATE: RUNNING<br>OBSERVED: 06 NOV 2003 / 02:14<br>DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS<br><br>PURPOSE:<br>Watches designated equipment that requires uninterrupted service.<br><br>NORMAL FUNCTIONS:<br>Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.<br><br>LIMITATIONS:<br>Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.<br><br>HISTORY:<br>A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.<br><br>AVAILABLE:<br>LOG 006 |
 | Why is it number six? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
-| Was 006 assigned on purpose? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
+| Was 006 assigned on purpose? | SERVICE 006 / CONTINUITY MONITOR<br><br>STATE: RUNNING<br>OBSERVED: 06 NOV 2003 / 02:14<br>DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS<br><br>PURPOSE:<br>Watches designated equipment that requires uninterrupted service.<br><br>NORMAL FUNCTIONS:<br>Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.<br><br>LIMITATIONS:<br>Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.<br><br>HISTORY:<br>A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.<br><br>AVAILABLE:<br>LOG 006 |
 | Do numbers have hidden meanings? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
 | Are all sixes sinister? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
 | Does Site Six equal service six? | Service identifiers are administrative numbers. A matching numeral is not evidence of a shared physical location. |
@@ -5300,7 +5300,7 @@ Rows labeled q_fresh_ use a fresh v1.0 session. All other groups show retained l
 
 | Reference question | Reply in the labeled session scope |
 | --- | --- |
-| Are you bored? | Your questions do not affect the client service schedule. |
+| Are you bored? | I am not a recreation service.<br>A dated filing and an operating observation answer different questions. What would let you check a recorded status? |
 | Do you get tired of answering me? | Your questions do not affect the client service schedule. |
 | Am I annoying you? | Your questions do not affect the client service schedule. |
 | Are my questions dull? | Your questions do not affect the client service schedule. |
