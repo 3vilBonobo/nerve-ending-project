@@ -7,7 +7,7 @@ import { build } from 'esbuild';
 // Authoring references are read here only. This validator is never part of the client bundle.
 await mkdir('tmp/corporate-validation', { recursive: true });
 const bundle = resolve('tmp/corporate-validation/corporate.mjs');
-await build({ stdin: { contents: "export * from './src/app/core/corporate-records'; export * from './src/app/core/engine/game'; export * from './src/app/core/engine/continuation'; export * from './src/app/core/interpretation/semantic';", resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: bundle });
+await build({ stdin: { contents: "export * from './src/app/core/corporate-records'; export * from './src/app/core/scenario-records'; export * from './src/app/core/engine/game'; export * from './src/app/core/engine/continuation'; export * from './src/app/core/interpretation/semantic';", resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: bundle });
 const g = await import(pathToFileURL(bundle).href);
 const writer = JSON.parse(await readFile('docs/narrative/NERVE_ENDING_PERSONNEL_DIRECTORY_v0_4.json', 'utf8'));
 const approved = Array.from({ length: 34 }, (_, index) => `P${String(index + 1).padStart(3, '0')}`);
@@ -63,12 +63,16 @@ if (process.argv.includes('--model')) {
 }
 let checkedProductionFiles = 0;
 if (process.argv.includes('--dist')) {
+  // v1.0 explicitly authors a protected care roster. Public projection exclusion above still applies to all six.
+  // Only names actually present in the approved playable records may occur in the static story bundle.
+  const authoredStory=JSON.stringify(g.SCENARIO_FILES).replace(/Dr\.? /g,'');
+  const unapprovedNames=excluded.filter(person=>!authoredStory.includes(person.name.replace(/Dr\.? /g,'')));
   const files = await readdir('dist/client', { recursive: true });
   assert.ok(files.some(file => /^main-.*\.js$/.test(file)), 'Build the production client before using --dist.');
   for (const file of files.filter(file => /\.(?:js|json|md)$/i.test(file))) {
     const text = await readFile(resolve('dist/client', file), 'utf8'); checkedProductionFiles++;
     assert.doesNotMatch(text, /author_only_note|writer_depth|NERVE_ENDING_PERSONNEL_DIRECTORY/);
-    for (const person of excluded) assert.ok(!text.includes(person.name), `Excluded contractor in ${file}`);
+    for (const person of unapprovedNames) assert.ok(!text.includes(person.name), `Unapproved contractor in ${file}`);
   }
 }
 const report = { publicProfiles: g.PUBLIC_PERSONNEL.length, excludedContractors: excluded.length, authoredDocuments: g.CORPORATE_FILES.length, realModelInferences, checkedProductionFiles, sourceProjectionAndPrivacy: 'passed' };

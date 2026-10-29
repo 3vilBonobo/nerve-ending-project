@@ -5,6 +5,9 @@ import { SEMANTIC_CATALOG } from './semantic-catalog';
 import { openingQuestion } from './opening-questions';
 import { corporateInterpretation } from './corporate-questions';
 import { serviceInterpretation } from './service-questions';
+import { scenarioFamily } from '../engine/scenario';
+import { freshInterpretation } from './fresh-topics';
+import { motherInterpretation } from './mother-routing';
 
 const openingExamples = new Map(SEMANTIC_CATALOG.filter(i => !i.intent.startsWith('q_')).flatMap(i => i.examples.map(e => [normalize(e), i.intent] as const)));
 export const isOpeningExample = (input: string): boolean => openingExamples.has(normalize(input));
@@ -13,9 +16,13 @@ export function normalize(input: string): string {
   return input.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9/. _-]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 export function classify(input: string, context: QueryContext = {}): Interpretation {
+  if(context.scenarioVersion==='1.0'){const ordinary=freshInterpretation(input,context);if(ordinary)return ordinary;}
+  const family=context.scenarioVersion==='1.0'?scenarioFamily(input):undefined;
+  if(family)return {intent:`q_case_${family.replaceAll('-','_')}`,needsClarification:false,provider:'fallback',method:'deterministic'};
+  if(context.scenarioVersion==='1.0'){const authored=motherInterpretation(input,context);if(authored)return authored;}
   const service = serviceInterpretation(input, context);
   if (service) return service;
-  const corporate = corporateInterpretation(input, context);
+  const corporate = /corporation.*keep paying|visit planned by meridian/i.test(input)?undefined:corporateInterpretation(input, context);
   if (corporate) return corporate;
   const regression = openingQuestion(input);
   if (regression) return regression;
@@ -27,7 +34,7 @@ export function classify(input: string, context: QueryContext = {}): Interpretat
   const story = (intent: QueryIntent): Interpretation => result(intent, { entityId: entity ?? 'service-006' });
   const fileRequest = /^(?:(?:can|could|would) (?:you|i) (?:please )?|please )?(?:open|read|show(?: me)?|view|display|bring up|look at|see)\s/.test(text);
   if (fileRequest && !/^(?:please )?(?:read|open|show(?: me)?) (?:the |local )*backup(?: copy)?$/.test(text)) {
-    const requested = FILES.find(f => [f.path.toLowerCase(), f.path.split('/').pop()!.toLowerCase(), normalize(f.title)].some(name => text.includes(name)));
+    const requested = FILES.find(f => [f.path.toLowerCase(), f.path.split('/').pop()!.toLowerCase(), normalize(f.title),...(/^NE-\d{3}$/.test(f.id)?[f.id.toLowerCase()]:[])].some(name => text.includes(name)));
     const alias = Object.keys(FILE_ALIASES).sort((a,b) => b.length - a.length).find(name => text.includes(name));
     if (requested || alias) return result('request_file', { fileId: requested?.id ?? FILE_ALIASES[alias!], entityId: entity });
   }

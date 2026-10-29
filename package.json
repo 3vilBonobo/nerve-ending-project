@@ -16,7 +16,12 @@
     "model:holdout": "node scripts/evaluate-language-model.mjs --holdout",
     "model:continuation": "node scripts/evaluate-language-model.mjs --continuation",
     "model:catalogue": "node scripts/evaluate-language-model.mjs --catalogue",
-    "model:verify": "node scripts/verify-language-assets.mjs"
+    "model:verify": "node scripts/verify-language-assets.mjs",
+    "conversation:evaluate": "node scripts/evaluate-fresh-conversation.mjs",
+    "mother:ingest": "node scripts/ingest-mother-conversations.mjs --check",
+    "mother:inventory": "node scripts/inventory-mother-conversations.mjs",
+    "mother:evaluate": "node scripts/evaluate-mother-conversations.mjs",
+    "mother:labels": "node scripts/analyze-mother-labels.mjs"
   },
   "dependencies": {
     "@angular/common": "^21.2.0",

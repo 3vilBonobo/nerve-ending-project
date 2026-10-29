@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { FILES } from '../content';
 import { GameState } from '../models';
-import { accessibleFiles, inspectFile, newGame, recover, runInput } from './game';
+import { accessibleFiles, inspectFile, newLegacyGame as newGame, recover, runInput } from './game';
 import { parseCommand, resolvePath } from './commands';
 
 const run = (state: GameState, input: string) => runInput(state, input).state;
@@ -81,7 +81,7 @@ describe('the unanswered call investigation', () => {
     expect(opening.lines.join(' ')).not.toMatch(/Try:|To begin|RECOVER|Read.*first/i);
   });
   it('has short source records, no split-code puzzle, and valid document references', () => {
-    for (const file of FILES) {
+    for (const file of FILES.filter(file => !file.scenarioScope)) {
       expect(file.body.split(/\s+/).length).toBeLessThan(130);
       expect(file.body).not.toMatch(/first part|second part|BATCH\/SLOT|read both|corroborat|before.*recover/i);
       for (const id of file.references ?? []) expect(FILES.some(item => item.id === id)).toBe(true);

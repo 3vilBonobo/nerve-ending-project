@@ -1,6 +1,6 @@
 import { Component, OnDestroy, computed, effect, inject, signal } from '@angular/core';
-import { fileById } from './core/content';
 import { Session } from './core/session';
+import { Welcome } from './features/welcome/welcome';
 import { Terminal } from './features/terminal/terminal';
 import { FileBrowser } from './features/files/file-browser';
 import { DocumentWindow } from './features/documents/document';
@@ -9,9 +9,10 @@ import { endingText } from './core/engine/continuation';
 import { KNOWLEDGE_LABELS } from './core/engine/dialogue';
 import type { QaSource } from './core/qa/types';
 import { QaPanel } from './features/qa/qa-panel';
+import { caseClock, caseFindings } from './core/scenario-state';
 
 interface InstallPromptEvent extends Event { prompt(): Promise<void>; userChoice: Promise<{ outcome: string }> }
-@Component({ selector: 'ne-root', standalone: true, imports: [Terminal, FileBrowser, DocumentWindow, QaPanel], templateUrl: './app.html' })
+@Component({ selector: 'ne-root', standalone: true, imports: [Terminal, FileBrowser, DocumentWindow, QaPanel, Welcome], templateUrl: './app.html' })
 export class App implements OnDestroy {
   readonly session = inject(Session);
   readonly stage = signal<'setup' | 'connecting' | 'desktop'>('setup');
@@ -21,8 +22,9 @@ export class App implements OnDestroy {
   readonly showEnding = signal(false);
   readonly endAcknowledged = signal(false);
   readonly finalText = computed(() => endingText(this.session.state()));
-  readonly findings = computed(() => this.session.state().knowledge.map(k => KNOWLEDGE_LABELS[k]));
+  readonly findings = computed(() => this.session.state().scenario ? caseFindings(this.session.state().scenario!) : this.session.state().knowledge.map(k => KNOWLEDGE_LABELS[k]));
   readonly clock = signal('02:14:00');
+  readonly displayedClock = computed(()=>this.session.state().scenario ? caseClock(this.session.state().scenario!) : '2003-11-06 '+this.clock());
   readonly online = signal(navigator.onLine);
   readonly cached = signal(false);
   readonly installPrompt = signal<InstallPromptEvent | null>(null);
@@ -32,7 +34,7 @@ export class App implements OnDestroy {
     const state = this.session.language.state();
     return Math.min(100, Math.floor(state.total ? state.loaded / state.total * 100 : 0));
   });
-  readonly documents = computed(() => this.session.state().openFileIds.flatMap(id => { const file = fileById(id); return file ? [file] : []; }));
+  readonly documents = computed(() => this.session.state().openFileIds.flatMap(id => { const file = this.session.files().find(record => record.id === id); return file ? [file] : []; }));
   readonly metricSummary = computed(() => {
     const rows = this.session.metrics();
     return { count: rows.length, fallback: rows.length ? Math.round(rows.filter(row => row.fallback).length / rows.length * 100) : 0, ms: rows.length ? Math.round(rows.reduce((sum, row) => sum + row.elapsedMs, 0) / rows.length) : 0 };
@@ -44,7 +46,7 @@ export class App implements OnDestroy {
   private readonly networkListener = (): void => { this.online.set(navigator.onLine); };
 
   constructor() {
-    effect(() => { if (this.session.state().operating.endingId && !this.endAcknowledged()) this.showEnding.set(true); });
+    effect(() => { if ((this.session.state().operating.endingId || this.session.state().scenario?.outcome) && !this.endAcknowledged()) this.showEnding.set(true); });
     window.addEventListener('beforeinstallprompt', this.installListener);
     window.addEventListener('online', this.networkListener); window.addEventListener('offline', this.networkListener);
     let seconds = 0;
@@ -61,9 +63,17 @@ export class App implements OnDestroy {
   }
   skipConnection(): void { clearInterval(this.connectionTimer); this.stage.set('desktop'); }
   openFile(id: string, source: QaSource = 'record-link'): void {
-    this.session.openFile(id, source); this.mobileTab.set('documents'); this.explorer.set(false);
+    this.session.openFile(id, source);
+    if (!this.documents().some(file => file.id === id)) return;
+    this.mobileTab.set('documents'); this.explorer.set(false);
     this.session.terminalMode('restored');
     setTimeout(() => document.querySelector<HTMLElement>(`[data-document="${id}"] .document-shell`)?.focus());
+  }
+  closeRecord(id: string): void {
+    this.session.closeFile(id);
+    const previous = this.documents().at(-1);
+    if (previous) setTimeout(() => document.querySelector<HTMLElement>(`[data-document="${previous.id}"] .document-shell`)?.focus());
+    else this.terminal();
   }
   terminal(): void {
     this.session.terminalMode(this.session.state().ui.terminalMode === 'minimized' ? 'restored' : this.session.state().ui.terminalMode);

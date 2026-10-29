@@ -67,7 +67,7 @@ export const SERVICES: readonly ServiceDefinition[] = [
     history: 'Retains early company records alongside current archives.', contacts: 'Oliver Ames; Gina Valdez.' },
 ];
 export const serviceById = (id: string): ServiceDefinition | undefined => SERVICES.find(service => service.id === id);
-export const currentServiceState = (service: ServiceDefinition, state: GameState): ServiceState => service.id === '006' ? state.operating.service006Running ? 'RUNNING' : 'STOPPED' : service.state;
+export const currentServiceState = (service: ServiceDefinition, state: GameState): ServiceState => state.scenario?.outcome ? service.state : service.id === '006' ? state.operating.service006Running ? 'RUNNING' : 'STOPPED' : service.state;
 
 // This is the existing fixed story observation, not a server clock or elapsed play time.
 export const SERVICE_OBSERVATION = { local: '2003-11-06T02:14:00', label: CLINICAL_SNAPSHOT.at } as const;

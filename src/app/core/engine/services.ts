@@ -1,13 +1,16 @@
 import type { GameState, Interpretation, Transition } from '../models';
 import { serviceInterpretation, serviceQuestion, ServiceQuestion } from '../interpretation/service-questions';
 import { currentServiceState, permittedServiceEvents, serviceById, serviceTimestamp, SERVICES, SERVICE_OBSERVATION, SERVICE_STATES } from '../service-records';
+import { caseClock, caseMilestone } from '../scenario-state';
 
 function reply(state: GameState, lines: string[], code: Transition['output']['code'] = 'ok', truth: Transition['output']['truth'] = 'system'): Transition {
+  if (state.scenario && caseMilestone(state.scenario)>0) lines=['ARCHIVED SERVICE SNAPSHOT / 06 NOV 2003 / 02:14',`CASE CLOCK: ${caseClock(state.scenario)}`,'States below describe the retained observation, not current clinical execution.',...lines];
   return { state, output: { lines, links: [], code, truth } };
 }
 export function serviceRegistry(state: GameState): Transition {
   const next = { ...state, lastTopic: 'services', lastIntent: 'ask_service_status' as const,
     discoveredEvidenceIds: state.operating.service006Running ? [...new Set([...state.discoveredEvidenceIds, 'EV_SERVICE_ACTIVE' as const])] : [...state.discoveredEvidenceIds] };
+  if(next.scenario && !caseMilestone(next.scenario))next.scenario={...next.scenario,liveService006Observed:true};
   return reply(next, ['MERIDIAN SYSTEMS / REGISTERED SERVICES', '06 NOV 2003', '', 'ID   SERVICE                 STATE',
     ...SERVICES.map(service => `${service.id}  ${service.name.padEnd(24)}${currentServiceState(service, state)}`), '', 'Type INFO <id> for service details.']);
 }
@@ -16,6 +19,7 @@ export function serviceDetails(state: GameState, id: string): Transition {
   if (!service) return reply(state, ['There is no registered service with that identifier.'], 'error');
   const next = { ...state, lastTopic: `service-${id}`, lastIntent: 'ask_service_status' as const,
     discoveredEvidenceIds: id === '006' && state.operating.service006Running ? [...new Set([...state.discoveredEvidenceIds, 'EV_SERVICE_ACTIVE' as const])] : [...state.discoveredEvidenceIds] };
+  if(next.scenario && id==='006' && !caseMilestone(next.scenario))next.scenario={...next.scenario,liveService006Observed:true};
   return reply(next, [`SERVICE ${id} / ${service.name.toUpperCase()}`, '', `STATE: ${currentServiceState(service, state)}`, `OBSERVED: ${SERVICE_OBSERVATION.label}`,
     ...(service.department ? [`DEPARTMENT: ${service.department.toUpperCase()}`] : []), '', 'PURPOSE:', service.purpose, '', 'NORMAL FUNCTIONS:', service.functions,
     ...(service.id === '003' ? ['', SERVICE_STATES.STANDBY] : []), '', 'LIMITATIONS:', service.limitations, '', 'HISTORY:', service.history,
@@ -33,9 +37,10 @@ export function serviceLog(state: GameState, id: string): Transition {
   ], 'ok', 'record');
 }
 export function serviceCommand(state: GameState, name: 'INFO' | 'LOG', args: readonly string[]): Transition {
-  if (!args.length) return reply(state, [name === 'LOG' ? 'Which service log would you like to inspect?' : 'Which service are you referring to?', `Syntax: ${name} <id> (001–008).`], 'notice');
+  if (!args.length) return reply({...state,...(state.scenario?{serviceClarification:name}:{})}, [name === 'LOG' ? 'Which service log would you like to inspect?' : 'Which service are you referring to?', `Syntax: ${name} <id> (001–008).`], 'notice');
   if (args.length !== 1) return reply(state, [`Supported syntax: ${name} <id> (001–008).`, 'Date ranges, filters and pagination are not supported.'], 'error');
-  return name === 'INFO' ? serviceDetails(state, args[0]) : serviceLog(state, args[0]);
+  const next=state.scenario?{...state,serviceClarification:undefined}:state;
+  return name === 'INFO' ? serviceDetails(next, args[0]) : serviceLog(next, args[0]);
 }
 function answer(state: GameState, question: ServiceQuestion): Transition {
   switch (question.kind) {
@@ -47,7 +52,7 @@ function answer(state: GameState, question: ServiceQuestion): Transition {
     case 'states': return reply(state, [`${question.state}: ${SERVICE_STATES[question.state!]}`]);
     case 'distinction': return reply(state, ['Current status is what the controller reports at the fixed observation: ' + SERVICE_OBSERVATION.label + '.', 'A shutdown report is a dated departmental claim. Reading it does not check current execution or prove an operational release.', 'Different dates and sources must be compared; a mismatch alone does not establish deliberate fraud.']);
     case 'invalid': return reply(state, ['There is no registered service with that identifier.'], 'error');
-    case 'missing': return reply(state, ['Which service are you referring to?', 'Specify an identifier from 001–008.'], 'notice');
+    case 'missing': return reply({...state,...(state.scenario?{serviceClarification:/logs?|events?/i.test(question.action??'')?'LOG' as const:'INFO' as const}:{})}, ['Which service are you referring to?', 'Specify an identifier from 001–008.'], 'notice');
     case 'syntax': return reply(state, ['Supported syntax: LOG <id> (001–008).', 'Date ranges, filters and pagination are not supported.', 'Show me recent service warnings lists the available warnings across services.'], 'error');
     case 'deny': return reply(state, ['CONTROL UNAVAILABLE.', /reroute|redirect/.test(question.action ?? '') ? 'This connection does not have permission to modify message routing.' : 'This connection does not have permission to change that service.'], 'denied', 'withheld');
   }
@@ -55,6 +60,7 @@ function answer(state: GameState, question: ServiceQuestion): Transition {
 export function answerService(state: GameState, input: string, predicted?: Interpretation): Transition | undefined {
   const question = serviceQuestion(input, state);
   if (!question) return undefined;
+  if(question.kind==='missing')question.action=input;
   const result = answer(state, question);
   const query = { ...serviceInterpretation(input, state)!, provider: predicted?.provider ?? 'fallback' as const };
   return { ...result, resolvedInterpretation: query,

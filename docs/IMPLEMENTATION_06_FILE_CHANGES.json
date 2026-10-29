@@ -1,0 +1,386 @@
+{
+  "scope": "Compared with the 173-path snapshot captured before Implementation 06. Not a diff from Git HEAD: prior Implementations 03\u201305 were already uncommitted. No files deleted or changes reverted by this task. Ignored tmp snapshots, model diagnostic output, Angular cache and dist are excluded. Additional unowned working changes are listed without claiming authorship.",
+  "baselinePaths": 173,
+  "modifiedByImplementation06": [
+    "docs/DIALOGUE_COVERAGE.json",
+    "docs/IMPLEMENTATION_04_TRANSCRIPT_CONTINUATION.md",
+    "docs/IMPLEMENTATION_04_TRANSCRIPT_SEVERANCE.md",
+    "docs/IMPLEMENTATION_05_CONVERSATION_INVENTORY.json",
+    "docs/IMPLEMENTATION_05_EVALUATION_AFTER.json",
+    "docs/QUESTION_CATALOG.md",
+    "docs/narrative/README.md",
+    "package.json",
+    "public/language/v1/embeddings.json",
+    "public/language/v1/manifest.json",
+    "scripts/evaluate-fresh-conversation.mjs",
+    "scripts/evaluate-language-model.mjs",
+    "scripts/validate-game.mjs",
+    "src/app/core/engine/conversation.spec.ts",
+    "src/app/core/engine/corporate.spec.ts",
+    "src/app/core/engine/fresh-conversation.ts",
+    "src/app/core/engine/game.ts",
+    "src/app/core/engine/scenario.ts",
+    "src/app/core/interpretation/corporate-questions.ts",
+    "src/app/core/interpretation/fallback.ts",
+    "src/app/core/interpretation/fresh-topics.ts",
+    "src/app/core/interpretation/providers.ts",
+    "src/app/core/interpretation/semantic-catalog.ts",
+    "src/app/core/interpretation/semantic.ts",
+    "src/app/core/interpretation/service-questions.ts",
+    "src/app/core/models.ts",
+    "src/app/core/persistence/saves.ts",
+    "src/app/core/qa/events.ts",
+    "src/app/core/qa/types.ts",
+    "src/app/core/session.ts"
+  ],
+  "addedByImplementation06": [
+    "docs/IMPLEMENTATION_06_AUTHOR_REVIEW_NOTES.md",
+    "docs/IMPLEMENTATION_06_BASELINE.json",
+    "docs/IMPLEMENTATION_06_CONVERSATION_INVENTORY.json",
+    "docs/IMPLEMENTATION_06_EVALUATION_AFTER.json",
+    "docs/IMPLEMENTATION_06_EVALUATION_BEFORE.json",
+    "docs/IMPLEMENTATION_06_FILE_CHANGES.json",
+    "docs/IMPLEMENTATION_06_INGEST.json",
+    "docs/IMPLEMENTATION_06_LABEL_AUDIT.json",
+    "docs/IMPLEMENTATION_06_MOTHER_CONVERSATION_REPORT.md",
+    "docs/IMPLEMENTATION_06_VALIDATION.json",
+    "docs/narrative/CODEX_IMPLEMENTATION_06_MOTHER_CONVERSATION_PROMPT.md",
+    "docs/narrative/NERVE_ENDING_MOTHER_CONVERSATIONS_AUTHOR_PACK_v1_1.json",
+    "docs/narrative/NERVE_ENDING_MOTHER_CONVERSATION_BIBLE_v1_1.md",
+    "docs/narrative/NERVE_ENDING_MOTHER_CONVERSATION_EVALUATION_v1_1.json",
+    "scripts/analyze-mother-labels.mjs",
+    "scripts/evaluate-mother-conversations.mjs",
+    "scripts/ingest-mother-conversations.mjs",
+    "scripts/inventory-mother-conversations.mjs",
+    "src/app/core/engine/mother-conversation.spec.ts",
+    "src/app/core/engine/mother-conversation.ts",
+    "src/app/core/interpretation/mother-corpus.ts",
+    "src/app/core/interpretation/mother-routing.ts"
+  ],
+  "preservedByteForByte": [
+    ".editorconfig",
+    ".gitignore",
+    ".openai/hosting.json",
+    "README.md",
+    "angular.json",
+    "docs/AI_EXPERIMENTS.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CREATIVE_GAMEPLAY_HANDOFF.md",
+    "docs/DEPLOYMENT.md",
+    "docs/DIALOGUE_COVERAGE.md",
+    "docs/GAMEPLAY_GUIDE.md",
+    "docs/IMPLEMENTATION_01_CORPORATE_EXPLORATION.md",
+    "docs/IMPLEMENTATION_02_OPERATIONAL_SERVICES.md",
+    "docs/IMPLEMENTATION_03_LEGACY_BITMAPS.md",
+    "docs/IMPLEMENTATION_04_PLAYABLE_STORY.md",
+    "docs/IMPLEMENTATION_05_CONVERSATIONAL_INTELLIGENCE.md",
+    "docs/IMPLEMENTATION_05_EVALUATION_BEFORE.json",
+    "docs/IMPLEMENTATION_05_WORDING_CORRECTIONS.md",
+    "docs/IMPLEMENTATION_REPORT.md",
+    "docs/NERVE_ENDING_DEVELOPMENT_ROADMAP.md",
+    "docs/NERVE_ENDING_FULL_GAME_AUDIT.md",
+    "docs/NERVE_ENDING_GAMEPLAY_FLOW.md",
+    "docs/NERVE_ENDING_STATUS_REPORT.md",
+    "docs/OPENING_REDESIGN.md",
+    "docs/QA_LOGGING.md",
+    "docs/VERIFICATION.md",
+    "docs/VISUAL_REFERENCES.md",
+    "docs/artwork/implementation-03/README.md",
+    "docs/artwork/implementation-03/demo-employee-id.pgm",
+    "docs/artwork/implementation-03/demo-equipment-layout.pgm",
+    "docs/artwork/implementation-03/demo-equipment-room.pgm",
+    "docs/narrative/CANON_CONFLICTS.md",
+    "docs/narrative/CODEX_IMPLEMENTATION_04_PLAYABLE_STORY_PROMPT.md",
+    "docs/narrative/IMPLEMENTATION_05_PROPOSED_DIALOGUE.md",
+    "docs/narrative/IMPLEMENTATION_IMPACT_MAP.md",
+    "docs/narrative/NERVE_ENDING_MERIDIAN_WORLD_BIBLE_v0_4.md",
+    "docs/narrative/NERVE_ENDING_MOTHER_ANNA_CANON_v0_3.md",
+    "docs/narrative/NERVE_ENDING_MOTHER_INFRASTRUCTURE_BIBLE_v0_5.md",
+    "docs/narrative/NERVE_ENDING_PERSONNEL_DIRECTORY_v0_4.json",
+    "docs/narrative/NERVE_ENDING_PLAYABLE_SCENARIO_SPEC_v1_0.md",
+    "docs/screenshots/opening-redesign.png",
+    "ngsw-config.json",
+    "package-lock.json",
+    "public/bitmaps/demo-employee-id.png",
+    "public/bitmaps/demo-equipment-layout.png",
+    "public/bitmaps/demo-equipment-room.png",
+    "public/fonts/OFL.txt",
+    "public/fonts/VT323-Regular.ttf",
+    "public/icons/icon-192.png",
+    "public/icons/icon-512.png",
+    "public/icons/icon.svg",
+    "public/language/v1/all-MiniLM-L6-v2/LICENSE.txt",
+    "public/language/v1/all-MiniLM-L6-v2/README.md",
+    "public/language/v1/all-MiniLM-L6-v2/config.json",
+    "public/language/v1/all-MiniLM-L6-v2/onnx/model_quantized.onnx",
+    "public/language/v1/all-MiniLM-L6-v2/special_tokens_map.json",
+    "public/language/v1/all-MiniLM-L6-v2/tokenizer.json",
+    "public/language/v1/all-MiniLM-L6-v2/tokenizer_config.json",
+    "public/language/v1/runtime/LICENSE.txt",
+    "public/language/v1/runtime/TRANSFORMERS-LICENSE.txt",
+    "public/language/v1/runtime/ort-wasm-simd-threaded.mjs",
+    "public/language/v1/runtime/ort-wasm-simd-threaded.wasm",
+    "public/language/v1/runtime/transformers.mjs",
+    "public/manifest.webmanifest",
+    "scripts/bitmap-fixtures.mjs",
+    "scripts/generate-icons.mjs",
+    "scripts/prepare-language-model.mjs",
+    "scripts/scenario-source.mjs",
+    "scripts/serve.mjs",
+    "scripts/validate-bitmaps.mjs",
+    "scripts/validate-corporate.mjs",
+    "scripts/validate-opening.mjs",
+    "scripts/validate-scenario.mjs",
+    "scripts/validate-services.mjs",
+    "scripts/verify-language-assets.mjs",
+    "src/app/app-bitmaps.spec.ts",
+    "src/app/app-scenario.spec.ts",
+    "src/app/core/bitmap-records.ts",
+    "src/app/core/content.ts",
+    "src/app/core/corporate-records.ts",
+    "src/app/core/engine/bitmaps.spec.ts",
+    "src/app/core/engine/commands.ts",
+    "src/app/core/engine/continuation.spec.ts",
+    "src/app/core/engine/continuation.ts",
+    "src/app/core/engine/corporate.ts",
+    "src/app/core/engine/dialogue.ts",
+    "src/app/core/engine/game.spec.ts",
+    "src/app/core/engine/human-questions.spec.ts",
+    "src/app/core/engine/investigation.spec.ts",
+    "src/app/core/engine/investigation.ts",
+    "src/app/core/engine/playthroughs.ts",
+    "src/app/core/engine/response-trace.ts",
+    "src/app/core/engine/scenario-playthroughs.ts",
+    "src/app/core/engine/scenario.spec.ts",
+    "src/app/core/engine/services.spec.ts",
+    "src/app/core/engine/services.ts",
+    "src/app/core/interpretation/browser-ai.spec.ts",
+    "src/app/core/interpretation/browser-ai.ts",
+    "src/app/core/interpretation/dialogue-catalog.ts",
+    "src/app/core/interpretation/dialogue-matching.ts",
+    "src/app/core/interpretation/interpretation.spec.ts",
+    "src/app/core/interpretation/language-protocol.ts",
+    "src/app/core/interpretation/language.worker.ts",
+    "src/app/core/interpretation/local-language.ts",
+    "src/app/core/interpretation/opening-questions.ts",
+    "src/app/core/persistence/saves.spec.ts",
+    "src/app/core/presentation/terminal-playback.ts",
+    "src/app/core/qa/database.spec.ts",
+    "src/app/core/qa/database.ts",
+    "src/app/core/qa/privacy.ts",
+    "src/app/core/qa/telemetry.spec.ts",
+    "src/app/core/qa/telemetry.ts",
+    "src/app/core/scenario-records.ts",
+    "src/app/core/scenario-state.ts",
+    "src/app/core/service-records.ts",
+    "src/app/core/story-records.ts",
+    "src/app/core/story-state.ts",
+    "src/app/features/documents/bitmap-viewer.css",
+    "src/app/features/documents/bitmap-viewer.html",
+    "src/app/features/documents/bitmap-viewer.spec.ts",
+    "src/app/features/documents/bitmap-viewer.ts",
+    "src/app/features/documents/document.ts",
+    "src/app/features/files/file-browser.ts",
+    "src/app/features/qa/qa-panel.html",
+    "src/app/features/qa/qa-panel.spec.ts",
+    "src/app/features/qa/qa-panel.ts",
+    "src/app/features/terminal/terminal.html",
+    "src/app/features/terminal/terminal.spec.ts",
+    "src/app/features/terminal/terminal.ts",
+    "src/index.html",
+    "src/main.ts",
+    "tests/fresh-conversation-evaluation.json",
+    "tests/language-continuation.json",
+    "tests/language-evaluation.json",
+    "tests/language-holdout.json",
+    "tsconfig.app.json",
+    "tsconfig.json",
+    "tsconfig.spec.json",
+    "tsconfig.worker.json"
+  ],
+  "otherChangedDuringTask": [
+    "src/app/app.html",
+    "src/app/app.spec.ts",
+    "src/app/app.ts",
+    "src/styles.css"
+  ],
+  "otherAddedDuringTask": [
+    "src/app/app-welcome.spec.ts",
+    "src/app/features/welcome/welcome.css",
+    "src/app/features/welcome/welcome.html",
+    "src/app/features/welcome/welcome.ts"
+  ],
+  "missingBaselinePaths": [],
+  "changedBaselineHashes": [
+    {
+      "path": "docs/IMPLEMENTATION_04_TRANSCRIPT_CONTINUATION.md",
+      "beforeSha256": "0082758325944e66f8e392fe8fdac0589b8930a5b4048819e12adbfad981c50b",
+      "afterSha256": "7621d9cd01ee4b97f83895859061b3ddf2e1e50c84b9cb3a438bea6bbef7022a"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_04_TRANSCRIPT_SEVERANCE.md",
+      "beforeSha256": "a8937a0f1da36475cf7b1621467f5b787b901636c3e31dc6a0c1cb5147f98b20",
+      "afterSha256": "fb27acb27db92c69ebf8fc7c1f76d77a0040585b8cdafb1aa9d075fc06160d9f"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_05_CONVERSATION_INVENTORY.json",
+      "beforeSha256": "1666ae08b9e7c0b4915e70aeba1e05388b038d674fa2a3f74dec1e5271e53ef6",
+      "afterSha256": "b08608ad77332f4f16ce044b47c63c79cdea8b82c265e139985cd1bca0add011"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_05_EVALUATION_AFTER.json",
+      "beforeSha256": "88d79dea3b97587ef6753aac0c89546d37619aad1df0db7aac2a5012ec95db50",
+      "afterSha256": "0043fffc550da62e28a509d08ffd1c4296e9323215dda8909e3fbbfcb1667f9c"
+    },
+    {
+      "path": "scripts/evaluate-fresh-conversation.mjs",
+      "beforeSha256": "649ed475d2d9f7f3c42a0213fac41ff33c36811440a732535c9bd09406e1e2b2",
+      "afterSha256": "adde74a4e833af7912b4549b3c2a7dca9f39d167c4beeb546dcd1747618212ea"
+    },
+    {
+      "path": "src/app/core/engine/conversation.spec.ts",
+      "beforeSha256": "084189415e683821dd976ad20f76afa93b3fe4e7cad46a8c4dde368b1c168294",
+      "afterSha256": "5d41f0315ff5585568ab60c9e958cc0f9778246e65a16d9806ec18f4c5bd2ea1"
+    },
+    {
+      "path": "src/app/core/engine/fresh-conversation.ts",
+      "beforeSha256": "6631d580d07796a87013b6d4c3017267e6e08adf57db79adc6d16f417f03cc62",
+      "afterSha256": "a8683232d0c19248bb56faa9ca3a30b1371a98cab1c7d97de50b46af3670fb75"
+    },
+    {
+      "path": "src/app/core/engine/scenario.ts",
+      "beforeSha256": "3173c224f395d12842e9082f3c586d1dd92982aedd9e599776f858f7b28d8408",
+      "afterSha256": "796a3429fc224a05bb179422a24ec9fa6ca0fae67744825484c59de27e95b4db"
+    },
+    {
+      "path": "src/app/core/interpretation/fresh-topics.ts",
+      "beforeSha256": "4e4d53fdd79b12ce0a634f0db95fa19ab8ee63c7f3c6d4785d722e8b451b1a26",
+      "afterSha256": "ddc927d2ff4e8d2b73153ba8ec60d5185c3c88bf92832710893effb50c07e6c7"
+    },
+    {
+      "path": "docs/DIALOGUE_COVERAGE.json",
+      "beforeSha256": "771ca90573462f5556d959fabe6ca040656b4e01af404ffb9d852ca07076de7e",
+      "afterSha256": "55d7a72cd7a36d0112b6fe66b3ba2ad1d43226251c440278f98fd1f93e1af1d2"
+    },
+    {
+      "path": "docs/QUESTION_CATALOG.md",
+      "beforeSha256": "15502a67aba2b35a04ee9896d9a47e05ba3cb9dc86ddd15ea184f9d5ae59aabb",
+      "afterSha256": "f3e54dda4f9bb7f7384bcc95d22700133addbd00fb81b2a80139bdc7d67496ae"
+    },
+    {
+      "path": "docs/narrative/README.md",
+      "beforeSha256": "ce5b5f2dff8366ed3e069471d1f0ad344be291357c97085005e6e8edc89ee1dc",
+      "afterSha256": "0a77186a1fa265e80242d9a7c8f57565ab04886c63468d6abc972e52d5c1324c"
+    },
+    {
+      "path": "package.json",
+      "beforeSha256": "422f148d75163f15761666232b1fc86ca461c36392c19f8dcc7cb938a0ebf2bc",
+      "afterSha256": "478d590748efd78b91fc23f3e81ad678c44a47e4794aeff2b328bfa50094ef80"
+    },
+    {
+      "path": "public/language/v1/embeddings.json",
+      "beforeSha256": "f33299ecf15d9ccd110f581f88305b58596d47d9d43091a260020a1d996a32cd",
+      "afterSha256": "79e574802fde6b65c72b25411b43bd372f1fbb1ed634747776b862f0955d14de"
+    },
+    {
+      "path": "public/language/v1/manifest.json",
+      "beforeSha256": "0a6a85da5d726d14d3945a02caf960f9d3d03962a983db982b4e9eeb4ffb2e66",
+      "afterSha256": "e7c703cf0b2c033aa32290fa170392996c5bfd257ee3c18ec875d76ff219f377"
+    },
+    {
+      "path": "scripts/evaluate-language-model.mjs",
+      "beforeSha256": "ab53f12e24d984bb106e196dff7e7f46f1452f1dbe7e6f3a95b23c93a6312101",
+      "afterSha256": "efa2cbb36349ff51b5027e05086803382a53f073d64df958e9942aa0f0805b53"
+    },
+    {
+      "path": "scripts/validate-game.mjs",
+      "beforeSha256": "4aeddc1ddfadacf6977f00156e25265b7be6f061a07e28e8865598e2af74556e",
+      "afterSha256": "d956b91640a8913d5aaed0b9fbe38dd16db7b5158dce263c248813ce39cfa350"
+    },
+    {
+      "path": "src/app/app.html",
+      "beforeSha256": "02345d8296d08df18aae370bd4d6ed2256266f2be81331727e90d967aa08ee42",
+      "afterSha256": "9d03f663bbb2501a2429b5182740e672577df632ea0365fe35bb0735d3d50d4a"
+    },
+    {
+      "path": "src/app/app.spec.ts",
+      "beforeSha256": "7fc48c076f32d138b7cb11fb88305f539fc512c600212c513f6887b62323ed3b",
+      "afterSha256": "a15717abf80bf126ae34d05dc6f7838b044c6c245b6c45d5345d3086aaf093da"
+    },
+    {
+      "path": "src/app/app.ts",
+      "beforeSha256": "3303a2f9ea0b971d164c4c5ff9914fb1fef7c9934f98247b08a594e45a22c6ee",
+      "afterSha256": "b9b0a79f18be0dd225c134840f62f21103a5bc9e6d23f7cc67a956f168cc7b9f"
+    },
+    {
+      "path": "src/app/core/engine/corporate.spec.ts",
+      "beforeSha256": "60c10aea04c44e5ff7fccf2a456a1eee270e9064f8a4656259f800786cf6943c",
+      "afterSha256": "53ec19973618171a66d42c1eb245550c12c6d34dafd8e82f1ad8e2f2bb48a2c0"
+    },
+    {
+      "path": "src/app/core/engine/game.ts",
+      "beforeSha256": "e6c8a0fe341b595108bb6bde8746bb1d877eb71d4700ffe24d9140aa563149ea",
+      "afterSha256": "197db9d287ea0bbc59bcf0be9b463b08786ef8324c844a01622f680415979756"
+    },
+    {
+      "path": "src/app/core/interpretation/corporate-questions.ts",
+      "beforeSha256": "d651efa036fe687794a0cdaff74a8946949a0c80b6ef7c4245c8fe9c57903956",
+      "afterSha256": "93b8f201b71209f3ac1baf2d1b6f337c9db0869bbd18521699f8f1dae21c3c57"
+    },
+    {
+      "path": "src/app/core/interpretation/fallback.ts",
+      "beforeSha256": "3b9077c3f3d8d52a1142280b1a3ab68592560bb09a43c42453937e6a06b277db",
+      "afterSha256": "36ec6777e46015b273b61f3b6ac5d178bc5a23091f5d130ada211edb777533cc"
+    },
+    {
+      "path": "src/app/core/interpretation/providers.ts",
+      "beforeSha256": "945f9493be1c8d6a1cf8fcf2db5fc832fe73762f7daa03357b1ec78bf594bc88",
+      "afterSha256": "0a57f17ce15596cc89e6cd66490cb71f25bc2a77f3251573f77c7d19872f7087"
+    },
+    {
+      "path": "src/app/core/interpretation/semantic-catalog.ts",
+      "beforeSha256": "b5cf8b5a404904cf1cd78bf2b0e85694f5d517dc31ab2bd99b1c01a84a9adb4f",
+      "afterSha256": "6a4b0d33ef8c7d042875912ea9eea721f72bbfa1999456f4c1103f792e21166a"
+    },
+    {
+      "path": "src/app/core/interpretation/semantic.ts",
+      "beforeSha256": "547dfdec076a3ba42c0bde3551e9cb54ca6b06cdfc29f3f9a21f163f28fbfd67",
+      "afterSha256": "6d3a8f830c19ed0a6a9b41fee5e39e4a8c196e6a8356f7250df2947b4eba4aa4"
+    },
+    {
+      "path": "src/app/core/interpretation/service-questions.ts",
+      "beforeSha256": "2269a3663725086a0e1726cc0cb959511e5094fa42c43822beb14e8e5ee2ccb8",
+      "afterSha256": "ce95f72a9d3286a6b7c2671fe478799116b17feec20598a692779f27a858ebc3"
+    },
+    {
+      "path": "src/app/core/models.ts",
+      "beforeSha256": "799c360060a90777133d102a9e8280f350b3507b585ba7ab8fcc2a9d49053142",
+      "afterSha256": "7cd8833466fd22da4368ea3ab8960d8d0fc86961dcc1e385653961385c63809f"
+    },
+    {
+      "path": "src/app/core/persistence/saves.ts",
+      "beforeSha256": "804427a6c404f6603a1c2ba9884d78f55a34cf59573c6290df8ae5033b02d347",
+      "afterSha256": "c34efc09f2183b296d8885958e2b84fe4ae7e9fb5dfaa79841959130ee2da1f0"
+    },
+    {
+      "path": "src/app/core/qa/events.ts",
+      "beforeSha256": "b11370ccd589257c25431059673c7d8f2aa0debb8e44d91f680ba51876f85679",
+      "afterSha256": "3ba802bdfe83b4cf842154ed0c14cd72bd60648fb26beced6ddc783eb9bf1191"
+    },
+    {
+      "path": "src/app/core/qa/types.ts",
+      "beforeSha256": "208e05f2746a544302932c44e2374ff17e739ee70ea9f9c94709e17333d7bb24",
+      "afterSha256": "e7754a02170bd0f945fafe37aa7f0dd51f67bb2d8693ed3a8ac2fad2422addf2"
+    },
+    {
+      "path": "src/app/core/session.ts",
+      "beforeSha256": "956ddba7e3d0a5e15d349ec88326c4855b425a184f63075f3915b2a68072b1a5",
+      "afterSha256": "418ddb5d8d19a00498d060656a92b03bdad5eaf623149edc14b4b7aec33ea12e"
+    },
+    {
+      "path": "src/styles.css",
+      "beforeSha256": "506aca116a8f4dd800fff0f3f270c390831b7ea9ae242b5619d0b1f64c92a560",
+      "afterSha256": "4ac63819d5de5ccd8090b4929c5f097d7bd4cd09e1ac6481ffacc25d35a52cd8"
+    }
+  ]
+}

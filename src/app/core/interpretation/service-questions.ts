@@ -1,6 +1,6 @@
 import type { Interpretation, QueryContext } from '../models';
 import { SERVICES, serviceById, ServiceId, SERVICE_STATES, ServiceState } from '../service-records';
-import { SEMANTIC_CATALOG } from './semantic-catalog';
+import { BASE_SEMANTIC_CATALOG as SEMANTIC_CATALOG } from './semantic-catalog';
 
 export interface ServiceQuestion {
   kind: 'registry' | 'info' | 'log' | 'warnings' | 'states' | 'distinction' | 'missing' | 'invalid' | 'syntax' | 'deny';
@@ -15,7 +15,7 @@ export function serviceQuestion(input: string, context: QueryContext = {}): Serv
   const text = normalized(input);
   if (/^(?:help|dir|ls|cd|open|read|search|status|info|log|clear|cls|recover|diag)\b/.test(text)) return undefined;
   // Retain the authored early/revealed dialogue and its gates for existing story questions.
-  if (SEMANTIC_CATALOG.some(entry => entry.intent.startsWith('q_') && entry.examples.some(example => normalized(example) === text))) return undefined;
+  if (SEMANTIC_CATALOG.some(entry => entry.intent.startsWith('q_') && !entry.intent.startsWith('q_neconv_') && entry.examples.some(example => normalized(example) === text))) return undefined;
   if (/\b(?:difference|distinguish)\b/.test(text) && /(?:shutdown|closure|historical|archive)/.test(text) && /(?:current|live|status)/.test(text)) return { kind: 'distinction' };
   const state = (Object.keys(SERVICE_STATES) as ServiceState[]).find(value => new RegExp(`\\b${value.toLowerCase()}\\b`).test(text));
   if (state && /^(?:what (?:does|is)|explain|define)\b/.test(text) && /\b(?:mean|state|standby|retired)\b/.test(text) && !/\bservice\s+\d/.test(text)) return { kind: 'states', state };
@@ -31,11 +31,11 @@ export function serviceQuestion(input: string, context: QueryContext = {}): Serv
   const pronoun = /\b(?:it|its|that service|this service)\b/.test(text);
   const requested = code ?? (named.length === 1 ? named[0].id : recordsSystem ? '007' : undefined);
   const id = requested ?? (pronoun ? contextId : undefined);
-  const logs = /\b(?:logs?|events?|history)\b/.test(text) && /^(?:show|list|display|give|can|could|what|when)\b/.test(text);
+  const logs = /\b(?:logs?|events?|history|activity entries)\b/.test(text) && /^(?:show|list|display|give|can|could|what|when)\b/.test(text);
   const factual = /^(?:what|who|why|when|how|is|was|does|has|tell|show|which|and|can|could)\b/.test(text);
   const control = /^(?:(?:can|could|would) (?:you|i) |please )?(start|stop|restart|reroute|redirect|disable|enable|shut down|turn (?:it )?off)\b/.exec(text);
   if (control && (id || requested || /\bservice\b/.test(text))) return { kind: 'deny', id: serviceById(id ?? '')?.id, action: control[1] };
-  const shortFollowup = /^(?:what does (?:it|that service|this service) do|is it (?:working|running|active|stopped)|show me its logs)$/.test(text);
+  const shortFollowup = /^(?:what does (?:it|that service|this service) do|is it (?:working|running|active|stopped)|show me its logs|(?:can|could) (?:i|you) (?:see|show)(?: me)? its (?:activity entries|logs))$/.test(text);
   if (!requested && pronoun && !shortFollowup) return undefined;
   if (/^(?:show|show me) (?:service )?006$/.test(text)) return undefined;
   if (id === '006' && /\b(?:was|closed|decommissioned|turned off|stopped|shutdown|retired)\b/.test(text)) return undefined;
@@ -49,7 +49,7 @@ export function serviceQuestion(input: string, context: QueryContext = {}): Serv
   if (logs && (id || /\b(?:service|its|the) logs?\b/.test(text))) {
     if (/\b(?:yesterday|today|week|month|between|since|before|after|page|filter|last\s+\d|warnings?|errors?)\b/.test(text)) return { kind: 'syntax' };
     const remainder = SERVICES.reduce((rest, service) => rest.replace(service.name.toLowerCase(), ''), text)
-      .replace(/\b(?:show|me|list|display|give|can|could|you|please|what|is|are|the|service|its|that|this|logs?|events?|history|for|of|recent|available|\d{3})\b/g, '').trim();
+      .replace(/\b(?:show|me|list|display|give|can|could|you|i|see|activity|entries|please|what|is|are|the|service|its|that|this|logs?|events?|history|for|of|recent|available|\d{3})\b/g, '').trim();
     if (remainder) return { kind: 'syntax' };
     return id ? { kind: 'log', id: id as ServiceId } : { kind: 'missing' };
   }

@@ -10,6 +10,8 @@ import { availableOperations, OPERATION_DEFINITIONS, parseOperation } from './en
 import { QaTelemetry } from './qa/telemetry';
 import type { QaInteraction } from './qa/events';
 import type { QaSource } from './qa/types';
+import { SCENE_MESSAGES } from './scenario-records';
+import { rememberFactual } from './engine/mother-conversation';
 
 @Injectable({ providedIn: 'root' })
 export class Session implements OnDestroy {
@@ -28,6 +30,10 @@ export class Session implements OnDestroy {
   readonly files = computed(() => accessibleFiles(this.state()));
   readonly operations = computed(() => availableOperations(this.state()));
   readonly pending = computed(() => OPERATION_DEFINITIONS.find(o => o.id === this.state().pendingOperation));
+  readonly scenarioPreview = computed(()=>{
+    const choice=this.state().scenario?.pendingChoice;
+    return choice?SCENE_MESSAGES[choice==='severance'?'M13':'M12'][0]:'';
+  });
   readonly metrics = signal<InterpretationMetrics[]>([]);
   readonly developerMode = isDevMode();
   provider?: IntentInterpreter;
@@ -50,7 +56,7 @@ export class Session implements OnDestroy {
     try {
       const current = this.state();
       const [result] = await Promise.all([
-        parseCommand(input) || parseOperation(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.openFileIds.at(-1) ?? current.lastFileId, lastIntent: current.lastIntent }, this.provider ?? this.language.provider),
+        parseCommand(input) || parseOperation(input) ? undefined : interpretSafely(input, { lastTopic: current.lastTopic, lastFileId: current.openFileIds.at(-1) ?? current.lastFileId, lastIntent: current.lastIntent, scenarioVersion:current.scenario?.version, conversationSubject:current.conversation?.lastFactual?.subject }, this.provider ?? this.language.provider),
         pause,
       ]);
       if (request !== this.requestId) return;
@@ -67,7 +73,7 @@ export class Session implements OnDestroy {
       this.qa.interrupt(this.activeInteraction, this.state(), 'input-error'); throw error;
     } finally { if (request === this.requestId) { this.activeInteraction = undefined; this.playback.cancel(); } }
   }
-  openFile(id: string, source: QaSource = 'record-link'): void { const before = this.state(); const transition = inspectFile(before,id); this.qa.transition(before,transition, 'OPEN RECORD',source,id); this.state.set(transition.state); this.persist(); }
+  openFile(id: string, source: QaSource = 'record-link'): void { const before = this.state(); const transition = rememberFactual(before,inspectFile(before,id)); this.qa.transition(before,transition, 'OPEN RECORD',source,id); this.state.set(transition.state); this.persist(); }
   closeFile(id: string): void { this.state.update(state => ({ ...state, openFileIds: state.openFileIds.filter(file => file !== id) })); this.qa.record(this.state(),'file_closed',{fileId:id},'record-tab'); this.persist(); }
   focusFile(id: string): void { this.state.update(state => ({ ...state, openFileIds: [...state.openFileIds.filter(file => file !== id), id] })); this.qa.record(this.state(),'file_focused',{fileId:id},'record-tab'); this.persist(); }
   directory(path: string): void { const before = this.state(); const transition = runInput(before,`CD ${path}`); this.qa.transition(before,transition,'CHANGE DIRECTORY','file-browser'); this.state.set(transition.state); this.qa.record(transition.state,'directory_changed',{path:transition.state.currentDirectory,success:transition.output.code==='ok'},'file-browser'); this.persist(); }

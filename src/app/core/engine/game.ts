@@ -10,6 +10,13 @@ import { initialInvestigation, openingInteraction } from './investigation';
 import { findPublicPersonnel, publicPersonnelLines } from '../corporate-records';
 import { answerCorporate } from './corporate';
 import { answerService, serviceCommand, serviceDetails, serviceRegistry } from './services';
+import { initialScenario, caseOperating } from '../scenario-state';
+import { scenarioInteraction, scenarioFallback, scenarioHint } from './scenario';
+import { freshConversation, semanticCaseAnswer } from './fresh-conversation';
+import { freshTopic } from '../interpretation/fresh-topics';
+import { motherConversation, rememberFactual, explicitCaseRequest } from './mother-conversation';
+import { corporateQuestion } from '../interpretation/corporate-questions';
+import { motherLiteral } from '../interpretation/mother-routing';
 
 export const OPENING = [
   'MERIDIAN SYSTEMS', 'REMOTE ACCESS CLIENT 2.04', '', '06 NOV 2003', '',
@@ -19,6 +26,9 @@ export const output = (lines: string[], fileIds: string[] = [], code: TerminalOu
   lines, code, truth, links: fileIds.flatMap(id => { const file = fileById(id); return file ? [{ fileId: id, label: file.path }] : []; }),
 });
 export function newGame(now = new Date().toISOString(), sessionId = `MR-${Math.random().toString(16).slice(2, 6).toUpperCase()}`): GameState {
+  return { ...newLegacyGame(now,sessionId), schemaVersion:6, scenario:initialScenario() };
+}
+export function newLegacyGame(now = new Date().toISOString(), sessionId = `MR-${Math.random().toString(16).slice(2, 6).toUpperCase()}`): GameState {
   return {
     ...initialStory(), schemaVersion: 5, investigation: initialInvestigation(), sessionId, startedAt: now, currentDirectory: '/', discoveredEvidenceIds: [], unlockedCapabilities: ['CAP_ARCHIVE_RECOVERY'], viewedFileIds: [], openFileIds: [], completedActions: [],
     archive006Recovered: false, act01Complete: false, hasStarted: false,
@@ -45,6 +55,7 @@ export function inspectFile(state: GameState, fileId: string): Transition {
     openFileIds: [...state.openFileIds.filter(id => id !== file.id), file.id].slice(-5),
   // A saved monitor reading is historical evidence, never a fresh controller query.
   }, file.evidence.filter(id => id !== 'EV_SERVICE_ACTIVE'));
+  if (next.scenario && file.id === 'authorization') next.scenario = { ...next.scenario, historicClosureObserved:true };
   return {
     state: next,
     output: output([`OPENED: ${file.title}`, `Saved: ${file.modified}`], [], 'ok', 'record'), openFileId: file.id,
@@ -63,7 +74,7 @@ function search(state: GameState, term: string): TerminalOutput {
   if (!term.trim()) return output(['Enter a word after SEARCH.', 'Example: SEARCH company'], [], 'error');
   const needle = term.toUpperCase();
   const matches = accessibleFiles(state).filter(file => `${file.path} ${file.title} ${file.body}`.toUpperCase().includes(needle));
-  const excerpts = matches.map(file => `${file.title}\n  ${file.body.split('\n').find(line => line.toUpperCase().includes(needle))?.trim() ?? file.title}`);
+  const excerpts = matches.map(file => `${file.title}\n  ${file.body.split('\n').find(line => line.toUpperCase().includes(needle))?.trim() ?? file.title}${file.bitmap ? '\n  TYPE: BITMAP / ' + file.bitmap.category.toUpperCase() + (file.bitmap.artwork === 'placeholder' ? ' / PLACEHOLDER' : '') : ''}`);
   const people = findPublicPersonnel(term);
   return output([`SEARCH: ${term} / FILES FOUND: ${matches.length}`, ...excerpts, ...(people.length ? [`PUBLIC WORK PROFILES: ${people.length}`, ...publicPersonnelLines(people)] : [])], matches.map(file => file.id));
 }
@@ -205,30 +216,54 @@ function resolveClarification(state: GameState, input: string): Transition | und
 export function runInput(state: GameState, raw: string, interpretation?: Interpretation): Transition {
   const input = raw.trim().slice(0, 1000);
   if (!input) return { state, output: output([]) };
-  const command = parseCommand(input);
+  const literalTopic=state.scenario?motherLiteral(input,{...state,conversationSubject:state.conversation?.lastFactual?.subject}):undefined;
+  // A supplied ordinary LIST sentence is not a directory path. Path-shaped LIST
+  // requests and every consequential command keep the existing parser.
+  const command = literalTopic?.domain==='world'&&/^list [a-z]/i.test(input)?undefined:parseCommand(input);
   const operation = parseOperation(input);
-  const service = !command && !operation ? answerService(state, input, interpretation) : undefined;
-  const corporate = !service && !command && !operation ? answerCorporate(state, input, interpretation) : undefined;
-  const clarification = !corporate && !command && !operation ? resolveClarification(state, input) : undefined;
-  const encounter = service || corporate || clarification ? undefined : openingInteraction(state, input, !!command || !!operation);
+  const preservedCorporate=state.scenario&&!command&&!operation?corporateQuestion(input,state):undefined;
+  const preciseCorporate=preservedCorporate&&(preservedCorporate.kind==='unavailable'||preservedCorporate.kind==='personnel'&&!!preservedCorporate.people?.length||preservedCorporate.kind==='company'&&(preservedCorporate.topic!=='unavailable'||/\b(?:street|postal|zip|address|coordinates|telephone|phone|email|website|exact|unlisted)\b/i.test(input)));
+  const authoredSubject=literalTopic&&(literalTopic.domain!=='world'||preservedCorporate?.kind==='unavailable'&&!preservedCorporate.people?.length);
+  const richer=preciseCorporate&&!authoredSubject&&!/^(?:why|how so|tell me more|explain that|what does that mean)[?!.]*$/i.test(input)?answerCorporate(state,input,interpretation):undefined;
+  const directService=state.scenario&&!command&&!operation&&!explicitCaseRequest(state,input)?state.serviceClarification&&/^(?:service )?00[1-8]$/i.test(input)?serviceCommand(state,state.serviceClarification,[input.slice(-3)]):answerService(state,input,interpretation):undefined;
+  const retainedRestart=state.scenario&&!command&&!operation&&/\b(?:restart|restarted|reboot|boot back up)\b/i.test(input)&&(/\b006\b/.test(input)||state.lastTopic==='service-006')?freshConversation(state,input):undefined;
+  const authored=state.scenario&&!command&&!operation&&!richer&&!directService&&!retainedRestart?motherConversation(state,input,interpretation??classify(input,{...state,scenarioVersion:'1.0',conversationSubject:state.conversation?.lastFactual?.subject})):undefined;
+  const ordinary=!authored&&!richer&&!directService&&state.scenario&&!command&&!operation&&freshTopic(input,state)?freshConversation(state,input):undefined;
+  const revised = !authored&&!richer&&!directService&&!ordinary && state.scenario && !command ? scenarioInteraction(state,input) : undefined;
+  // The optional recognizer cannot supply an executable case request or protected file on the player's behalf.
+  const unhandled=!richer&&!directService&&!retainedRestart&&!authored&&!ordinary&&!revised;
+  const service = unhandled && !command && !operation ? state.scenario&&state.serviceClarification&&/^(?:service )?00[1-8]$/i.test(input)?serviceCommand(state,state.serviceClarification,[input.slice(-3)]):answerService(state, input, interpretation) : undefined;
+  const corporate = unhandled && !service && !command && !operation ? answerCorporate(state, input, interpretation) : undefined;
+  const clarification = state.scenario ? unhandled&&!service&&!command&&!operation&&(state.pendingClarification||interpretation?.needsClarification)?freshConversation(state,input,interpretation):undefined : !corporate && !command && !operation ? resolveClarification(state, input) : undefined;
+  const encounter = state.scenario || service || corporate || clarification ? undefined : openingInteraction(state, input, !!command || !!operation);
   let result: Transition;
   const done = (out: TerminalOutput, next: GameState = state): Transition => ({ state: next, output: out });
-  if (clarification) result = clarification;
+  if (richer) result = richer;
+  else if (directService) result = directService;
+  else if (retainedRestart) result = retainedRestart;
+  else if (authored) result = authored;
+  else if (ordinary) result = ordinary;
+  else if (revised) result = revised;
+  else if (clarification) result = clarification;
   else if (service) result = service;
   else if (corporate) result = corporate;
   else if (encounter) result = encounter;
-  else if (operation) result = executeOperation(state, operation);
+  else if (operation) result = state.scenario ? {state, output:output(['PROTOTYPE OPERATION UNAVAILABLE. R-02 has no clinical equipment authority.'],[],'denied')} : executeOperation(state, operation);
   else if (command?.error) result = done(output([command.error], [], 'error'));
   else if (command) {
     const argument = command.args.join(' ');
     switch (command.name) {
-      case 'HELP': result = done(output(argument.toUpperCase() === 'RECOVER'
+      case 'HELP':
+        if(state.scenario&&argument.toUpperCase()!=='RECOVER'){
+          result=done(output(['TERMINAL HELP','Questions can be written in ordinary words.','STATUS / INFO <id> / LOG <id> — eight registered services (001–008).','DIR / LS [path]; CD [path] / CD ..; OPEN / READ <title, path or record ID>.','SEARCH terms; DIAG; RECOVER BACKUP; CLEAR / CLS.','INFO or LOG without an identifier asks which service. Reply with its ID.','Up/Down recalls input. Esc shows the full reply.','APPLICATION / LOCAL SAVES: Progress is saved in this browser when storage is available. Reloading never confirms a pending operation. See CLIENT SETTINGS.',...(state.scenario.events.includes('closure-compared')?['PERMITTED REVIEW ACTIONS',...scenarioHint(state.scenario)]:[])] ,['readme']));break;
+        }
+        result = done(output(argument.toUpperCase() === 'RECOVER'
         ? ['BACKUP READER', 'Reads a saved copy when the original attachment is unavailable.', 'It does not change the original or control running services.']
         : ['TERMINAL HELP', '', 'Questions can be written in ordinary words.', 'Examples: What is Meridian Systems? / What does Service 002 do?', '', 'HELP                   Show these instructions', 'STATUS                 View all registered services', 'INFO <id>              Service details (001–008)', 'LOG <id>               Retained service events (001–008)', 'DIR / LS [path]        List folders and files', 'CD [path]              Change folder; CD .. goes back', 'OPEN / READ filename   Read a named file', 'SEARCH terms           Search permitted records and work profiles', 'DIAG                   Read-only connection diagnostics', 'RECOVER BACKUP         Read a listed local backup', 'CLEAR / CLS            Clear terminal text', 'EXPLAIN                Explain an active verification', 'DEFER / RESUME INVESTIGATION', '', 'INFO and LOG accept one identifier; no date filters or pagination.', 'Up/Down recalls earlier input. Esc shows a full reply.'], ['readme'])); break;
       case 'DIR': {
         const directory = resolvePath(argument || '.', state.currentDirectory);
         if (!DIRECTORIES.includes(directory as typeof DIRECTORIES[number])) { result = done(output([`FOLDER NOT FOUND: ${directory}`], [], 'error')); break; }
-        const dirs = DIRECTORIES.filter(path => path !== '/' && directory === '/' && accessibleFiles(state).some(f => f.path.startsWith(path + '/')));
+        const dirs = DIRECTORIES.filter(path => path !== '/' && (path.slice(0,path.lastIndexOf('/'))||'/')===directory && accessibleFiles(state).some(f => f.path.startsWith(path + '/')));
         const files = accessibleFiles(state).filter(file => file.path.slice(0, file.path.lastIndexOf('/')) === directory);
         result = done(output([`FOLDER: ${directory}`, ...dirs.map(path => ` <FOLDER> ${path.slice(1)}`), ...files.map(file => ` ${file.modified}  ${file.title}`)], files.map(file => file.id))); break;
       }
@@ -253,6 +288,11 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
       case 'RECOVER': result = /^(?:ARCHIVE\s+)?(?:006|BACKUP|RECEIPT|HANDOVER RECEIPT)$/i.test(argument) ? recover(state) : done(output(['No local backup matched that name.'], [], 'error')); break;
       case 'DIAG': result = done(output(['R-02 / RECORDS CONNECTION', 'Monitor: responding', 'Original records: read only', 'Control access: unavailable'], ['readme'])); break;
     }
+  } else if (state.scenario) {
+    // Only raw ordinary requests can open records; model-supplied IDs never release a projection.
+    const literal = classify(input, {...state,scenarioVersion:'1.0'});
+    const query=interpretation??literal;
+    result = literal.intent === 'request_search' ? done(search(state,literal.searchTerm??'')) : literal.intent === 'request_file' && literal.fileId ? inspectFile(state,literal.fileId) : freshConversation(state,input,literal) ?? freshConversation(state,input,query) ?? semanticCaseAnswer(state,input,query) ?? scenarioFallback(state,input);
   } else {
     const query = interpretation ?? classify(input, state);
     const question = /[?]|\b(why|what|where|who|when|how|is|was|did|can|could|show|find|explain|tell)\b/i.test(input);
@@ -260,5 +300,7 @@ export function runInput(state: GameState, raw: string, interpretation?: Interpr
     result = legacyResponseTrace(state, query, result);
   }
   const history = result.clear ? [] : result.state.terminalHistory;
+  result=rememberFactual(state,result);
+  if(result.state.scenario)result.state={...result.state,operating:caseOperating(result.state.scenario,result.state.operating),act01Complete:result.state.scenario.events.includes('closure-compared')};
   return { ...result, state: { ...result.state, terminalHistory: [...history, { input, ...result.output }].slice(-80) } };
 }

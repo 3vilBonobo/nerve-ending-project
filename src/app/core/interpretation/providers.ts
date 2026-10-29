@@ -2,12 +2,14 @@ import { FILES } from '../content';
 import { INTENTS, Interpretation, IntentInterpreter, QueryContext } from '../models';
 import { classify } from './fallback';
 import { DIALOGUE_IDS } from './dialogue-catalog';
+import { FRESH_INTENTS } from './fresh-topics';
+import { MOTHER_INTENTS } from './mother-routing';
 export { BrowserAIInterpreter } from './browser-ai';
 
 export function validateInterpretation(value: unknown, provider: Interpretation['provider']): Interpretation | undefined {
   if (!value || typeof value !== 'object') return undefined;
   const candidate = value as Record<string, unknown>;
-  if ((!INTENTS.includes(candidate['intent'] as typeof INTENTS[number]) && !DIALOGUE_IDS.has(String(candidate['intent']))) || typeof candidate['needsClarification'] !== 'boolean') return undefined;
+  if ((!INTENTS.includes(candidate['intent'] as typeof INTENTS[number]) && !DIALOGUE_IDS.has(String(candidate['intent'])) && !FRESH_INTENTS.has(String(candidate['intent'])) && !MOTHER_INTENTS.has(String(candidate['intent'])) && !/^q_case_[a-z_]+$/.test(String(candidate['intent']))) || typeof candidate['needsClarification'] !== 'boolean') return undefined;
   if (candidate['entityId'] !== undefined && !/^service-00[1-8]$/.test(String(candidate['entityId']))) return undefined;
   if (candidate['fileId'] !== undefined && !FILES.some(file => file.id === candidate['fileId'] && !file.locked)) return undefined;
   const intent = candidate['intent'] as Interpretation['intent'];
@@ -20,7 +22,7 @@ export function validateInterpretation(value: unknown, provider: Interpretation[
     fileId: candidate['fileId'] as string | undefined,
     searchTerm: typeof candidate['searchTerm'] === 'string' ? candidate['searchTerm'].slice(0, 150) : undefined,
     ...(['identity','headquarters','server','local-save','biological','live-monitor','kell'].includes(String(candidate['subject'])) ? { subject: candidate['subject'] as Interpretation['subject'] } : {}),
-    ...(Array.isArray(candidate['choices']) ? { choices: candidate['choices'].filter(c => c && (INTENTS.includes(c.intent) || DIALOGUE_IDS.has(c.intent)) && typeof c.label === 'string').slice(0, 2).map(c => ({ intent: c.intent, label: c.label.slice(0, 150) })) } : {}),
+    ...(Array.isArray(candidate['choices']) ? { choices: candidate['choices'].filter(c => c && (INTENTS.includes(c.intent) || DIALOGUE_IDS.has(c.intent) || FRESH_INTENTS.has(c.intent) || MOTHER_INTENTS.has(c.intent)) && typeof c.label === 'string').slice(0, 2).map(c => ({ intent: c.intent, label: c.label.slice(0, 150) })) } : {}),
     ...(typeof candidate['clarification'] === 'string' ? { clarification: candidate['clarification'].slice(0, 180) } : {}),
     ...(typeof candidate['confidence'] === 'number' && Number.isFinite(candidate['confidence']) && candidate['confidence'] >= 0 && candidate['confidence'] <= 1 ? { confidence: candidate['confidence'] } : {}),
   };

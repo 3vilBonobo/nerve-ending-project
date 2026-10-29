@@ -9,7 +9,7 @@ import { decodeSave } from '../persistence/saves';
 import { ENDINGS, KNOWLEDGE } from '../story-state';
 import { actOf, availableOperations, canRead, endingText, executeOperation, OPERATION_DEFINITIONS, parseOperation } from './continuation';
 import { answerDialogue, voiceOf } from './dialogue';
-import { accessibleFiles, inspectFile, newGame, runInput } from './game';
+import { accessibleFiles, inspectFile, newLegacyGame as newGame, runInput } from './game';
 import { GOLDEN_PATHS, INVESTIGATION_PATH, OPENING_PATH } from './playthroughs';
 
 const play = (steps: readonly string[], initial = newGame()): GameState => steps.reduce((s, input) => {

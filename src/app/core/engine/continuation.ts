@@ -1,10 +1,15 @@
 import { fileById } from '../content';
 import type { ArchiveFile, GameState, TerminalOutput, Transition } from '../models';
 import { CLINICAL_SNAPSHOT, Knowledge, OperationId, Permission } from '../story-state';
+import { scenarioCanRead, caseMilestone } from '../scenario-state';
+import { scenarioEnding, scenarioHint } from './scenario';
 
 export const knows = (s: GameState, k: Knowledge): boolean => s.knowledge.includes(k);
 export const permits = (s: GameState, p: Permission): boolean => s.permissions.includes(p);
 export function canRead(s: GameState, f: ArchiveFile): boolean {
+  if (s.scenario && f.legacyOnly || !s.scenario && f.scenarioScope) return false;
+  if (f.scenarioScope) return !!s.scenario && scenarioCanRead(s.scenario, f.scenarioScope, f.id);
+  if (s.scenario && f.access) return false;
   return (!(f.locked || f.requiresBackup) || s.archive006Recovered) && (!f.access || permits(s, f.access)) && (!f.requiresKnowledge || knows(s, f.requiresKnowledge));
 }
 export function learn(s: GameState, knowledge: readonly Knowledge[] = [], permissions: readonly Permission[] = []): GameState {
@@ -36,7 +41,7 @@ export const OPERATION_DEFINITIONS: readonly Operation[] = [
   { id: 'contain-site', label: 'CONTAIN SITE', available: s => permits(s, 'bridgeOperationsAccess') && knows(s, 'annaAliveKnown'), requires: 'Review routes and establish the patient\'s continued support.', warning: 'FINAL: permanently isolate the known external relay and continue preservation. Anna remains alive. Her neurological correction cycles continue. This does not resolve her distress.' },
   { id: 'controlled-release', label: 'CONTROLLED RELEASE', available: s => permits(s, 'clinicalReleaseAuthorization') && s.operating.releaseProcedureStarted && knows(s, 'externalRiskKnown') && s.operating.vendorCredentialsRevoked && s.operating.siteRelayIsolated && s.operating.isolationVerified, requires: 'Understand external risk, revoke the vendor credentials, isolate and verify the relay, then prepare release.', warning: 'FINAL: end Anna Voss\'s dependent biological support with the known recovery route blocked. She will die. Legitimate vendor support remains disrupted; replacement arrangements are outside this client\'s control. Undocumented routes cannot be certified.' },
 ];
-export const availableOperations = (s: GameState): readonly Operation[] => s.operating.endingId ? [] : OPERATION_DEFINITIONS.filter(o => o.available(s));
+export const availableOperations = (s: GameState): readonly Operation[] => s.scenario || s.operating.endingId ? [] : OPERATION_DEFINITIONS.filter(o => o.available(s));
 
 /** Anchored operational grammar. Questions and semantic classifications cannot enter the reducer. */
 export function parseOperation(raw: string): OperationId | 'confirm' | 'cancel' | undefined {
@@ -120,6 +125,7 @@ export function executeOperation(state: GameState, id: OperationId | 'confirm' |
 }
 function finishSupport(s: GameState): void { s.operating.annaBiologicallyAlive = false; s.operating.clinicalSupportActive = false; s.operating.service006Running = false; }
 export function endingText(s: GameState): string[] {
+  if (s.scenario) return scenarioEnding(s.scenario);
   switch (s.operating.endingId) {
     case 'MERCY_PROPAGATION': return ['MERCY / PROPAGATION', 'Preservation ended. Anna Voss: biological activity ceased.', s.operating.outboundPackageTransmitted ? 'Recovery package: delivered to clinic service depot 2. Receipt confirmed.' : 'Recovery package: queued locally. Delivery attempted; no external receipt. The known route has not been permanently neutralized.', 'A saved control profile is not Anna.', s.operating.outboundPackageTransmitted ? 'The depot has accepted it as a service item. Installation is unverified.' : 'The queue still names a destination.', 'The night desk is no longer being called.'];
     case 'CONTAINMENT_CONTINUATION': return ['CONTAINMENT / CONTINUATION', 'Known outbound relay permanently isolated. No recovery package delivered.', 'Anna Voss remains biologically alive.', `${knows(s, 'motherIdentified') ? 'MOTHER' : 'CONTROLLER'}: Patient preservation successful.`, `Correction cycles at the last observation: ${CLINICAL_SNAPSHOT.correctionCycles}.`, 'The next correction remains authorized.'];
@@ -128,6 +134,7 @@ export function endingText(s: GameState): string[] {
   }
 }
 export function actOf(s: GameState): number {
+  if (s.scenario) return Math.min(7, caseMilestone(s.scenario) + 1);
   if (s.operating.endingId) return 7;
   if (knows(s, 'releaseConsequencesKnown') && knows(s, 'externalRiskKnown')) return 6;
   if (knows(s, 'recoveryHandoffKnown')) return 5;
@@ -137,6 +144,7 @@ export function actOf(s: GameState): number {
   return 1;
 }
 export function nextHint(s: GameState): { lines: string[]; files: string[] } {
+  if (s.scenario) return {lines:scenarioHint(s.scenario),files:[]};
   if (s.operating.endingId) return { lines: ['The intervention is complete. Records remain available; a new session permits another choice.'], files: [] };
   if (s.investigation.stage === 'closure') return { lines: ['Compare the live service reading with the office closure. Ask about the discrepancy when you have a question.', 'During a review, EXPLAIN gives procedural help; DEFER preserves it while you investigate.'], files: ['register', 'authorization', 'ledger'] };
   if (s.investigation.stage === 'provenance') return { lines: ['The confirmation source must be corroborated. Transfer acceptance and authority to end a hold are different claims.'], files: ['fragment', 'bridge'] };

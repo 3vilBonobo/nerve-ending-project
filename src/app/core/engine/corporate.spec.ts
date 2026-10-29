@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CORPORATE_FILES, findPublicPersonnel, PUBLIC_PERSONNEL } from '../corporate-records';
-import { accessibleFiles, inspectFile, newGame, OPENING, runInput } from './game';
+import { accessibleFiles, inspectFile, newGame, newLegacyGame, OPENING, runInput } from './game';
 import { classify } from '../interpretation/fallback';
 import { directInterpretation, selectMeaning } from '../interpretation/semantic';
 import { decodeSave } from '../persistence/saves';
@@ -137,7 +137,7 @@ describe('Implementation 01 corporate exploration', () => {
     ready.ui = { crtEnabled: false, fontScale: 1.2, terminalMode: 'restored' };
     const t = runInput(ready, 'Who founded Meridian?');
     expect(decodeSave(JSON.stringify(t.state)).state.ui).toEqual(ready.ui);
-    const clinical = INVESTIGATION_PATH.reduce((s, input) => runInput(s, input).state, newGame());
+    const clinical = INVESTIGATION_PATH.reduce((s, input) => runInput(s, input).state, newLegacyGame());
     const pending = runInput(clinical, 'RELEASE PATIENT').state;
     expect(pending.pendingOperation).toBe('release-patient');
     expect(story(decodeSave(JSON.stringify(runInput(pending, 'Who is Leah Morgan?').state)).state)).toEqual(story(pending));
@@ -151,7 +151,7 @@ describe('Implementation 01 corporate exploration', () => {
     const s = runInput(newGame(), 'What is Meridian Systems?').state;
     expect(runInput(s, 'Who are you?').output.lines.join(' ')).toContain('R-02');
     expect(runInput(s, 'Where is your server located?').output.lines.join(' ')).toContain('physical server location');
-    expect(runInput(s, 'Is Anna alive?').output.lines.join(' ')).toContain('No current');
+    expect(runInput(s, 'Is Anna alive?').output.lines.join(' ')).toContain('not available through this work-records connection');
     expect(classify('What is the price of a new phone?').intent).toBe('unknown');
   });
 });

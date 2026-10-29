@@ -7,34 +7,10 @@
   }
 
   @if (session.storageWarning()) { <div class="storage-notice" role="status">{{ session.storageWarning() }}</div> }
+  @if (!session.state().scenario) { <div class="storage-notice">LEGACY PROTOTYPE SESSION — original progression retained. <button class="text-button" (click)="restart()">START V1.0 STORY</button></div> }
 
   @if (stage() === 'setup') {
-    <section class="setup-screen" aria-labelledby="setup-title">
-      <div class="setup-dialog">
-        <header class="window-titlebar"><span class="window-title"><span class="terminal-glyph" aria-hidden="true">&gt;_</span> Meridian Remote Access</span></header>
-        <div class="setup-body">
-          <div class="setup-identity"><span class="meridian-mark large" aria-hidden="true"></span><div><h1 id="setup-title">MERIDIAN SYSTEMS</h1><p>Remote Information Services</p></div></div>
-          <p class="setup-description">Open the company’s old records.<br>Read files and ask questions.</p>
-          <p class="setup-note">Progress is saved in this browser.</p>
-          <div class="setup-language" aria-label="Question model status">
-            @let modelState = session.language.state();
-            @switch (modelState.phase) {
-              @case ('off') { <span>Question model: off</span><button class="text-button" (click)="session.language.enable()">ENABLE / 42 MB</button> }
-              @case ('loading') { <label for="start-model-progress">Question model: {{ modelPercent() }}%</label><progress id="start-model-progress" max="100" [value]="modelPercent()"></progress><span>{{ (modelState.loaded / 1000000).toFixed(1) }} / {{ (modelState.total / 1000000).toFixed(1) }} MB — you can start playing.</span><button class="text-button" (click)="session.language.disable()">CANCEL</button> }
-              @case ('initializing') { <span role="status">Question model: files loaded 100%. {{ modelState.detail }}</span><progress aria-label="Preparing question model"></progress><button class="text-button" (click)="session.language.disable()">CANCEL</button> }
-              @case ('ready') { <span role="status">Question model: 100% / READY</span> }
-              @case ('error') { <span role="status">Question model could not load. Basic questions are ready.</span><button class="text-button" (click)="session.language.enable()">TRY AGAIN</button> }
-              @case ('unsupported') { <span>Basic questions: ready. Optional model unavailable in this browser.</span> }
-            }
-          </div>
-        </div>
-        <footer class="setup-actions">
-          <button class="text-button" (click)="settings.showModal()">Settings...</button>
-          <button class="primary-button start-button" (click)="start()">{{ session.state().hasStarted ? 'Resume session' : 'Start session' }}</button>
-        </footer>
-      </div>
-      <p class="setup-caption">Nerve Ending / Revision 1.1</p>
-    </section>
+    <ne-welcome [returning]="session.state().hasStarted" (entered)="start()" (settingsRequested)="settings.showModal()" />
   }
 
   @if (stage() === 'connecting') {
@@ -47,7 +23,7 @@
   }
 
   @if (stage() === 'desktop') {
-    <div class="desktop-navigation"><span>MERIDIAN REMOTE DESKTOP <span class="muted">/ COMPANY RECORDS</span></span><span class="muted">2003-11-06 <span class="clock">{{ clock() }}</span></span></div>
+    <div class="desktop-navigation"><span>MERIDIAN REMOTE DESKTOP <span class="muted">/ COMPANY RECORDS</span></span><span class="muted clock">{{ displayedClock() }}</span></div>
     <nav class="mobile-tabs" aria-label="Workspace view"><button [class.selected]="mobileTab() === 'terminal'" (click)="terminal()">TERMINAL</button><button [class.selected]="mobileTab() === 'files'" (click)="folder(session.state().currentDirectory)">FILES</button><button [class.selected]="mobileTab() === 'documents'" (click)="mobileTab.set('documents')">RECORDS ({{ documents().length }})</button></nav>
     <section class="desktop" [class.terminal-maximized]="session.state().ui.terminalMode === 'maximized'" [class.tab-terminal]="mobileTab() === 'terminal'" [class.tab-files]="mobileTab() === 'files'" [class.tab-documents]="mobileTab() === 'documents'" aria-label="Remote desktop">
       <div class="desktop-watermark" aria-hidden="true"><span class="meridian-mark"></span><div>MERIDIAN<br><small>RETAINED INFORMATION SYSTEMS</small></div></div>
@@ -61,13 +37,13 @@
       }
       <div class="documents-area">
         @for (file of documents(); track file.id; let index = $index) {
-          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="session.closeFile(file.id)" (finished)="terminal()" />
+          <ne-document class="document-window" [attr.data-document]="file.id" [class.front-document]="index === documents().length - 1" [style.--window-index]="index" [style.z-index]="10 + index" [file]="file" (pointerdown)="index !== documents().length - 1 && session.focusFile(file.id)" (focusin)="index !== documents().length - 1 && session.focusFile(file.id)" (closed)="closeRecord(file.id)" (finished)="terminal()" />
         }
         @if (!documents().length) { <div class="empty-documents"><span class="page-icon" aria-hidden="true"></span><p>NO RECORD OPEN</p><small>Use OPEN / READ or select a file in the file browser.</small></div> }
         @if (documents().length > 1) { <nav class="document-tabs" aria-label="Open records">@for (file of documents(); track file.id) { <button (click)="session.focusFile(file.id)" [class.selected]="file.id === documents().at(-1)?.id">{{ file.title }}</button> }</nav> }
       </div>
     </section>
-    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILES</button><span class="taskbar-spacer"></span>@if (session.state().act01Complete) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
+    <div class="taskbar"><button [class.active-task]="session.state().ui.terminalMode !== 'minimized'" (click)="terminal()">&gt;_ TERMINAL</button><button [class.active-task]="explorer()" (click)="folder(session.state().currentDirectory)"><span class="folder-icon" aria-hidden="true"></span> FILES</button><span class="taskbar-spacer"></span>@if (session.state().act01Complete || session.state().scenario?.outcome) { <button (click)="showEnding.set(true)">SESSION REPORT</button> }<span class="taskbar-label">{{ documents().length }} RECORD(S) OPEN</span></div>
   }
 
   @if (stage() !== 'setup') { <footer class="session-strip"><span><i class="status-light"></i> {{ stage() === 'desktop' ? 'SESSION ' + session.state().sessionId : 'CLIENT READY' }}</span><span class="strip-right">{{ session.qa.enabled() ? 'QA RECORDING / LOCAL · ' : '' }}{{ online() ? 'EXTERNAL / LIMITED' : 'BROWSER OFFLINE' }}</span></footer> }
@@ -84,12 +60,15 @@
 <dialog #settings class="settings-dialog" [style.--font-scale]="session.state().ui.fontScale">
   <header class="window-titlebar"><h2 class="window-title">CLIENT SETTINGS</h2><div class="window-controls"><button (click)="settings.close()" aria-label="Close settings">×</button></div></header>
   <div class="settings-body">
+    <h3>LOCAL SAVES</h3>
+    <p>Progress is saved in this browser when storage is available. Reloading never confirms a pending operation.</p>
     <ne-qa-panel />
     <h3>DISPLAY</h3>
     <label class="check-label"><input #crtToggle type="checkbox" [checked]="session.state().ui.crtEnabled" (change)="session.display(crtToggle.checked, session.state().ui.fontScale)"> CRT scanlines & phosphor glow</label>
     <p class="muted">Motion effects follow your device’s reduced-motion preference.</p>
     <label class="range-label" for="font-scale">TEXT SIZE <span>{{ (session.state().ui.fontScale * 100).toFixed(0) }}%</span></label><input #fontScale id="font-scale" type="range" min="0.9" max="1.25" step="0.05" [value]="session.state().ui.fontScale" (input)="session.display(session.state().ui.crtEnabled, +fontScale.value)">
     <h3>QUESTIONS</h3>
+
     <p>Basic questions and commands are always available.</p>
     <section class="language-settings" aria-label="Local question understanding">
       @let language = session.language.state();

@@ -18,7 +18,7 @@ export interface Interpretation {
   provider: 'fallback' | 'browser-ai' | 'ollama';
   method?: 'deterministic' | 'semantic' | 'ollama';
 }
-export interface QueryContext { lastTopic?: string; lastFileId?: string; lastIntent?: QueryIntent }
+export interface QueryContext { lastTopic?: string; lastFileId?: string; lastIntent?: QueryIntent; scenarioVersion?: '1.0'; conversationSubject?:string }
 export interface IntentInterpreter {
   readonly id: string;
   isAvailable(): Promise<boolean>;
@@ -40,6 +40,22 @@ export interface ArchiveFile {
   readonly reveals?: readonly Knowledge[];
   readonly author?: string;
   readonly provenance?: string;
+  /** Optional permitted media; existing text bodies and access rules retain their meaning. */
+  readonly bitmap?: ArchiveBitmap;
+  readonly legacyOnly?: boolean;
+  readonly scenarioScope?: import('./scenario-state').ScenarioScope;
+}
+export interface ArchiveBitmap {
+  readonly category: 'personnel' | 'surveillance' | 'clinical' | 'diagram';
+  readonly asset: string;
+  readonly width: number;
+  readonly height: number;
+  readonly description: string;
+  readonly alt: string;
+  readonly artwork: 'placeholder' | 'approved';
+  readonly department?: string;
+  readonly archivedAt?: string;
+  readonly sourceId?: string;
 }
 export interface FileLink { fileId: string; label: string }
 export interface TerminalOutput {
@@ -50,9 +66,12 @@ export interface TerminalOutput {
 }
 export interface TerminalEntry extends TerminalOutput { input: string }
 export interface GameState extends StoryState {
-  schemaVersion: 5;
+  schemaVersion: 5 | 6;
+  scenario?: import('./scenario-state').ScenarioState;
   investigation: OpeningInvestigation;
   pendingClarification?: { input: string; interpretation: Interpretation };
+  serviceClarification?: 'INFO' | 'LOG';
+  conversation?: import('./engine/mother-conversation').ConversationMemory;
   sessionId: string;
   startedAt: string;
   currentDirectory: string;

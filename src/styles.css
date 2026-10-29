@@ -46,7 +46,7 @@ small { font-size: .85em; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 .app-surface { min-height: 100dvh; display: flex; flex-direction: column; font-size: calc(20px * var(--font-scale, 1)); position: relative; isolation: isolate; }
 .crt:after { content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, #00000018 3px, #00000018 4px); opacity: .3; }
-.crt .scrollback, .crt .document-content, .crt .command-row {
+.crt .scrollback, .crt .document-content:not(.bitmap-content), .crt .command-row {
   text-shadow: 0 0 2px #b2c98999, 0 0 5px #b2c98926;
   filter: blur(.15px);
 }
@@ -357,3 +357,8 @@ button:disabled { cursor: default; opacity: .5; }
   *, *:before, *:after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .crt:after { opacity: .15; }
 }
+.scenario-pending { display: block; max-height: 13rem; overflow: auto; } .scenario-pending summary { cursor: pointer; } .scenario-pending pre { white-space: pre-wrap; font: inherit; margin: .75rem 0 0; }
+
+/* The welcome sits outside the retained remote client. */
+.is-setup { background: #080808; }
+.is-setup.crt:after { display: none; }

@@ -1,13 +1,18 @@
 import { FILES, DIRECTORIES } from '../content';
 import { EVIDENCE, EvidenceId, GameState, INTENTS, TerminalEntry } from '../models';
-import { deriveKnowledge, newGame } from '../engine/game';
+import { deriveKnowledge, newGame, newLegacyGame } from '../engine/game';
+import { decodeScenario, hasCaseEvent, caseOperating } from '../scenario-state';
 import { canRead, OPERATION_DEFINITIONS } from '../engine/continuation';
 import { ENDINGS, KNOWLEDGE, OPERATIONS, PERMISSIONS, initialStory } from '../story-state';
 import { DIALOGUE_IDS } from '../interpretation/dialogue-catalog';
 import { initialInvestigation } from '../engine/investigation';
 import { validateInterpretation } from '../interpretation/providers';
+import { FRESH_INTENTS, LEGACY_FRESH_BRIDGE } from '../interpretation/fresh-topics';
+import { MOTHER_INTENTS, motherTopic } from '../interpretation/mother-routing';
+import { disclosureAllowed, restoreConversation } from '../engine/mother-conversation';
 
 export const SAVE_KEY = 'nerve-ending.save.v5';
+export const SCENARIO_SAVE_KEY = 'nerve-ending.save.v6';
 export const PREVIOUS_SAVE_KEY = 'nerve-ending.save.v4';
 export const OPENING_SAVE_KEY = 'nerve-ending.save.v3';
 export const LEGACY_SAVE_KEY = 'nerve-ending.save';
@@ -23,12 +28,40 @@ function display(value: unknown): GameState['ui'] {
   };
 }
 export function decodeSave(raw: string | null): LoadResult {
+  if (!raw) return {state:newGame()};
+  try {
+    const data=JSON.parse(raw);
+    if (data?.schemaVersion!==6) {
+      const legacy=decodeLegacySave(raw);
+      if (legacy.state.schemaVersion===5) legacy.warning='Legacy prototype session preserved. NEW SESSION starts the v1.0 story; old permissions do not authorize the revised clinical review.';
+      return legacy;
+    }
+    if(typeof data.sessionId!=='string'||!Array.isArray(data.discoveredEvidenceIds))throw new Error('Invalid save');
+    const legacy=decodeLegacySave(JSON.stringify({...data,schemaVersion:5})).state;
+    const scenario=decodeScenario(data.scenario);
+    const state:GameState={...legacy,...initialStory(),schemaVersion:6,scenario,investigation:initialInvestigation(),act01Complete:hasCaseEvent(scenario,'closure-compared'),pendingClarification:undefined};
+    state.operating=caseOperating(scenario,state.operating);
+    state.conversation=restoreConversation(state,data.conversation);
+    if(data.serviceClarification==='INFO'||data.serviceClarification==='LOG')state.serviceClarification=data.serviceClarification;
+    const pending=data.pendingClarification;
+    const query=validateInterpretation(pending?.interpretation,pending?.interpretation?.provider==='browser-ai'?'browser-ai':'fallback');
+    if(typeof pending?.input==='string'&&query?.needsClarification&&query.choices?.length&&query.choices.every(c=>FRESH_INTENTS.has(c.intent)||c.intent in LEGACY_FRESH_BRIDGE||!!motherTopic(c.intent)&&disclosureAllowed(state,motherTopic(c.intent)!.gate)))state.pendingClarification={input:pending.input.slice(0,1000),interpretation:query};
+    const allowed=FILES.filter(f=>canRead(state,f)).map(f=>f.id);
+    state.viewedFileIds=strings(data.viewedFileIds).filter(id=>allowed.includes(id));
+    state.openFileIds=strings(data.openFileIds).filter(id=>allowed.includes(id)).slice(-5);
+    state.lastFileId=allowed.includes(data.lastFileId)?data.lastFileId:undefined;
+    state.lastIntent=typeof data.lastIntent==='string'&&(/^q_case_[a-z_]+$/.test(data.lastIntent)||FRESH_INTENTS.has(data.lastIntent)||MOTHER_INTENTS.has(data.lastIntent))?data.lastIntent:legacy.lastIntent;
+    if(Array.isArray(data.terminalHistory))state.terminalHistory=data.terminalHistory.slice(-80).flatMap((e:TerminalEntry)=>e&&typeof e.input==='string'&&Array.isArray(e.lines)?[{input:e.input.slice(0,1000),lines:strings(e.lines).slice(0,120).map(l=>l.slice(0,16000)),links:Array.isArray(e.links)?e.links.filter(l=>allowed.includes(l?.fileId)).map(l=>({fileId:l.fileId,label:FILES.find(f=>f.id===l.fileId)!.path})):[],code:['ok','notice','denied','error'].includes(e.code)?e.code:'ok',truth:['record','interpretation','withheld','system'].includes(e.truth)?e.truth:'system'}]:[]);
+    return {state};
+  } catch {return {state:newGame(),warning:'The saved session could not be read. A new session is available.'};}
+}
+function decodeLegacySave(raw: string | null): LoadResult {
   if (!raw) return { state: newGame() };
   try {
     const data = JSON.parse(raw) as Record<string, unknown>;
     if (!data || ![1, 2, 3, 4, 5].includes(Number(data['schemaVersion']))) throw new Error('Unsupported save version');
     if (typeof data['sessionId'] !== 'string' || !Array.isArray(data['discoveredEvidenceIds'])) throw new Error('Invalid save');
-    const base = newGame();
+    const base = Number(data['schemaVersion']) < 3 ? newGame() : newLegacyGame();
     if (Number(data['schemaVersion']) < 3) return {
       state: { ...base, ui: { ...display(data['ui']), terminalMode: 'maximized' } },
       warning: 'A new opening is ready. Your earlier session is still saved separately.',
@@ -116,12 +149,12 @@ export function decodeSave(raw: string | null): LoadResult {
   } catch { return { state: newGame(), warning: 'The saved session could not be read. A new session is available.' }; }
 }
 export function loadSave(storage: SaveStore): LoadResult {
-  try { return decodeSave(storage.getItem(SAVE_KEY) ?? storage.getItem(PREVIOUS_SAVE_KEY) ?? storage.getItem(OPENING_SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY)); }
+  try { return decodeSave(storage.getItem(SCENARIO_SAVE_KEY) ?? storage.getItem(SAVE_KEY) ?? storage.getItem(PREVIOUS_SAVE_KEY) ?? storage.getItem(OPENING_SAVE_KEY) ?? storage.getItem(LEGACY_SAVE_KEY)); }
   catch { return { state: newGame(), warning: 'Browser storage is restricted. You can play, but progress may not survive closing this page.' }; }
 }
 export function writeSave(storage: SaveStore, state: GameState): boolean {
-  try { storage.setItem(SAVE_KEY, JSON.stringify(state)); return true; } catch { return false; }
+  try { storage.setItem(state.scenario ? SCENARIO_SAVE_KEY : SAVE_KEY, JSON.stringify(state)); return true; } catch { return false; }
 }
 export function resetSave(storage: SaveStore): boolean {
-  try { storage.removeItem(SAVE_KEY); return true; } catch { return false; }
+  try { storage.removeItem(SCENARIO_SAVE_KEY); return true; } catch { return false; }
 }

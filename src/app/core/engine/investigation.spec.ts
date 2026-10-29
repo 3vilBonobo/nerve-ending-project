@@ -5,7 +5,7 @@ import { decodeSave } from '../persistence/saves';
 import { classify } from '../interpretation/fallback';
 import { selectMeaning } from '../interpretation/semantic';
 import { actOf, availableOperations, executeOperation } from './continuation';
-import { accessibleFiles, inspectFile, newGame, recover, runInput } from './game';
+import { accessibleFiles, inspectFile, newLegacyGame as newGame, recover, runInput } from './game';
 import { OPENING_PATH } from './playthroughs';
 
 const play = (steps: readonly string[], initial = newGame()): GameState => steps.reduce((s, input) => runInput(s, input).state, initial);

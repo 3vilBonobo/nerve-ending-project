@@ -3,13 +3,15 @@ import type { GameState } from '../models';
 export const QA_DATABASE = 'nerve-ending-qa';
 export const QA_DATABASE_VERSION = 1;
 export const QA_SCHEMA_VERSION = 1;
-export const APPLICATION_VERSION = '1.1.0+opening.1';
+export const APPLICATION_VERSION = '1.2.0+scenario.1';
 export type QaSource = 'terminal' | 'operation-button' | 'record-link' | 'record-tab' | 'file-browser' | 'evidence-button' | 'client';
 export type FeedbackTag = 'confusing' | 'incorrect' | 'repetitive' | 'effective';
 export const FEEDBACK_TAGS: readonly FeedbackTag[] = ['confusing', 'incorrect', 'repetitive', 'effective'];
 export type QaEventType = 'qa_enabled' | 'qa_disabled' | 'session_started' | 'session_resumed' | 'session_reset' | 'question_submitted' | 'command_submitted' | 'question_resolved' | 'response_selected' | 'file_opened' | 'file_open_attempt' | 'file_focused' | 'file_closed' | 'directory_changed' | 'evidence_compared' | 'authorization_challenged' | 'challenge_attempt' | 'operation_requested' | 'action_result' | 'action_failed' | 'milestone_reached' | 'act_transition' | 'ending_selected' | 'feedback' | 'input_interrupted' | 'encounter_prompted' | 'encounter_explained' | 'encounter_deferred' | 'encounter_resumed' | 'encounter_completed';
 export type QaJson = string | number | boolean | null | QaJson[] | { [key: string]: QaJson };
 export interface QaNarrativeState {
+  conversation?: {tone:string;paused:boolean;recentEggs:string[];selfQuestions:number;sourceIds:string[]};
+  scenario?: { version:string; caseClock:string; events:string[]; question:string; pendingChoice:string|null; outcome:string|null; deferred:boolean };
   act: number;
   knowledge: string[];
   permissions: string[];

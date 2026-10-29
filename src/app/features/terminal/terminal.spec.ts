@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Session } from '../../core/session';
 import { Interpretation } from '../../core/models';
-import { SAVE_KEY, decodeSave } from '../../core/persistence/saves';
+import { SCENARIO_SAVE_KEY as SAVE_KEY, decodeSave } from '../../core/persistence/saves';
 import { Terminal } from './terminal';
 
 describe('terminal reply playback', () => {
@@ -40,7 +40,7 @@ describe('terminal reply playback', () => {
     element.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await pending; fixture.detectChanges();
     expect(session.busy()).toBe(false);
-    expect(element.textContent).toContain('No staff terminal is connected.');
+    expect(element.textContent).toContain('No human operator is impersonated.');
     expect(element.querySelector('.terminal-entry:last-of-type .record-link')).toBeNull();
     expect(element.querySelector('.terminal-entry:last-of-type .record-reference')?.textContent).toContain('/SYSTEM/READ_FIRST.TXT');
     fixture.destroy();

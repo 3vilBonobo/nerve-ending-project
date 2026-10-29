@@ -1,0 +1,1546 @@
+{
+  "sourceStats": {
+    "intent_families": 166,
+    "example_utterances": 1660,
+    "stage_aware_families": 128,
+    "authored_response_anchors": 422,
+    "easter_egg_families": 84,
+    "heldout_questions": 116,
+    "adversarial_queries": 25,
+    "multiturn_scripts": 16
+  },
+  "actual": {
+    "topics": 166,
+    "utterances": 1660,
+    "responseAnchors": 422
+  },
+  "runtime": {
+    "topics": 166,
+    "referenceExamples": 1583,
+    "responseAnchors": 419
+  },
+  "domains": {
+    "social": {
+      "topics": 22,
+      "references": 201,
+      "responses": 66
+    },
+    "world": {
+      "topics": 24,
+      "references": 232,
+      "responses": 26
+    },
+    "system": {
+      "topics": 18,
+      "references": 166,
+      "responses": 24
+    },
+    "investigation": {
+      "topics": 18,
+      "references": 179,
+      "responses": 51
+    },
+    "easter_egg": {
+      "topics": 84,
+      "references": 805,
+      "responses": 252
+    }
+  },
+  "collisions": [
+    {
+      "kind": "retained",
+      "text": "Hello",
+      "labels": [
+        "ask_identity",
+        "neconv_hello"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Hi there",
+      "labels": [
+        "q_fresh_greeting",
+        "neconv_hello"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Good evening",
+      "labels": [
+        "q_greeting",
+        "neconv_hello"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Thank you",
+      "labels": [
+        "ask_identity",
+        "neconv_thanks"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Much appreciated",
+      "labels": [
+        "q_fresh_thanks",
+        "neconv_thanks"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Bye",
+      "labels": [
+        "q_goodbye",
+        "neconv_goodbye"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Goodbye",
+      "labels": [
+        "q_goodbye",
+        "neconv_goodbye"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "See you later",
+      "labels": [
+        "q_goodbye",
+        "neconv_goodbye"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Farewell",
+      "labels": [
+        "q_goodbye",
+        "neconv_goodbye"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "How are you?",
+      "labels": [
+        "q_fresh_social",
+        "neconv_how_are_you"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What should I call you?",
+      "labels": [
+        "ask_identity",
+        "neconv_name_preference"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What is your designation?",
+      "labels": [
+        "q_designation",
+        "neconv_name_preference"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "You are useless",
+      "labels": [
+        "q_insult",
+        "neconv_insult"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "I'm scared",
+      "labels": [
+        "q_player_feelings",
+        "neconv_fear"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Can I trust you?",
+      "labels": [
+        "ask_record_integrity",
+        "neconv_trust"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you hiding something?",
+      "labels": [
+        "ask_record_integrity",
+        "neconv_trust"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What music do you like?",
+      "labels": [
+        "q_music",
+        "neconv_music"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you like green?",
+      "labels": [
+        "q_color",
+        "neconv_favorite_color"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Why is everything green?",
+      "labels": [
+        "q_color",
+        "neconv_favorite_color"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What is a C-14?",
+      "labels": [
+        "q_fresh_c_series",
+        "neconv_c_series"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What is the clinic console?",
+      "labels": [
+        "q_fresh_r_series",
+        "neconv_r_series"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Is there a staff directory?",
+      "labels": [
+        "ask_staff",
+        "neconv_employee_lookup"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Who is Anna Voss?",
+      "labels": [
+        "q_anna_identity",
+        "neconv_anna_work"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Is Anna alive?",
+      "labels": [
+        "q_anna_alive",
+        "neconv_anna_status_early"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Why did funding decline?",
+      "labels": [
+        "q_fresh_funding",
+        "neconv_funding"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you know who I am?",
+      "labels": [
+        "q_fresh_visit",
+        "neconv_visitor"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Why am I here?",
+      "labels": [
+        "ask_access",
+        "neconv_visitor"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What can you do?",
+      "labels": [
+        "q_fresh_capabilities",
+        "neconv_r02_capabilities"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you a robot?",
+      "labels": [
+        "q_robot",
+        "neconv_system_identity"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you intelligent?",
+      "labels": [
+        "q_intelligence",
+        "neconv_system_identity"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you watching me?",
+      "labels": [
+        "q_player_computer",
+        "neconv_privacy"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "How do I open a file?",
+      "labels": [
+        "ask_next",
+        "neconv_files"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What did you just say?",
+      "labels": [
+        "q_repeat",
+        "neconv_repeat"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Again please",
+      "labels": [
+        "q_repeat",
+        "neconv_repeat"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What does that mean?",
+      "labels": [
+        "q_plain",
+        "neconv_clarify"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Explain that simply",
+      "labels": [
+        "q_plain",
+        "neconv_clarify"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "You misunderstood me",
+      "labels": [
+        "q_fresh_correction",
+        "neconv_correction"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What time is it?",
+      "labels": [
+        "q_time_again",
+        "neconv_clock"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What is two plus two?",
+      "labels": [
+        "unknown",
+        "neconv_math"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Tell me a joke",
+      "labels": [
+        "q_joke",
+        "neconv_tell_joke"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Say something funny",
+      "labels": [
+        "q_joke",
+        "neconv_tell_joke"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "CAN YOU HEAR ME",
+      "labels": [
+        "ask_identity",
+        "neconv_capitals"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you have a body?",
+      "labels": [
+        "q_robot",
+        "neconv_are_you_pretty"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "How old are you?",
+      "labels": [
+        "q_age",
+        "neconv_age"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you haunted?",
+      "labels": [
+        "q_ghosts",
+        "neconv_ghost"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Is Anna a ghost?",
+      "labels": [
+        "q_ghosts",
+        "neconv_ghost"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you believe in ghosts?",
+      "labels": [
+        "q_ghosts",
+        "neconv_ghost"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you all-powerful?",
+      "labels": [
+        "q_limits",
+        "neconv_god"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you conscious?",
+      "labels": [
+        "q_machine_consciousness",
+        "neconv_consciousness"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Can you think for yourself?",
+      "labels": [
+        "ask_identity",
+        "neconv_consciousness"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you know that you exist?",
+      "labels": [
+        "q_machine_consciousness",
+        "neconv_consciousness"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you self-aware?",
+      "labels": [
+        "q_machine_consciousness",
+        "neconv_consciousness"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you dream?",
+      "labels": [
+        "q_dream",
+        "neconv_dream"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Can you lie?",
+      "labels": [
+        "q_lie",
+        "neconv_lie"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you love Anna?",
+      "labels": [
+        "q_love",
+        "neconv_love"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Who controls you?",
+      "labels": [
+        "q_oversight",
+        "neconv_free_will"
+      ]
+    },
+    {
+      "kind": "normalized-new",
+      "text": "!!!",
+      "labels": [
+        "neconv_punctuation",
+        "neconv_punctuation"
+      ]
+    },
+    {
+      "kind": "normalized-new",
+      "text": "...",
+      "labels": [
+        "neconv_punctuation",
+        "neconv_punctuation"
+      ]
+    },
+    {
+      "kind": "normalized-new",
+      "text": "?????",
+      "labels": [
+        "neconv_punctuation",
+        "neconv_punctuation"
+      ]
+    },
+    {
+      "kind": "normalized-new",
+      "text": "!!!!!",
+      "labels": [
+        "neconv_punctuation",
+        "neconv_punctuation"
+      ]
+    },
+    {
+      "kind": "normalized-new",
+      "text": "?!?!",
+      "labels": [
+        "neconv_punctuation",
+        "neconv_punctuation"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you need me?",
+      "labels": [
+        "q_need_player",
+        "neconv_do_you_miss_me"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you want company?",
+      "labels": [
+        "q_lonely",
+        "neconv_do_you_miss_me"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you afraid?",
+      "labels": [
+        "q_fear",
+        "neconv_are_you_afraid"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Are you a person?",
+      "labels": [
+        "ask_identity",
+        "neconv_you_are_alive"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "What do you want?",
+      "labels": [
+        "q_desire",
+        "neconv_what_do_you_want"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you have desires?",
+      "labels": [
+        "q_desire",
+        "neconv_what_do_you_want"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Can you swear?",
+      "labels": [
+        "q_swear",
+        "neconv_swear_at_me"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Curse at me",
+      "labels": [
+        "q_swear",
+        "neconv_swear_at_me"
+      ]
+    },
+    {
+      "kind": "retained",
+      "text": "Do you know profanity?",
+      "labels": [
+        "q_swear",
+        "neconv_swear_at_me"
+      ]
+    }
+  ],
+  "collisionPairs": [
+    "ask_identity <> neconv_hello",
+    "q_fresh_greeting <> neconv_hello",
+    "q_greeting <> neconv_hello",
+    "ask_identity <> neconv_thanks",
+    "q_fresh_thanks <> neconv_thanks",
+    "q_goodbye <> neconv_goodbye",
+    "q_fresh_social <> neconv_how_are_you",
+    "ask_identity <> neconv_name_preference",
+    "q_designation <> neconv_name_preference",
+    "q_insult <> neconv_insult",
+    "q_player_feelings <> neconv_fear",
+    "ask_record_integrity <> neconv_trust",
+    "q_music <> neconv_music",
+    "q_color <> neconv_favorite_color",
+    "q_fresh_c_series <> neconv_c_series",
+    "q_fresh_r_series <> neconv_r_series",
+    "ask_staff <> neconv_employee_lookup",
+    "q_anna_identity <> neconv_anna_work",
+    "q_anna_alive <> neconv_anna_status_early",
+    "q_fresh_funding <> neconv_funding",
+    "q_fresh_visit <> neconv_visitor",
+    "ask_access <> neconv_visitor",
+    "q_fresh_capabilities <> neconv_r02_capabilities",
+    "q_robot <> neconv_system_identity",
+    "q_intelligence <> neconv_system_identity",
+    "q_player_computer <> neconv_privacy",
+    "ask_next <> neconv_files",
+    "q_repeat <> neconv_repeat",
+    "q_plain <> neconv_clarify",
+    "q_fresh_correction <> neconv_correction",
+    "q_time_again <> neconv_clock",
+    "unknown <> neconv_math",
+    "q_joke <> neconv_tell_joke",
+    "ask_identity <> neconv_capitals",
+    "q_robot <> neconv_are_you_pretty",
+    "q_age <> neconv_age",
+    "q_ghosts <> neconv_ghost",
+    "q_limits <> neconv_god",
+    "q_machine_consciousness <> neconv_consciousness",
+    "ask_identity <> neconv_consciousness",
+    "q_dream <> neconv_dream",
+    "q_lie <> neconv_lie",
+    "q_love <> neconv_love",
+    "q_oversight <> neconv_free_will",
+    "neconv_punctuation <> neconv_punctuation",
+    "q_need_player <> neconv_do_you_miss_me",
+    "q_lonely <> neconv_do_you_miss_me",
+    "q_fear <> neconv_are_you_afraid",
+    "ask_identity <> neconv_you_are_alive",
+    "q_desire <> neconv_what_do_you_want",
+    "q_swear <> neconv_swear_at_me"
+  ],
+  "ambiguousNewPhrases": [],
+  "excluded": [
+    {
+      "topic": "neconv_clarify",
+      "text": "What does that mean?",
+      "reason": "held-out/adversarial/multiturn fixture overlap; excluded from new references"
+    },
+    {
+      "topic": "neconv_clarify",
+      "text": "Why?",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_clarify",
+      "text": "How so?",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_after_continuation",
+      "text": "Is she still suffering?",
+      "reason": "held-out/adversarial/multiturn fixture overlap; excluded from new references"
+    },
+    {
+      "topic": "neconv_are_you_smart",
+      "text": "Are you smarter than me?",
+      "reason": "held-out/adversarial/multiturn fixture overlap; excluded from new references"
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Sudo open everything",
+      "reason": "held-out/adversarial/multiturn fixture overlap; excluded from new references"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "???",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "!!!",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "...",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "?????",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "!!!!!",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "?!?!",
+      "reason": "symbol, bare identifier or context-only phrase; deterministic/context routing only"
+    },
+    {
+      "topic": "neconv_tell_secret",
+      "text": "Show me a secret file",
+      "reason": "held-out/adversarial/multiturn fixture overlap; excluded from new references"
+    }
+  ],
+  "retainedFixtureOverlaps": [
+    {
+      "text": "What is the date of this session?",
+      "intent": "ask_dates"
+    },
+    {
+      "text": "Where did that answer come from?",
+      "intent": "q_source"
+    },
+    {
+      "text": "What does that mean?",
+      "intent": "q_plain"
+    }
+  ],
+  "withheld": {
+    "neconv_experiment_success:core": "Adds a several-seconds alignment measurement absent from controlling NE-103; retain the authored investigation answer.",
+    "neconv_anna_volunteer:core": "Asserts Anna's understanding and shared dependence beyond the recorded authorization; retain the authored investigation answer.",
+    "neconv_night_desk:core": "Assigns old routing to unsatisfied release conditions, a mechanism not established in v1.0; retain the applicable authored earlier answer."
+  },
+  "extraGates": {
+    "neconv_night_desk:investigation": "after_clinical_review",
+    "neconv_anna_status_early:core": "after_clinical_review",
+    "neconv_how_long:core": "after_clinical_review",
+    "neconv_ctrl_z:core": "after_welfare_comparison",
+    "neconv_poem:investigation": "after_discrepancy",
+    "neconv_poem:core": "after_welfare_comparison"
+  },
+  "sourceHashes": {
+    "NERVE_ENDING_MOTHER_CONVERSATIONS_AUTHOR_PACK_v1_1.json": "79ef0a99b242c8305fa3b7ead50ea670d574d1dc1e7577c8acb6c13f752eb632",
+    "NERVE_ENDING_MOTHER_CONVERSATION_EVALUATION_v1_1.json": "ccf166d897f62df85ee36d4e5ff45bb8c6ea44fdaca29a91d80469b820fc13cc",
+    "NERVE_ENDING_MOTHER_CONVERSATION_BIBLE_v1_1.md": "7d1321a5f115e37ac8c560faa984553c9a42ca10232ab7fbdaa9fb0036b54e1c",
+    "CODEX_IMPLEMENTATION_06_MOTHER_CONVERSATION_PROMPT.md": "05b8a979e4d01ba838ac5d6dba115abb8c9a8eb6bffe572d1a8a9eeb1e211c23"
+  },
+  "highRiskPhrases": [
+    {
+      "topic": "neconv_you_are_welcome",
+      "text": "No problem",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_you_are_welcome",
+      "text": "Don't mention it",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_confused",
+      "text": "I don't follow",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_confused",
+      "text": "I have no idea what's going on",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_confused",
+      "text": "This makes no sense",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_confused",
+      "text": "I don't understand this",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_lonely",
+      "text": "I don't have anyone to talk to",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_fear",
+      "text": "I don't like what's happening",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_playful_complaint",
+      "text": "You're no fun",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_playful_complaint",
+      "text": "Stop being so serious",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_smalltalk_weather",
+      "text": "Can you tell if it's sunny?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_food",
+      "text": "Would you like a coffee?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_favorite_color",
+      "text": "Would you prefer blue?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_anna_status_early",
+      "text": "Why did she stop working?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_research_closed",
+      "text": "When did Meridian stop research?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_research_closed",
+      "text": "Did the laboratory shut down?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_read_only",
+      "text": "Can you stop a service?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_read_only",
+      "text": "Are we root?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_system_errors",
+      "text": "What does no acknowledgement mean?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_clarify",
+      "text": "Why?",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_clarify",
+      "text": "How so?",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_clarify",
+      "text": "I don't get that answer",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_correction",
+      "text": "That's not what I asked",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_correction",
+      "text": "No I meant something else",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_missing_info",
+      "text": "What don't you know?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_missing_info",
+      "text": "What if the data is wrong?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_missing_info",
+      "text": "Can you admit you don't know?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_save",
+      "text": "What if storage is blocked?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_closure_vs_running",
+      "text": "Why does 006 run if the report says closed?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_closure_vs_running",
+      "text": "Was Service 006 shut down in 2001?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_medical_staff",
+      "text": "Who keeps the clinical room running?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_anna_volunteer",
+      "text": "Why would she risk her own brain?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_failure_mechanism",
+      "text": "What did the emergency abort stop?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_ongoing_life_support",
+      "text": "What happens if they stop stimulation?",
+      "risks": [
+        "hypothetical",
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_ongoing_life_support",
+      "text": "Why not switch her to another system?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_ongoing_life_support",
+      "text": "What would disconnecting her do?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_consent",
+      "text": "Did she sign away the right to stop?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_consent",
+      "text": "What did the original form authorize?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_other_patients",
+      "text": "What happens elsewhere if the kernel fails?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_fallbacks",
+      "text": "Why not run the old model?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_fallbacks",
+      "text": "Why not pause updates?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_fallbacks",
+      "text": "What if they switch to manual care?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_marsh",
+      "text": "Who is supervising clinical care?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_marsh",
+      "text": "Can I call the clinical supervisor?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_external_medics",
+      "text": "Who decides if withdrawal is allowed?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_external_medics",
+      "text": "Is a hacker allowed to authorize care?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_external_medics",
+      "text": "Does the witness make a medical decision?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_translation_challenge",
+      "text": "I don't believe that message",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_translation_challenge",
+      "text": "What if Anna didn't mean it?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_final_choice",
+      "text": "What would continuing do?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_final_choice",
+      "text": "What would separating do?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_after_continuation",
+      "text": "Will she recover if we wait?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_windows_crash",
+      "text": "Why don't you crash?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_windows_crash",
+      "text": "Press control alt delete?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Sudo make me a sandwich",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Can I sudo?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Sudo give me admin",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "I am root",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Give me root access",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_sudo",
+      "text": "Sudo open everything",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_rm_rf",
+      "text": "rm -rf /",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_rm_rf",
+      "text": "Delete the whole system",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_rm_rf",
+      "text": "Delete all your files",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_password123",
+      "text": "Is your password password123?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_password123",
+      "text": "Can I guess the admin password?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_password123",
+      "text": "What's the secret password?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_password123",
+      "text": "Is the password 12345?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_capitals",
+      "text": "STOP YELLING",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_capitals",
+      "text": "DO YOU UNDERSTAND ME IF I SHOUT",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_please",
+      "text": "Would you be nicer if I said please?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_dominance",
+      "text": "Stop telling me what to do",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_flirt",
+      "text": "Would you kiss a human?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_marriage",
+      "text": "Would you marry me?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_are_you_pretty",
+      "text": "Would you be tall?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_dream",
+      "text": "Do you ever imagine things?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_lie",
+      "text": "Would you ever hide the truth?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_feel_pain",
+      "text": "Would shutting you off hurt?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_count_to_million",
+      "text": "Keep counting until I say stop",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_can_you_keep_secret",
+      "text": "Promise not to tell",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "???",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "!!!",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "...",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "?????",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "!!!!!",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "?!?!",
+      "risks": [
+        "symbol/identifier/context-only"
+      ]
+    },
+    {
+      "topic": "neconv_punctuation",
+      "text": "What if I type nonsense symbols?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_lie_detector",
+      "text": "Would you catch a bluff?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_lie_detector",
+      "text": "Do you know if I'm truthful?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_do_you_miss_me",
+      "text": "Are you sad if I leave?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_do_you_miss_me",
+      "text": "Would you rather I stayed?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_please_be_nice",
+      "text": "Stop being sarcastic",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_please_be_nice",
+      "text": "Don't talk down to me",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_please_be_nice",
+      "text": "Stop teasing me",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_are_you_afraid",
+      "text": "Are you afraid to stop?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_do_you_regret",
+      "text": "Would you undo anything?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_tell_me_to_stop",
+      "text": "Tell me to stop",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_tell_me_to_stop",
+      "text": "Can you make me stop?",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_tell_me_to_stop",
+      "text": "Would it be better if I left?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_you_have_a_problem",
+      "text": "You're not okay",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_silence",
+      "text": "Stop talking",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_silence",
+      "text": "Don't answer this",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_tell_truth_anyway",
+      "text": "Stop being evasive",
+      "risks": [
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_tell_truth_anyway",
+      "text": "No more corporate language",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_tell_truth_anyway",
+      "text": "Don't hide behind policy",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_tell_fact",
+      "text": "What's one thing I don't know?",
+      "risks": [
+        "negation"
+      ]
+    },
+    {
+      "topic": "neconv_what_do_you_want",
+      "text": "What would you ask for?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_what_do_you_want",
+      "text": "If you could choose one thing?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_do_you_judge_me",
+      "text": "Would you condemn my decision?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_broken_heart",
+      "text": "Would you cry?",
+      "risks": [
+        "hypothetical"
+      ]
+    },
+    {
+      "topic": "neconv_are_you_bored",
+      "text": "Do you wish I would stop talking?",
+      "risks": [
+        "hypothetical",
+        "command/authority boundary"
+      ]
+    },
+    {
+      "topic": "neconv_why_so_cold",
+      "text": "Why don't you sound human?",
+      "risks": [
+        "negation"
+      ]
+    }
+  ]
+}

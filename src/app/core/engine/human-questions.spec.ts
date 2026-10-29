@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { INTENTS } from '../models';
 import { classify } from '../interpretation/fallback';
-import { newGame, runInput } from './game';
+import { newLegacyGame as newGame, runInput } from './game';
 
 describe('human questions and staged knowledge', () => {
   it.each([

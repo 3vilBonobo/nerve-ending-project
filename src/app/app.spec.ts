@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './app';
 import { Session } from './core/session';
-import { newGame, runInput } from './core/engine/game';
+import { newLegacyGame as newGame, runInput } from './core/engine/game';
 import { INVESTIGATION_PATH } from './core/engine/playthroughs';
 import { actOf } from './core/engine/continuation';
 
@@ -28,8 +28,8 @@ describe('Meridian investigation UI', () => {
   it('opens a neutral client and lets the player request service status', async () => {
     const fixture = TestBed.createComponent(App); fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('.setup-dialog')!.textContent).toContain('Read files and ask questions.');
-    expect(element.querySelector('.setup-dialog')!.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE/);
+    expect(element.querySelector('ne-welcome')!.textContent).toContain('Read files and ask questions.');
+    expect(element.querySelector('ne-welcome')!.textContent).not.toMatch(/WebGPU|LANGUAGE MODULE/);
     fixture.componentInstance.start(); fixture.componentInstance.skipConnection(); fixture.detectChanges();
     expect(element.querySelector('#terminal-command')).not.toBeNull();
     expect(element.textContent).toContain('REMOTE ACCESS CLIENT 2.04');
@@ -95,17 +95,17 @@ describe('Meridian investigation UI', () => {
     expect(app.session.state().permissions).toEqual([]); expect(app.session.state().knowledge).toEqual([]);
     expect(actOf(app.session.state())).toBe(1); expect(app.session.state().operating.endingId).toBeUndefined(); fixture.destroy();
   });
-  it('shows the loading percentage on the start page while keeping play available', () => {
+  it('shows the loading percentage in settings while keeping play available', () => {
     const fixture = TestBed.createComponent(App); const app = fixture.componentInstance;
     app.session.language.state.update(state => ({ ...state, phase: 'loading', loaded: 12_500_000, total: 25_000_000 }));
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('.setup-language')?.textContent).toContain('50%');
-    expect(element.querySelector<HTMLProgressElement>('#start-model-progress')?.value).toBe(50);
+    expect(element.querySelector('.language-settings')?.textContent).toContain('50%');
+    expect(element.querySelector<HTMLProgressElement>('.language-settings progress')?.value).toBe(50);
     expect(element.querySelector<HTMLButtonElement>('.start-button')?.disabled).toBe(false);
     app.session.language.state.update(state => ({ ...state, phase: 'initializing', detail: 'Checking first question…' }));
     fixture.detectChanges();
-    expect(element.querySelector('.setup-language')?.textContent).toContain('files loaded 100%');
+    expect(element.querySelector('.language-settings')?.textContent).toContain('100% FILES LOADED');
     fixture.destroy();
   });
 });

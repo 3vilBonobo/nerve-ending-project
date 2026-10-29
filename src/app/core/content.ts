@@ -1,8 +1,10 @@
 import { ArchiveFile } from './models';
 import { STORY_FILES } from './story-records';
 import { CORPORATE_FILES } from './corporate-records';
+import { BITMAP_FILES } from './bitmap-records';
+import { SCENARIO_FILES } from './scenario-records';
 
-export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM', '/COMMS', '/POLICY', '/FINANCE', '/STAFF', '/PERSONNEL', '/RESEARCH', '/INCIDENT', '/CLINICAL', '/VENDOR', '/CONTROL'] as const;
+export const DIRECTORIES = ['/', '/OPERATIONS', '/ARCHIVE', '/ADMIN', '/SYSTEM', '/COMMS', '/POLICY', '/FINANCE', '/STAFF', '/PERSONNEL', '/RESEARCH', '/INCIDENT', '/CLINICAL', '/VENDOR', '/CONTROL', '/RESEARCH/NEURAL', '/CLINICAL/REVIEWS', '/CLINICAL/OPERATIONS', '/CLINICAL/EXTERNAL', '/ENGINEERING', '/ENGINEERING/NEURAL', '/AUDIT'] as const;
 export const FILES: readonly ArchiveFile[] = [
   {
     id: 'call', path: '/OPERATIONS/CALL_QUEUE.LOG', title: 'Unanswered call', modified: '2003-11-06 02:13',
@@ -154,8 +156,10 @@ Esc shows a reply without waiting for it to finish.
 
 Original records cannot be edited.`,
   },
-  ...STORY_FILES,
+  ...STORY_FILES.map(file => ({ ...file, legacyOnly: true })),
+  ...SCENARIO_FILES,
   ...CORPORATE_FILES,
+  ...BITMAP_FILES,
 ];
 export const fileById = (id: string): ArchiveFile | undefined => FILES.find(file => file.id === id);
 export const FILE_ALIASES: Readonly<Record<string, string>> = {
@@ -173,5 +177,5 @@ export const FILE_ALIASES: Readonly<Record<string, string>> = {
 export function fileByName(value: string): ArchiveFile | undefined {
   const name = value.toLowerCase().trim().replace(/^the\s+/, '');
   return fileById(FILE_ALIASES[name] ?? '') ?? FILES.find(file =>
-    [file.title, file.path, file.path.split('/').pop()].some(candidate => candidate?.toLowerCase() === name));
+    [file.id, file.title, file.path, file.path.split('/').pop()].some(candidate => candidate?.toLowerCase() === name));
 }

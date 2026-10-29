@@ -1,0 +1,19 @@
+:host { display: block; min-width: 0; }
+.bitmap-record { margin: 0; min-width: 0; }
+figcaption { display: grid; gap: .45em; margin-bottom: .8em; line-height: 1.35; overflow-wrap: anywhere; }
+figcaption strong { color: var(--bright); font-weight: normal; }
+.bitmap-metadata { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .3em .8em; margin: 0 0 1em; font-size: .85em; line-height: 1.3; }
+dt { color: var(--medium); }
+dd { margin: 0; overflow-wrap: anywhere; }
+.bitmap-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; font-size: .85em; }
+.bitmap-controls button { padding: 5px 9px; min-height: 36px; border: 1px solid var(--line); }
+.bitmap-controls button[aria-pressed=true] { background: var(--face); color: var(--bright); border-color: var(--medium); }
+.bitmap-controls span { flex: 1 0 100%; color: var(--medium); }
+.bitmap-screen { max-width: 100%; min-width: 0; overflow: auto; padding: 8px; border: 1px solid var(--line); background: #050b05; scrollbar-width: thin; scrollbar-color: var(--line) var(--panel); }
+.bitmap-screen.crt-enabled { box-shadow: inset 0 0 0 1px var(--face); }
+.bitmap-screen img { display: block; max-width: none; margin: 0 auto; image-rendering: crisp-edges; image-rendering: pixelated; }
+.bitmap-caption { margin: .7em 0 0; font-size: .85em; line-height: 1.35; overflow-wrap: anywhere; color: var(--medium); }
+.bitmap-unavailable { padding: 8px; line-height: 1.4; }
+.bitmap-unavailable p { margin: .6em 0 0; overflow-wrap: anywhere; }
+@media (max-width: 480px) { .bitmap-metadata { grid-template-columns: minmax(0, 1fr); gap: .2em; } dd { margin-bottom: .5em; } }
+/* No image filters, flicker, transitions or animation; reduced motion is static too. */

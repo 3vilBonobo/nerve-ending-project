@@ -7,7 +7,7 @@ import { validateInterpretation } from '../interpretation/providers';
 import { decodeSave } from '../persistence/saves';
 import { qaInteraction, transitionObservations } from '../qa/events';
 import { currentServiceState, permittedServiceEvents, SERVICES, SERVICE_EVENTS, SERVICE_OBSERVATION, SERVICE_STATES } from '../service-records';
-import { inspectFile, newGame, runInput } from './game';
+import { inspectFile, newGame, newLegacyGame, runInput } from './game';
 
 const text = (state: GameState, input: string): string => runInput(state, input).output.lines.join('\n');
 const story = (state: GameState): unknown => ({ investigation: state.investigation, knowledge: state.knowledge, permissions: state.permissions, operating: state.operating, events: state.events, pendingOperation: state.pendingOperation, pendingClarification: state.pendingClarification, act01Complete: state.act01Complete, archive006Recovered: state.archive006Recovered, completedActions: state.completedActions });
@@ -181,7 +181,7 @@ describe('evidence, existing investigation, saves and QA compatibility', () => {
     ['OPEN Restart log', 'OPEN Closure list'], ['OPEN Service 006', 'OPEN Closure list'],
     ['INFO 002', 'LOG 008', 'INFO 006', 'OPEN Closure list'],
   ].map(inputs => [inputs] as const))('preserves existing review progression with source order %j', inputs => {
-    const s = play([...inputs, 'OPEN Handover receipt', 'OPEN backup', 'READ /COMMS/BRIDGE_02_STATUS.LOG', 'Please investigate the discrepancy']);
+    const s = play([...inputs, 'OPEN Handover receipt', 'OPEN backup', 'READ /COMMS/BRIDGE_02_STATUS.LOG', 'Please investigate the discrepancy'],newLegacyGame());
     const t = runInput(s, 'The office approval is not an operational release; holding system confirmation is missing.');
     expect(t.state.investigation.stage).toBe('provenance'); expect(t.state.permissions).toEqual([]);
     const expected = s.discoveredEvidenceIds.includes('EV_SERVICE_ACTIVE') ? 'live-service-006' : 'archived-service-006';
@@ -190,7 +190,7 @@ describe('evidence, existing investigation, saves and QA compatibility', () => {
     expect(completed.state.investigation.stage).toBe('complete'); expect(completed.state.operating).toEqual(newGame().operating);
   });
   it('does not let reading logs solve the review, even with a correct answer', () => {
-    const s = play(['LOG 006', 'OPEN Closure list', 'OPEN Handover receipt', 'Please investigate the discrepancy']);
+    const s = play(['LOG 006', 'OPEN Closure list', 'OPEN Handover receipt', 'Please investigate the discrepancy'],newLegacyGame());
     const t = runInput(s, 'The office approval is not an operational release; holding system confirmation is missing.');
     expect(t.encounters?.[0].outcome).toBe('missing-evidence'); expect(t.state.investigation.stage).toBe('closure');
   });

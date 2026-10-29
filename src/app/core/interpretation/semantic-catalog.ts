@@ -1,5 +1,7 @@
 import { QueryIntent } from '../models';
 import { DIALOGUE } from './dialogue-catalog';
+import { FRESH_TOPICS, freshIntent } from './fresh-topics';
+import { MOTHER_TOPICS } from './mother-corpus';
 
 export interface IntentExamples { intent: QueryIntent; label: string; examples: string[] }
 // Recognition examples only. No hidden record bodies or later story are supplied to the model.
@@ -119,6 +121,9 @@ const OPENING_CATALOG: IntentExamples[] = [
 
 const key = (s: string): string => s.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
 const newExamples = new Set(DIALOGUE.flatMap(i => i.examples.map(key)));
-export const SEMANTIC_CATALOG: IntentExamples[] = [...OPENING_CATALOG.map(group => ({ ...group, examples: group.examples.filter(text => !newExamples.has(key(text))) })), ...DIALOGUE.map(i => ({ intent: i.id, label: i.label, examples: i.examples }))];
+const legacyCatalog:IntentExamples[]=[...OPENING_CATALOG.map(group=>({...group,examples:group.examples.filter(text=>!newExamples.has(key(text)))})),...DIALOGUE.map(i=>({intent:i.id,label:i.label,examples:i.examples}))];
+const retainedExamples=new Set(legacyCatalog.flatMap(row=>row.examples.map(key)));
+export const BASE_SEMANTIC_CATALOG:IntentExamples[] = [...legacyCatalog, ...FRESH_TOPICS.map(row=>({intent:freshIntent(row[0]),label:row[0].replaceAll('_',' '),examples:row[1].filter(text=>!retainedExamples.has(key(text)))}))];
+export const SEMANTIC_CATALOG:IntentExamples[]=[...BASE_SEMANTIC_CATALOG,...MOTHER_TOPICS.map(t=>({intent:t.intent,label:t.id.replace('neconv_','').replaceAll('_',' '),examples:[...t.examples]}))];
 export const SEMANTIC_EXAMPLES = SEMANTIC_CATALOG.flatMap(group => group.examples.map(text => ({ text, intent: group.intent })));
-export const CATALOG_VERSION = 2;
+export const CATALOG_VERSION = 4;

@@ -38,7 +38,14 @@
   @if (session.state().pendingClarification; as clarification) {
     <aside class="investigation-prompt" aria-label="Pending question clarification"><strong>QUESTION CLARIFICATION</strong><span>{{ clarification.interpretation.clarification || 'Which service or record do you mean?' }}</span><small>@if (clarification.interpretation.choices?.length === 2) { Answer with the subject or first / second. } @else if (clarification.interpretation.choices?.length === 1) { Name the subject or confirm with YES. } @else { Name the service or record. } CANCEL CLARIFICATION dismisses this question.</small></aside>
   }
+  @if (session.scenarioPreview()) {
+    <details class="investigation-prompt scenario-pending" aria-label="Pending procedural choice"><summary>CHOICE PENDING — type CONFIRM OPERATION or CANCEL. Review the full warning.</summary><pre>{{ session.scenarioPreview() }}</pre></details>
+  }
+    @if (!session.state().scenario?.outcome && (session.state().scenario?.motherQuestion === 'offered' || session.state().scenario?.motherQuestion === 'awaiting-answer')) {
+    <aside class="investigation-prompt" aria-label="Pending MOTHER question"><strong>MOTHER / QUESTION AVAILABLE</strong><span>{{ session.state().scenario?.motherQuestion === 'offered' ? 'May I ask you a question?' : 'Which observation describes successful care?' }}</span><small>Answer freely, decline, or continue the independent review below.</small></aside>
+  }
   <form class="command-row" (submit)="$event.preventDefault(); submit()">
+    @if (session.state().scenario?.pendingChoice) { <span class="sr-only" role="status">A choice is pending. Read the full risk preview above. Separately type CONFIRM OPERATION or CANCEL.</span> }
     <label for="terminal-command">SYS<span aria-hidden="true">&gt;</span></label>
     <div class="terminal-input">
       <input id="terminal-command" #command [value]="input" (input)="input = command.value; updateCaret(command)" (keydown)="history($event)" (keyup)="updateCaret(command)" (click)="updateCaret(command)" (select)="updateCaret(command)" (scroll)="updateCaret(command)" (focus)="updateCaret(command)" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="1000" placeholder="Enter command or ask a question..." [readOnly]="session.busy()" aria-label="Terminal command or question">

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { inspectFile, newGame, runInput } from '../engine/game';
+import { inspectFile, newGame, newLegacyGame, runInput } from '../engine/game';
 import { LEGACY_SAVE_KEY, OPENING_SAVE_KEY, PREVIOUS_SAVE_KEY, SAVE_KEY, SaveStore, decodeSave, loadSave, resetSave, writeSave } from './saves';
 import { OPENING_PATH } from '../engine/playthroughs';
 
@@ -10,7 +10,7 @@ function memoryStorage(): SaveStore {
 describe('versioned browser persistence', () => {
   it('preserves completed schema-4 investigations separately without making a new backup read sufficient', () => {
     const storage = memoryStorage();
-    const advanced = OPENING_PATH.reduce((s, input) => runInput(s, input).state, newGame());
+    const advanced = OPENING_PATH.reduce((s, input) => runInput(s, input).state, newLegacyGame());
     const previous = JSON.stringify({ ...advanced, schemaVersion: 4, investigation: undefined });
     storage.setItem(PREVIOUS_SAVE_KEY, previous);
     const loaded = loadSave(storage);
@@ -30,7 +30,7 @@ describe('versioned browser persistence', () => {
     expect(loaded.state.permissions).toEqual([]);
     expect(runInput(loaded.state, 'VERIFY HANDOVER').state.permissions).toEqual([]);
     writeSave(storage, loaded.state); expect(storage.getItem(OPENING_SAVE_KEY)).toBe(old);
-    expect(loadSave(storage).warning).toBeUndefined();
+    expect(loadSave(storage).warning).toContain('Legacy');
   });
   it('round trips discovery, current directory, records, recovery, completion and display', () => {
     let state = newGame(); state.hasStarted = true;
@@ -45,7 +45,7 @@ describe('versioned browser persistence', () => {
     const previous = JSON.stringify({ ...newGame(), schemaVersion: 2, hasStarted: true, archive006Recovered: true, ui: { crtEnabled: false, fontScale: 1.15 }, terminalHistory: [{ input: 'HELP', lines: ['Old puzzle instructions'] }] });
     storage.setItem(LEGACY_SAVE_KEY, previous);
     const result = loadSave(storage);
-    expect(result.state.schemaVersion).toBe(5); expect(result.state.hasStarted).toBe(false);
+    expect(result.state.schemaVersion).toBe(6); expect(result.state.hasStarted).toBe(false);
     expect(result.state.archive006Recovered).toBe(false);
     expect(result.state.terminalHistory[0].lines.join(' ')).not.toContain('Old puzzle');
     expect(result.state.ui).toMatchObject({ crtEnabled: false, fontScale: 1.15, terminalMode: 'maximized' });
@@ -69,7 +69,7 @@ describe('versioned browser persistence', () => {
   });
   it('continues in memory if storage is restricted or quota exhausted', () => {
     const storage: SaveStore = { getItem: () => { throw new Error('restricted'); }, setItem: () => { throw new Error('full'); }, removeItem: () => { throw new Error('restricted'); } };
-    expect(loadSave(storage).state.schemaVersion).toBe(5); expect(loadSave(storage).warning).toContain('restricted');
+    expect(loadSave(storage).state.schemaVersion).toBe(6); expect(loadSave(storage).warning).toContain('restricted');
     expect(writeSave(storage, newGame())).toBe(false); expect(resetSave(storage)).toBe(false);
   });
   it('reset removes only this game and starts with clean evidence', () => {

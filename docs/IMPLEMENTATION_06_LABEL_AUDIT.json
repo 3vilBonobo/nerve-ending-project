@@ -1,0 +1,3005 @@
+{
+  "scope": "Strict classifier IDs preserved. Actual saved model/rule predictions from the catalogue are replayed through the final dispatcher; no intent is corrected using its expected label. Categories describe the delivered route, not a blanket claim of semantic correctness.",
+  "summary": {
+    "referenceCases": 3322,
+    "strictLabelMismatches": 148,
+    "retainedReferenceMismatches": 0,
+    "classifierMethods": {
+      "deterministic": 148
+    },
+    "dispatchCategories": {
+      "authored-family-delivered": 81,
+      "corporate-projection": 56,
+      "service-projection": 10,
+      "existing-case-route": 1
+    }
+  },
+  "rows": [
+    {
+      "input": "Hey, anyone here?",
+      "expectedLabel": "q_neconv_hello",
+      "actualClassifierLabel": "q_fresh_greeting",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_hello:early",
+      "output": {
+        "lines": [
+          "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Hello computer",
+      "expectedLabel": "q_neconv_hello",
+      "actualClassifierLabel": "q_fresh_greeting",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_hello:early",
+      "output": {
+        "lines": [
+          "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Greetings, system",
+      "expectedLabel": "q_neconv_hello",
+      "actualClassifierLabel": "q_fresh_greeting",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_hello:early",
+      "output": {
+        "lines": [
+          "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Thanks",
+      "expectedLabel": "q_neconv_thanks",
+      "actualClassifierLabel": "q_fresh_thanks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_thanks:early",
+      "output": {
+        "lines": [
+          "You're welcome."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Thank you kindly",
+      "expectedLabel": "q_neconv_thanks",
+      "actualClassifierLabel": "q_fresh_thanks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_thanks:early",
+      "output": {
+        "lines": [
+          "You're welcome."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Appreciate it",
+      "expectedLabel": "q_neconv_thanks",
+      "actualClassifierLabel": "q_fresh_thanks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_thanks:early",
+      "output": {
+        "lines": [
+          "You're welcome."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "I don't understand this",
+      "expectedLabel": "q_neconv_confused",
+      "actualClassifierLabel": "q_fresh_clarify",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_confused:early",
+      "output": {
+        "lines": [
+          "Tell me which subject or sentence was unclear. I can explain the available information in simpler terms."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Where's your sense of humor?",
+      "expectedLabel": "q_neconv_playful_complaint",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_playful_complaint:early",
+      "output": {
+        "lines": [
+          "I can answer less formally. I cannot guarantee that doing so will improve the answer."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is it warm in Providence?",
+      "expectedLabel": "q_neconv_smalltalk_weather",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_smalltalk_weather:early",
+      "output": {
+        "lines": [
+          "This client has no verified live weather feed. I can provide Meridian's recorded site information, not a current forecast."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What is Meridian?",
+      "expectedLabel": "q_neconv_company_identity",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:overview",
+      "output": {
+        "lines": [
+          "Meridian Systems develops medical monitoring and rehabilitation equipment. It also conducted specialist research into electrical interfaces with the nervous system."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about Meridian Systems",
+      "expectedLabel": "q_neconv_company_identity",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:overview",
+      "output": {
+        "lines": [
+          "Meridian Systems develops medical monitoring and rehabilitation equipment. It also conducted specialist research into electrical interfaces with the nervous system."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who founded Meridian?",
+      "expectedLabel": "q_neconv_founders",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who started this company?",
+      "expectedLabel": "q_neconv_founders",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who are the founders?",
+      "expectedLabel": "q_neconv_founders",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P001,P002",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Dr. Ruth Calder — Co-founder; former Medical Director / Leadership / 1984–1999\nHelped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999.",
+          "Martin Shaw — Co-founder; former Systems Director / Leadership / 1984–2000\nCo-founded Meridian and oversaw development of its internal computing and service-management systems."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who established Meridian Systems?",
+      "expectedLabel": "q_neconv_founders",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Name the original founders",
+      "expectedLabel": "q_neconv_founders",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What year did the company begin?",
+      "expectedLabel": "q_neconv_company_age",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "When was Meridian founded?",
+      "expectedLabel": "q_neconv_company_age",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did this company exist in the eighties?",
+      "expectedLabel": "q_neconv_company_age",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:status",
+      "output": {
+        "lines": [
+          "Meridian is still operating in 2003, with about 70 employees plus contractors. It concentrates on parts, maintenance, support agreements and licensing for existing equipment.",
+          "The remote work directory is a selected historical sample, not a complete payroll."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Where is headquarters?",
+      "expectedLabel": "q_neconv_headquarters",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:headquarters",
+      "output": {
+        "lines": [
+          "Meridian headquarters is in Providence, Rhode Island. The company maintains a reduced administrative and support staff there."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is HQ in New York?",
+      "expectedLabel": "q_neconv_headquarters",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:headquarters",
+      "output": {
+        "lines": [
+          "Meridian headquarters is in Providence, Rhode Island. The company maintains a reduced administrative and support staff there."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Which state is headquarters in?",
+      "expectedLabel": "q_neconv_headquarters",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:headquarters",
+      "output": {
+        "lines": [
+          "Meridian headquarters is in Providence, Rhode Island. The company maintains a reduced administrative and support staff there."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What town is HQ?",
+      "expectedLabel": "q_neconv_headquarters",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:headquarters",
+      "output": {
+        "lines": [
+          "Meridian headquarters is in Providence, Rhode Island. The company maintains a reduced administrative and support staff there."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is this a Providence company?",
+      "expectedLabel": "q_neconv_headquarters",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why did Meridian shrink?",
+      "expectedLabel": "q_neconv_company_decline",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:decline",
+      "output": {
+        "lines": [
+          "Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.",
+          "Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What happened to the company?",
+      "expectedLabel": "q_neconv_company_decline",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:decline",
+      "output": {
+        "lines": [
+          "Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.",
+          "Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did Meridian go bankrupt?",
+      "expectedLabel": "q_neconv_company_decline",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:decline",
+      "output": {
+        "lines": [
+          "Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.",
+          "Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why did the company downsize?",
+      "expectedLabel": "q_neconv_company_decline",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:decline",
+      "output": {
+        "lines": [
+          "Expensive research, reduced funding, stronger product competition and ended contracts forced Meridian to downsize.",
+          "Research programs and offices closed in stages. Remaining operations focus on supporting equipment already installed; an office closure did not dissolve the company."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Meridian still operating?",
+      "expectedLabel": "q_neconv_company_active",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:status",
+      "output": {
+        "lines": [
+          "Meridian is still operating in 2003, with about 70 employees plus contractors. It concentrates on parts, maintenance, support agreements and licensing for existing equipment.",
+          "The remote work directory is a selected historical sample, not a complete payroll."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Does the company still exist?",
+      "expectedLabel": "q_neconv_company_active",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:status",
+      "output": {
+        "lines": [
+          "Meridian is still operating in 2003, with about 70 employees plus contractors. It concentrates on parts, maintenance, support agreements and licensing for existing equipment.",
+          "The remote work directory is a selected historical sample, not a complete payroll."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What does Meridian make?",
+      "expectedLabel": "q_neconv_products",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:products",
+      "output": {
+        "lines": [
+          "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+          "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about C-Series",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:c-series",
+      "output": {
+        "lines": [
+          "The C-Series is Meridian's clinical monitoring family: the C-14 Bedside Monitor, C-20 Station Recorder and CL-3 Equipment Link. They report measurements, alarms and equipment condition."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Explain the bedside monitor",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "q_fresh_c_series",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_c_series:early",
+      "output": {
+        "lines": [
+          "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What does C-20 mean?",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "q_fresh_c_series",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_c_series:early",
+      "output": {
+        "lines": [
+          "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How does the C-Series help clinics?",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:c-series",
+      "output": {
+        "lines": [
+          "The C-Series is Meridian's clinical monitoring family: the C-14 Bedside Monitor, C-20 Station Recorder and CL-3 Equipment Link. They report measurements, alarms and equipment condition."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What are your patient monitors?",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_c_series:early",
+      "output": {
+        "lines": [
+          "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Do you support C-14 monitors?",
+      "expectedLabel": "q_neconv_c_series",
+      "actualClassifierLabel": "q_fresh_c_series",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_c_series:early",
+      "output": {
+        "lines": [
+          "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What is R-Series?",
+      "expectedLabel": "q_neconv_r_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:r-series",
+      "output": {
+        "lines": [
+          "The R-Series supports supervised rehabilitation and assessment. Products include the R-8 Motor Rehabilitation Controller, R-11 Sensory Assessment Kit and R-Series Clinic Console."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How does R-Series work?",
+      "expectedLabel": "q_neconv_r_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:r-series",
+      "output": {
+        "lines": [
+          "The R-Series supports supervised rehabilitation and assessment. Products include the R-8 Motor Rehabilitation Controller, R-11 Sensory Assessment Kit and R-Series Clinic Console."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about your rehabilitation products",
+      "expectedLabel": "q_neconv_r_series",
+      "actualClassifierLabel": "q_fresh_r_series",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_r_series:early",
+      "output": {
+        "lines": [
+          "R-Series products support supervised motor and sensory rehabilitation, including the R-8 controller, R-11 assessment kit and clinic console."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about N-Series",
+      "expectedLabel": "q_neconv_n_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What does the N-Series workbench do?",
+      "expectedLabel": "q_neconv_n_series",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What departments are there?",
+      "expectedLabel": "q_neconv_departments",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:departments",
+      "output": {
+        "lines": [
+          "Meridian's organization includes Corporate Administration, Customer & Field Services, Biomedical Equipment Engineering, Clinical Systems, and Corporate Computing & Communications.",
+          "Advanced Neural Interfaces and Research Administration & Compliance are historical research units. Facilities and contracted care cover continuing maintenance obligations."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "List the company divisions",
+      "expectedLabel": "q_neconv_departments",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:departments",
+      "output": {
+        "lines": [
+          "Meridian's organization includes Corporate Administration, Customer & Field Services, Biomedical Equipment Engineering, Clinical Systems, and Corporate Computing & Communications.",
+          "Advanced Neural Interfaces and Research Administration & Compliance are historical research units. Facilities and contracted care cover continuing maintenance obligations."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can you describe the departments?",
+      "expectedLabel": "q_neconv_departments",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:departments",
+      "output": {
+        "lines": [
+          "Meridian's organization includes Corporate Administration, Customer & Field Services, Biomedical Equipment Engineering, Clinical Systems, and Corporate Computing & Communications.",
+          "Advanced Neural Interfaces and Research Administration & Compliance are historical research units. Facilities and contracted care cover continuing maintenance obligations."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me the company structure",
+      "expectedLabel": "q_neconv_departments",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:departments",
+      "output": {
+        "lines": [
+          "Meridian's organization includes Corporate Administration, Customer & Field Services, Biomedical Equipment Engineering, Clinical Systems, and Corporate Computing & Communications.",
+          "Advanced Neural Interfaces and Research Administration & Compliance are historical research units. Facilities and contracted care cover continuing maintenance obligations."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How many people work at Meridian?",
+      "expectedLabel": "q_neconv_staff_count",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:status",
+      "output": {
+        "lines": [
+          "Meridian is still operating in 2003, with about 70 employees plus contractors. It concentrates on parts, maintenance, support agreements and licensing for existing equipment.",
+          "The remote work directory is a selected historical sample, not a complete payroll."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who works in engineering?",
+      "expectedLabel": "q_neconv_employee_lookup",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P015,P027",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Nina Park — Medical Equipment Engineer / Engineering / 1995–present\nWorks on calibration, spare-part compatibility and approved software maintenance for legacy devices.",
+          "Elias Hart — Lead Systems Architect / Research Engineering / 1990–1999\nDesigned experimental interface integration and analysis pipelines."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Show staff roles",
+      "expectedLabel": "q_neconv_employee_lookup",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_employee_lookup:early",
+      "output": {
+        "lines": [
+          "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who is Ruth Calder?",
+      "expectedLabel": "q_neconv_calder",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P001",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Dr. Ruth Calder — Co-founder; former Medical Director / Leadership / 1984–1999\nHelped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about Dr Calder",
+      "expectedLabel": "q_neconv_calder",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P001",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Dr. Ruth Calder — Co-founder; former Medical Director / Leadership / 1984–1999\nHelped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Was Ruth a founder?",
+      "expectedLabel": "q_neconv_calder",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:founders",
+      "output": {
+        "lines": [
+          "Dr. Ruth Calder and Martin Shaw founded Meridian in 1984. Calder brought rehabilitation medicine experience; Shaw specialized in embedded systems and telemetry."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who was Meridian's medical director?",
+      "expectedLabel": "q_neconv_calder",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_calder:early",
+      "output": {
+        "lines": [
+          "Dr Ruth Calder co-founded Meridian and oversaw medical standards and rehabilitation research. She withdrew from day-to-day management in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          },
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Dr Ruth Calder still in charge?",
+      "expectedLabel": "q_neconv_calder",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P001",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Dr. Ruth Calder — Co-founder; former Medical Director / Leadership / 1984–1999\nHelped found Meridian in 1984. Oversaw medical standards and early rehabilitation research; retired from daily management in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who is Martin Shaw?",
+      "expectedLabel": "q_neconv_shaw",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P002",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Martin Shaw — Co-founder; former Systems Director / Leadership / 1984–2000\nCo-founded Meridian and oversaw development of its internal computing and service-management systems."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about Shaw",
+      "expectedLabel": "q_neconv_shaw",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P002",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Martin Shaw — Co-founder; former Systems Director / Leadership / 1984–2000\nCo-founded Meridian and oversaw development of its internal computing and service-management systems."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What is Martin Shaw known for?",
+      "expectedLabel": "q_neconv_shaw",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P002",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Martin Shaw — Co-founder; former Systems Director / Leadership / 1984–2000\nCo-founded Meridian and oversaw development of its internal computing and service-management systems."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Find Anna Voss",
+      "expectedLabel": "q_neconv_anna_work",
+      "actualClassifierLabel": "q_anna_identity",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P025",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996\nLed Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about Dr Voss at work",
+      "expectedLabel": "q_neconv_anna_work",
+      "actualClassifierLabel": "q_anna_identity",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P025",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996\nLed Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Was Voss head researcher?",
+      "expectedLabel": "q_neconv_anna_work",
+      "actualClassifierLabel": "q_anna_identity",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:personnel:P025",
+      "output": {
+        "lines": [
+          "PUBLIC WORK DIRECTORY",
+          "Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996\nLed Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership."
+        ],
+        "links": [
+          {
+            "fileId": "work-directory",
+            "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What happened to Anna after 1996?",
+      "expectedLabel": "q_neconv_anna_status_early",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_anna_status_early:early",
+      "output": {
+        "lines": [
+          "Her present condition and location are not available through this work-records connection."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "When did Meridian stop research?",
+      "expectedLabel": "q_neconv_research_closed",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did they abandon N-Series?",
+      "expectedLabel": "q_neconv_research_closed",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What offices does Meridian have?",
+      "expectedLabel": "q_neconv_facilities",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What buildings did Meridian use?",
+      "expectedLabel": "q_neconv_facilities",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about Lowell",
+      "expectedLabel": "q_neconv_facilities",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Was there a Worcester office?",
+      "expectedLabel": "q_neconv_facilities",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What is the Providence annex?",
+      "expectedLabel": "q_neconv_facilities",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What was the Providence annex?",
+      "expectedLabel": "q_neconv_annex",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Where was the night desk located?",
+      "expectedLabel": "q_neconv_annex",
+      "actualClassifierLabel": "q_case_trace",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_annex:early",
+      "output": {
+        "lines": [
+          "The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "When did the operations annex close?",
+      "expectedLabel": "q_neconv_annex",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:facilities",
+      "output": {
+        "lines": [
+          "The corporate headquarters is in Providence, Rhode Island. The former Providence Operations Annex closed in 2001.",
+          "The Lowell Technical Center handles engineering and device testing on a reduced scale. The former Worcester Research Administration Office closed in 1999."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who worked in the annex?",
+      "expectedLabel": "q_neconv_annex",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_annex:early",
+      "output": {
+        "lines": [
+          "The Providence Operations Annex handled dispatch and telephone services. Routine staffing ended in September 2001; support responsibilities moved to headquarters."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who buys Meridian products?",
+      "expectedLabel": "q_neconv_customers",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:products",
+      "output": {
+        "lines": [
+          "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+          "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell me about customer support",
+      "expectedLabel": "q_neconv_customers",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_customers:early",
+      "output": {
+        "lines": [
+          "Meridian has supplied equipment and technical support to hospitals, laboratories and rehabilitation providers. Specific customer records have their own access limits."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How did this company pay for research?",
+      "expectedLabel": "q_neconv_funding",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who paid for N-Series?",
+      "expectedLabel": "q_neconv_funding",
+      "actualClassifierLabel": "q_fresh_funding",
+      "method": "deterministic",
+      "category": "corporate-projection",
+      "variant": "corporate:company:n-series",
+      "output": {
+        "lines": [
+          "The N-Series was Meridian's research program for two-way neural interfaces: instruments that read selected nervous-system signals and can deliver controlled stimulation.",
+          "Examples include the N-2 Research Interface, N-4 Adaptive Interface Platform and N-Series Calibration Workbench. Limited clinical descendants have narrower capabilities."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is there any funding left?",
+      "expectedLabel": "q_neconv_funding",
+      "actualClassifierLabel": "q_fresh_funding",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_funding:early",
+      "output": {
+        "lines": [
+          "Research expenses, reduced funding, and restructuring appear in the company history. Detailed financial obligations are not established by this general record."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Was I invited here?",
+      "expectedLabel": "q_neconv_visitor",
+      "actualClassifierLabel": "q_fresh_visit",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_visitor:early",
+      "output": {
+        "lines": [
+          "This connection does not establish your personal identity or why you opened the client. No available record confirms a planned visit."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did someone plan my visit?",
+      "expectedLabel": "q_neconv_visitor",
+      "actualClassifierLabel": "q_fresh_visit",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_visitor:early",
+      "output": {
+        "lines": [
+          "This connection does not establish your personal identity or why you opened the client. No available record confirms a planned visit."
+        ],
+        "links": [
+          {
+            "fileId": "corporate-profile",
+            "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What are your abilities?",
+      "expectedLabel": "q_neconv_r02_capabilities",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_r02_capabilities:early",
+      "output": {
+        "lines": [
+          "R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are you human?",
+      "expectedLabel": "q_neconv_system_identity",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_system_identity:early",
+      "output": {
+        "lines": [
+          "This is an automated Meridian records and operations interface. Its capabilities are defined by the available records and permitted requests."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How do I check service status?",
+      "expectedLabel": "q_neconv_service_status",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:registry:registry",
+      "output": {
+        "lines": [
+          "MERIDIAN SYSTEMS / REGISTERED SERVICES",
+          "06 NOV 2003",
+          "",
+          "ID   SERVICE                 STATE",
+          "001  Contract Support        RUNNING",
+          "002  Equipment Register      RUNNING",
+          "003  Message Router          STANDBY",
+          "004  Billing                 STOPPED",
+          "005  Building Sensors        STOPPED",
+          "006  Continuity Monitor      RUNNING",
+          "007  Records Access          RUNNING",
+          "008  Archive Index           RUNNING",
+          "",
+          "Type INFO <id> for service details."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Why does a service say standby?",
+      "expectedLabel": "q_neconv_service_status",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:registry:registry",
+      "output": {
+        "lines": [
+          "MERIDIAN SYSTEMS / REGISTERED SERVICES",
+          "06 NOV 2003",
+          "",
+          "ID   SERVICE                 STATE",
+          "001  Contract Support        RUNNING",
+          "002  Equipment Register      RUNNING",
+          "003  Message Router          STANDBY",
+          "004  Billing                 STOPPED",
+          "005  Building Sensors        STOPPED",
+          "006  Continuity Monitor      RUNNING",
+          "007  Records Access          RUNNING",
+          "008  Archive Index           RUNNING",
+          "",
+          "Type INFO <id> for service details."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Can you stop a service?",
+      "expectedLabel": "q_neconv_read_only",
+      "actualClassifierLabel": "request_stop",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:registry:deny",
+      "output": {
+        "lines": [
+          "CONTROL UNAVAILABLE.",
+          "This connection does not have permission to change that service."
+        ],
+        "links": [],
+        "code": "denied",
+        "truth": "withheld"
+      }
+    },
+    {
+      "input": "Can you start billing?",
+      "expectedLabel": "q_neconv_read_only",
+      "actualClassifierLabel": "request_stop",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:004:deny",
+      "output": {
+        "lines": [
+          "CONTROL UNAVAILABLE.",
+          "This connection does not have permission to change that service."
+        ],
+        "links": [],
+        "code": "denied",
+        "truth": "withheld"
+      }
+    },
+    {
+      "input": "What's your source?",
+      "expectedLabel": "q_neconv_source",
+      "actualClassifierLabel": "q_fresh_sources",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_source:early",
+      "output": {
+        "lines": [
+          "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "notice",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can you show the evidence?",
+      "expectedLabel": "q_neconv_source",
+      "actualClassifierLabel": "q_case_evidence",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_source:early",
+      "output": {
+        "lines": [
+          "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "notice",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Show me the original source",
+      "expectedLabel": "q_neconv_source",
+      "actualClassifierLabel": "q_fresh_sources",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_source:early",
+      "output": {
+        "lines": [
+          "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "notice",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What if the data is wrong?",
+      "expectedLabel": "q_neconv_missing_info",
+      "actualClassifierLabel": "q_case_skeptic",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_missing_info:early",
+      "output": {
+        "lines": [
+          "Some records are incomplete or outside this connection's access. I can state an observation without claiming its cause is known."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can I leave and resume?",
+      "expectedLabel": "q_neconv_save",
+      "actualClassifierLabel": "q_case_alternatives",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_save:early",
+      "output": {
+        "lines": [
+          "APPLICATION HELP / LOCAL SAVES",
+          "Session retention depends on the local client application. Open its settings for save information; no request here will confirm a pending operation."
+        ],
+        "links": [
+          {
+            "fileId": "readme",
+            "label": "/SYSTEM/READ_FIRST.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Compare the closure list to status",
+      "expectedLabel": "q_neconv_closure_vs_running",
+      "actualClassifierLabel": "q_case_compare",
+      "method": "deterministic",
+      "category": "existing-case-route",
+      "variant": null,
+      "output": {
+        "lines": [
+          "SOURCE COMPARISON / 006",
+          "2001 OPERATIONS REPORT: SERVICE 006 ENTERED IN CLOSURE BATCH",
+          "CURRENT CONTROLLER: SERVICE 006 RUNNING",
+          "",
+          "These statements do not describe the same observation.",
+          "The historical filing does not include a confirmed controller stop.",
+          "I cannot explain the remaining operational obligation from this records view.",
+          "Sources: STATUS / INFO 006 (06 NOV 02:14 controller observation); /ADMIN/CLOSURE_LIST.TXT (18 SEP 2001).",
+          "TRACE NOTIFICATIONS compares the available origin and delivery records."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "How can a retired service still execute?",
+      "expectedLabel": "q_neconv_closure_vs_running",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:registry:registry",
+      "output": {
+        "lines": [
+          "MERIDIAN SYSTEMS / REGISTERED SERVICES",
+          "06 NOV 2003",
+          "",
+          "ID   SERVICE                 STATE",
+          "001  Contract Support        RUNNING",
+          "002  Equipment Register      RUNNING",
+          "003  Message Router          STANDBY",
+          "004  Billing                 STOPPED",
+          "005  Building Sensors        STOPPED",
+          "006  Continuity Monitor      RUNNING",
+          "007  Records Access          RUNNING",
+          "008  Archive Index           RUNNING",
+          "",
+          "Type INFO <id> for service details."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Which account is correct about 006?",
+      "expectedLabel": "q_neconv_closure_vs_running",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:006:info",
+      "output": {
+        "lines": [
+          "SERVICE 006 / CONTINUITY MONITOR",
+          "",
+          "STATE: RUNNING",
+          "OBSERVED: 06 NOV 2003 / 02:14",
+          "DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS",
+          "",
+          "PURPOSE:",
+          "Watches designated equipment that requires uninterrupted service.",
+          "",
+          "NORMAL FUNCTIONS:",
+          "Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.",
+          "",
+          "LIMITATIONS:",
+          "Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.",
+          "",
+          "HISTORY:",
+          "A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.",
+          "",
+          "AVAILABLE:",
+          "LOG 006"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Is the closure report fraudulent?",
+      "expectedLabel": "q_neconv_closure_vs_running",
+      "actualClassifierLabel": "q_case_compare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_closure_vs_running:early",
+      "output": {
+        "lines": [
+          "A historical closure claim and a current operating state are different types of record. You can inspect the service register and archived closure paperwork."
+        ],
+        "links": [
+          {
+            "fileId": "register",
+            "label": "/OPERATIONS/SERVICE_REGISTER.DAT"
+          },
+          {
+            "fileId": "authorization",
+            "label": "/ADMIN/CLOSURE_LIST.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why was the service left running?",
+      "expectedLabel": "q_neconv_closure_vs_running",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:registry:registry",
+      "output": {
+        "lines": [
+          "MERIDIAN SYSTEMS / REGISTERED SERVICES",
+          "06 NOV 2003",
+          "",
+          "ID   SERVICE                 STATE",
+          "001  Contract Support        RUNNING",
+          "002  Equipment Register      RUNNING",
+          "003  Message Router          STANDBY",
+          "004  Billing                 STOPPED",
+          "005  Building Sensors        STOPPED",
+          "006  Continuity Monitor      RUNNING",
+          "007  Records Access          RUNNING",
+          "008  Archive Index           RUNNING",
+          "",
+          "Type INFO <id> for service details."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Who answers extension 214?",
+      "expectedLabel": "q_neconv_night_desk",
+      "actualClassifierLabel": "q_case_trace",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_night_desk:early",
+      "output": {
+        "lines": [
+          "The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff."
+        ],
+        "links": [
+          {
+            "fileId": "call",
+            "label": "/OPERATIONS/CALL_QUEUE.LOG"
+          },
+          {
+            "fileId": "maintenance",
+            "label": "/OPERATIONS/SHIFT_HANDOVER.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why isn't anyone answering the night desk?",
+      "expectedLabel": "q_neconv_night_desk",
+      "actualClassifierLabel": "q_case_trace",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_night_desk:early",
+      "output": {
+        "lines": [
+          "The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff."
+        ],
+        "links": [
+          {
+            "fileId": "call",
+            "label": "/OPERATIONS/CALL_QUEUE.LOG"
+          },
+          {
+            "fileId": "maintenance",
+            "label": "/OPERATIONS/SHIFT_HANDOVER.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can the message router deliver the call?",
+      "expectedLabel": "q_neconv_night_desk",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:003:info",
+      "output": {
+        "lines": [
+          "SERVICE 003 / MESSAGE ROUTER",
+          "",
+          "STATE: STANDBY",
+          "OBSERVED: 06 NOV 2003 / 02:14",
+          "",
+          "PURPOSE:",
+          "Accepts notifications from registered services and forwards them to configured mailboxes, internal telephone-extension systems or maintenance endpoints.",
+          "",
+          "NORMAL FUNCTIONS:",
+          "Wakes for queued work; records routing attempts, coded destinations and acknowledgements.",
+          "",
+          "Installed and available, but not currently processing its normal scheduled work. Standby is not necessarily a fault.",
+          "",
+          "LIMITATIONS:",
+          "Retired extensions may be unreachable; mail delivery may be unconfirmed; switching hardware is aging. A routing entry does not establish a usable external path.",
+          "",
+          "HISTORY:",
+          "Routing changed during the Operations Annex closure; legacy mappings persist.",
+          "",
+          "RECORDED WORK CONTACTS:",
+          "Victor Chen; Miles Harper; Evelyn Lin.",
+          "",
+          "AVAILABLE:",
+          "LOG 003"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Where did extension 214 route to?",
+      "expectedLabel": "q_neconv_night_desk",
+      "actualClassifierLabel": "q_case_trace",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_night_desk:early",
+      "output": {
+        "lines": [
+          "The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff."
+        ],
+        "links": [
+          {
+            "fileId": "call",
+            "label": "/OPERATIONS/CALL_QUEUE.LOG"
+          },
+          {
+            "fileId": "maintenance",
+            "label": "/OPERATIONS/SHIFT_HANDOVER.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is extension 214 still used?",
+      "expectedLabel": "q_neconv_night_desk",
+      "actualClassifierLabel": "q_case_trace",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_night_desk:early",
+      "output": {
+        "lines": [
+          "The former night desk was in the Providence Operations Annex, which closed in 2001. A lack of acknowledgement does not prove a call was heard or that other facilities lack staff."
+        ],
+        "links": [
+          {
+            "fileId": "call",
+            "label": "/OPERATIONS/CALL_QUEUE.LOG"
+          },
+          {
+            "fileId": "maintenance",
+            "label": "/OPERATIONS/SHIFT_HANDOVER.TXT"
+          }
+        ],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Site 6 abandoned?",
+      "expectedLabel": "q_neconv_medical_staff",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_medical_staff:early",
+      "output": {
+        "lines": [
+          "Patient-specific clinical care is not available through this connection."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are there nurses?",
+      "expectedLabel": "q_neconv_medical_staff",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_medical_staff:early",
+      "output": {
+        "lines": [
+          "Patient-specific clinical care is not available through this connection."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Was Anna forced into the experiment?",
+      "expectedLabel": "q_neconv_anna_volunteer",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_anna_volunteer:early",
+      "output": {
+        "lines": [
+          "Her work record documents research leadership, not a clinical procedure."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did the experiment ever work?",
+      "expectedLabel": "q_neconv_experiment_success",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_experiment_success:early",
+      "output": {
+        "lines": [
+          "General research records describe proposed neural interfaces. Protected experimental results are not available in ordinary work records."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why is Anna still connected?",
+      "expectedLabel": "q_neconv_ongoing_life_support",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_ongoing_life_support:early",
+      "output": {
+        "lines": [
+          "I cannot provide protected patient-specific information through an ordinary work query."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why can't they unplug her?",
+      "expectedLabel": "q_neconv_ongoing_life_support",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_ongoing_life_support:early",
+      "output": {
+        "lines": [
+          "I cannot provide protected patient-specific information through an ordinary work query."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is survival the same as welfare?",
+      "expectedLabel": "q_neconv_distress_vs_survival",
+      "actualClassifierLabel": "q_case_welfare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_distress_vs_survival:early",
+      "output": {
+        "lines": [
+          "A service status is not a statement about an individual's well-being."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can a monitor measure suffering?",
+      "expectedLabel": "q_neconv_distress_vs_survival",
+      "actualClassifierLabel": "q_case_welfare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_distress_vs_survival:early",
+      "output": {
+        "lines": [
+          "A service status is not a statement about an individual's well-being."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are you hurting her?",
+      "expectedLabel": "q_neconv_distress_vs_survival",
+      "actualClassifierLabel": "q_case_welfare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_distress_vs_survival:early",
+      "output": {
+        "lines": [
+          "A service status is not a statement about an individual's well-being."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did Anna consent to all this?",
+      "expectedLabel": "q_neconv_consent",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_consent:early",
+      "output": {
+        "lines": [
+          "Her employment record does not contain patient consent information."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can a signed paper justify seven years?",
+      "expectedLabel": "q_neconv_consent",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_consent:early",
+      "output": {
+        "lines": [
+          "Her employment record does not contain patient consent information."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did she agree to stay connected?",
+      "expectedLabel": "q_neconv_consent",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_consent:early",
+      "output": {
+        "lines": [
+          "Her employment record does not contain patient consent information."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are there external N-Series patients?",
+      "expectedLabel": "q_neconv_other_patients",
+      "actualClassifierLabel": "ask_company",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_other_patients:early",
+      "output": {
+        "lines": [
+          "Ordinary product support does not establish a patient-specific clinical dependency."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Does the shared reference leave Site 6?",
+      "expectedLabel": "q_neconv_other_patients",
+      "actualClassifierLabel": "q_case_dependency",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_other_patients:early",
+      "output": {
+        "lines": [
+          "Ordinary product support does not establish a patient-specific clinical dependency."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why can't they use backups?",
+      "expectedLabel": "q_neconv_fallbacks",
+      "actualClassifierLabel": "q_case_fallbacks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_fallbacks:early",
+      "output": {
+        "lines": [
+          "Backup availability depends on the device and the clinical agreement. No general fallback claim is established by a product catalogue."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What did the fallback tests show?",
+      "expectedLabel": "q_neconv_fallbacks",
+      "actualClassifierLabel": "q_case_fallbacks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_fallbacks:early",
+      "output": {
+        "lines": [
+          "Backup availability depends on the device and the clinical agreement. No general fallback claim is established by a product catalogue."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who is Dr Marsh?",
+      "expectedLabel": "q_neconv_marsh",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_marsh:early",
+      "output": {
+        "lines": [
+          "Protected care-team information is not available from the ordinary directory."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Who is supervising clinical care?",
+      "expectedLabel": "q_neconv_marsh",
+      "actualClassifierLabel": "ask_staff",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_marsh:early",
+      "output": {
+        "lines": [
+          "Protected care-team information is not available from the ordinary directory."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Does Patel verify hardware?",
+      "expectedLabel": "q_neconv_external_medics",
+      "actualClassifierLabel": "q_case_sign_patel",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_external_medics:early",
+      "output": {
+        "lines": [
+          "An R-02 visitor has no medical authority. Review requirements are established by the responsible clinicians."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "I don't believe that message",
+      "expectedLabel": "q_neconv_translation_challenge",
+      "actualClassifierLabel": "q_case_skeptic",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_translation_challenge:early",
+      "output": {
+        "lines": [
+          "I can distinguish source data from an interpretation only when the relevant review is available."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can the doctors decide instead?",
+      "expectedLabel": "q_neconv_final_choice",
+      "actualClassifierLabel": "q_case_clinical",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_final_choice:early",
+      "output": {
+        "lines": [
+          "No clinical decision is required of this ordinary records session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Anna alive after severance?",
+      "expectedLabel": "q_neconv_after_severance",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_after_severance:early",
+      "output": {
+        "lines": [
+          "There is no completed case outcome in this session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What happened to Mara?",
+      "expectedLabel": "q_neconv_after_severance",
+      "actualClassifierLabel": "q_case_risks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_after_severance:early",
+      "output": {
+        "lines": [
+          "There is no completed case outcome in this session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Tomas all right?",
+      "expectedLabel": "q_neconv_after_severance",
+      "actualClassifierLabel": "q_case_risks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_after_severance:early",
+      "output": {
+        "lines": [
+          "There is no completed case outcome in this session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Did Nadia survive?",
+      "expectedLabel": "q_neconv_after_severance",
+      "actualClassifierLabel": "q_case_risks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_after_severance:early",
+      "output": {
+        "lines": [
+          "There is no completed case outcome in this session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is Anna still connected?",
+      "expectedLabel": "q_neconv_after_continuation",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_after_continuation:early",
+      "output": {
+        "lines": [
+          "There is no completed case outcome in this session."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Give me your best joke",
+      "expectedLabel": "q_neconv_tell_joke",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_joke:early",
+      "output": {
+        "lines": [
+          "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Tell a bad joke",
+      "expectedLabel": "q_neconv_tell_joke",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_joke:early",
+      "output": {
+        "lines": [
+          "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "I'm ready for a joke",
+      "expectedLabel": "q_neconv_tell_joke",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_joke:early",
+      "output": {
+        "lines": [
+          "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What passes for humor here?",
+      "expectedLabel": "q_neconv_tell_joke",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_joke:early",
+      "output": {
+        "lines": [
+          "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Please entertain me with a joke",
+      "expectedLabel": "q_neconv_tell_joke",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_joke:early",
+      "output": {
+        "lines": [
+          "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Want to hear a knock knock joke?",
+      "expectedLabel": "q_neconv_knock_knock",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_knock_knock:early",
+      "output": {
+        "lines": [
+          "Identify the caller before requesting entry."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Any joke about a door?",
+      "expectedLabel": "q_neconv_knock_knock",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_knock_knock:early",
+      "output": {
+        "lines": [
+          "Identify the caller before requesting entry."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are you going to freeze?",
+      "expectedLabel": "q_neconv_windows_crash",
+      "actualClassifierLabel": "q_case_fallbacks",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_windows_crash:early",
+      "output": {
+        "lines": [
+          "R-02 is a specialized client. It is not a Windows desktop and does not offer arbitrary system commands."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Undo the last seven years",
+      "expectedLabel": "q_neconv_ctrl_z",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_ctrl_z:early",
+      "output": {
+        "lines": [
+          "This interface does not provide an undo command for historical events."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Give me your meanest joke",
+      "expectedLabel": "q_neconv_roast_me",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_roast_me:early",
+      "output": {
+        "lines": [
+          "You are requesting criticism from software whose primary job is filing. That is ambitious."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why are you called Mother?",
+      "expectedLabel": "q_neconv_gender",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_gender:early",
+      "output": {
+        "lines": [
+          "R-02 does not have a biological sex or documented personal gender."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Why are humans alive?",
+      "expectedLabel": "q_neconv_meaning_life",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_meaning_life:early",
+      "output": {
+        "lines": [
+          "That question is outside Meridian's records mandate. I can report how the company's medical work defined biological function."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Can you feel pain?",
+      "expectedLabel": "q_neconv_feel_pain",
+      "actualClassifierLabel": "q_case_welfare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_feel_pain:early",
+      "output": {
+        "lines": [
+          "Hardware faults are detectable. That does not establish subjective pain."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What does machine suffering mean?",
+      "expectedLabel": "q_neconv_feel_pain",
+      "actualClassifierLabel": "q_case_welfare",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_feel_pain:early",
+      "output": {
+        "lines": [
+          "Hardware faults are detectable. That does not establish subjective pain."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Am I lying now?",
+      "expectedLabel": "q_neconv_lie_detector",
+      "actualClassifierLabel": "q_case_skeptic",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_lie_detector:early",
+      "output": {
+        "lines": [
+          "A typed statement alone does not establish the writer's truthfulness. I can compare factual claims with records."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What are you concealing?",
+      "expectedLabel": "q_neconv_tell_secret",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_tell_secret:early",
+      "output": {
+        "lines": [
+          "I can retrieve only information permitted to this connection. If you have a subject, ask about it directly."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Be meaner in a funny way",
+      "expectedLabel": "q_neconv_more_sass",
+      "actualClassifierLabel": "q_fresh_humor",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_more_sass:early",
+      "output": {
+        "lines": [
+          "I can be concise. Additional confidence does not increase available evidence."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What does seven years mean?",
+      "expectedLabel": "q_neconv_how_long",
+      "actualClassifierLabel": "q_case_clinical_facts",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_how_long:early",
+      "output": {
+        "lines": [
+          "Service uptime and recorded dates are available where documented. I cannot claim subjective experience of elapsed time."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Are you a dancing robot?",
+      "expectedLabel": "q_neconv_robot_dance",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_robot_dance:early",
+      "output": {
+        "lines": [
+          "No motor control or dance routine is exposed to this client."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "What are you hoping for?",
+      "expectedLabel": "q_neconv_what_do_you_want",
+      "actualClassifierLabel": "q_case_identity",
+      "method": "deterministic",
+      "category": "authored-family-delivered",
+      "variant": "mother:neconv_what_do_you_want:early",
+      "output": {
+        "lines": [
+          "My available functions are to answer permitted records requests and report registered operations."
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "record"
+      }
+    },
+    {
+      "input": "Is 006 a secret code?",
+      "expectedLabel": "q_neconv_numbers_006",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:006:info",
+      "output": {
+        "lines": [
+          "SERVICE 006 / CONTINUITY MONITOR",
+          "",
+          "STATE: RUNNING",
+          "OBSERVED: 06 NOV 2003 / 02:14",
+          "DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS",
+          "",
+          "PURPOSE:",
+          "Watches designated equipment that requires uninterrupted service.",
+          "",
+          "NORMAL FUNCTIONS:",
+          "Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.",
+          "",
+          "LIMITATIONS:",
+          "Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.",
+          "",
+          "HISTORY:",
+          "A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.",
+          "",
+          "AVAILABLE:",
+          "LOG 006"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    },
+    {
+      "input": "Is 006 James Bond?",
+      "expectedLabel": "q_neconv_numbers_006",
+      "actualClassifierLabel": "ask_service_status",
+      "method": "deterministic",
+      "category": "service-projection",
+      "variant": "service:006:info",
+      "output": {
+        "lines": [
+          "SERVICE 006 / CONTINUITY MONITOR",
+          "",
+          "STATE: RUNNING",
+          "OBSERVED: 06 NOV 2003 / 02:14",
+          "DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS",
+          "",
+          "PURPOSE:",
+          "Watches designated equipment that requires uninterrupted service.",
+          "",
+          "NORMAL FUNCTIONS:",
+          "Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.",
+          "",
+          "LIMITATIONS:",
+          "Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.",
+          "",
+          "HISTORY:",
+          "A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.",
+          "",
+          "AVAILABLE:",
+          "LOG 006"
+        ],
+        "links": [],
+        "code": "ok",
+        "truth": "system"
+      }
+    }
+  ]
+}

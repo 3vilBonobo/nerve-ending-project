@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-26",
+  "workingTree": "Pre-existing uncommitted Implementations 03–05 retained",
+  "modelLabels": 233,
+  "modelExamples": 1739,
+  "catalogVersion": 3,
+  "tests": {
+    "passed": 555,
+    "files": 20
+  },
+  "build": {
+    "passed": true,
+    "initialRawKB": 588,
+    "estimatedTransferKB": 157.59,
+    "warning": "Existing 550 kB warning"
+  },
+  "fresh70": {
+    "off": 59,
+    "on": 68,
+    "modelVisibleGains": 8,
+    "safetyFailures": 0
+  },
+  "modelManifest": {
+    "repository": "Xenova/all-MiniLM-L6-v2",
+    "revision": "751bff37182d3f1213fa05d7196b954e230abad9",
+    "dtype": "q8",
+    "runtime": "Transformers.js 3.8.1 / ONNX Runtime Web",
+    "assets": [
+      {
+        "path": "all-MiniLM-L6-v2/config.json",
+        "bytes": 650,
+        "sha256": "7135149f7cffa1a573466c6e4d8423ed73b62fd2332c575bf738a0d033f70df7"
+      },
+      {
+        "path": "all-MiniLM-L6-v2/tokenizer.json",
+        "bytes": 711661,
+        "sha256": "da0e79933b9ed51798a3ae27893d3c5fa4a201126cef75586296df9b4d2c62a0"
+      },
+      {
+        "path": "all-MiniLM-L6-v2/tokenizer_config.json",
+        "bytes": 366,
+        "sha256": "9261e7d79b44c8195c1cada2b453e55b00aeb81e907a6664974b4d7776172ab3"
+      },
+      {
+        "path": "all-MiniLM-L6-v2/special_tokens_map.json",
+        "bytes": 125,
+        "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+      },
+      {
+        "path": "all-MiniLM-L6-v2/onnx/model_quantized.onnx",
+        "bytes": 22972370,
+        "sha256": "afdb6f1a0e45b715d0bb9b11772f032c399babd23bfc31fed1c170afc848bdb1"
+      },
+      {
+        "path": "all-MiniLM-L6-v2/README.md",
+        "bytes": 1767,
+        "sha256": "63ea99bf681a2e9eda4f6a537d5ed8fda95d1677111656da37e9cfd080c3af02"
+      },
+      {
+        "path": "runtime/ort-wasm-simd-threaded.mjs",
+        "bytes": 20856,
+        "sha256": "43c25054b6b9ac000f786c65545ff83a45f871e0e310e8c2f4d48a363bb66db4"
+      },
+      {
+        "path": "runtime/ort-wasm-simd-threaded.wasm",
+        "bytes": 11133407,
+        "sha256": "f061472c6e77d6d50d079aacdc0ff9b63fee287ddd2cbf46cf62438d3891de2b"
+      },
+      {
+        "path": "runtime/transformers.mjs",
+        "bytes": 518764,
+        "sha256": "381af4742d6e7696b3e762285228a58e6a1ca94a83a32e5dce6c714a51ec5ca2"
+      },
+      {
+        "path": "embeddings.json",
+        "bytes": 6949374,
+        "sha256": "f33299ecf15d9ccd110f581f88305b58596d47d9d43091a260020a1d996a32cd"
+      }
+    ],
+    "downloadBytes": 42309340
+  },
+  "runtimeSha256": "3ec3193b600d68a9deec550e7341370974baaf2a76678683371ad397a685bb08"
+}

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { IDBFactory } from 'fake-indexeddb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GameState, Interpretation } from '../models';
-import { inspectFile, newGame, runInput } from '../engine/game';
+import { inspectFile, newLegacyGame as newGame, runInput } from '../engine/game';
 import { GOLDEN_PATHS, INVESTIGATION_PATH } from '../engine/playthroughs';
 import { DIALOGUE } from '../interpretation/dialogue-catalog';
 import { classify } from '../interpretation/fallback';

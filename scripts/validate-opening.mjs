@@ -12,7 +12,9 @@ await build({ stdin: { contents: [
   "export * from './src/app/core/interpretation/semantic';", "export * from './src/app/core/interpretation/fallback';",
   "export * from './src/app/core/persistence/saves';",
 ].join('\n'), resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: bundle });
-const g = await import(pathToFileURL(bundle).href);
+// This file validates the retained prototype opening. Fresh v1.0 has separate scenario/conversation suites.
+const exports = await import(pathToFileURL(bundle).href);
+const g = {...exports,newGame:exports.newLegacyGame};
 env.allowRemoteModels = false; env.allowLocalModels = true; env.useFSCache = false;
 env.localModelPath = resolve('public/language/v1') + '/';
 const embed = await pipeline('feature-extraction', 'all-MiniLM-L6-v2', { dtype: 'q8', device: 'cpu', local_files_only: true });
@@ -58,7 +60,7 @@ try {
       results.push({ model, path: n + 1, rows });
     }
   }
-  const summary = { model: 'all-MiniLM-L6-v2 / q8 / local CPU', regressionQuestions: 12, modes: ['offline','real model'], pathsPerMode: paths.length, reloadAfterEveryInput: true, inferences, passed: true };
+  const summary = { scope:'Legacy prototype opening only', model: 'all-MiniLM-L6-v2 / q8 / local CPU', regressionQuestions: 12, modes: ['offline','real model'], pathsPerMode: paths.length, reloadAfterEveryInput: true, inferences, passed: true };
   await writeFile('tmp/opening-validation/results.json', JSON.stringify({ summary, results }, null, 2) + '\n');
   console.log(JSON.stringify(summary));
 } finally { await embed.dispose(); }

@@ -1,6 +1,6 @@
 import { corporateText, findPublicPersonnel, PUBLIC_PERSONNEL, PublicEmployee } from '../corporate-records';
 import type { Interpretation, QueryContext } from '../models';
-import { SEMANTIC_CATALOG } from './semantic-catalog';
+import { BASE_SEMANTIC_CATALOG as SEMANTIC_CATALOG } from './semantic-catalog';
 
 export type CompanyTopic = 'overview' | 'history' | 'founders' | 'headquarters' | 'facilities' | 'status' | 'products' | 'n-series' | 'c-series' | 'r-series' | 'departments' | 'decline' | 'leadership' | 'unavailable';
 export interface CorporateQuestion { kind: 'company' | 'personnel' | 'unavailable'; topic?: CompanyTopic; people?: readonly PublicEmployee[]; intent: Interpretation['intent']; explicitCareer?: boolean }
@@ -8,6 +8,7 @@ export interface CorporateQuestion { kind: 'company' | 'personnel' | 'unavailabl
 /** Bounded authored information routes, shared by offline and optional-model recognition. */
 export function corporateQuestion(input: string, context: QueryContext = {}): CorporateQuestion | undefined {
   const text = corporateText(input);
+  if(/\b(?:weather|rain|snow|freezing|forecast)\b/.test(text)||/\b(?:web|website|internet)\b/.test(text)&&/\b(?:outside|external|beyond|not part)\b/.test(text))return undefined;
   if (!text || /^(?:open|read|search|help|status|dir|cd|clear|recover|diag|confirm|cancel|defer|resume|verify|audit|connect|release|revoke|isolate|restore|prepare|compare)\b/.test(text)) return undefined;
   const explicitCareer = /\b(?:career|employment|work profile|job|role|department|research responsibilities)\b/.test(text);
   const named = PUBLIC_PERSONNEL.filter(person => {
@@ -81,6 +82,7 @@ export function corporateQuestion(input: string, context: QueryContext = {}): Co
 
 export function corporateInterpretation(input: string, context: QueryContext = {}): Interpretation | undefined {
   const query = corporateQuestion(input, context);
+  if(context.scenarioVersion==='1.0'&&query?.kind==='company'&&query.topic==='unavailable'&&!/\b(?:street|postal|zip|address|coordinates|telephone|phone|email|exact|unlisted)\b/i.test(input))return undefined;
   // Preserve existing classifier labels for exact catalogue examples; answers use the public data route.
   const authored = query && SEMANTIC_CATALOG.find(entry => entry.examples.some(example => corporateText(example) === corporateText(input)));
   return query ? { intent: authored?.intent ?? query.intent, provider: 'fallback', method: 'deterministic', needsClarification: false } : undefined;

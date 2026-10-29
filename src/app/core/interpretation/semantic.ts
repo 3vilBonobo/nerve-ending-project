@@ -4,6 +4,8 @@ import { classify, isOpeningExample, normalize } from './fallback';
 import { SEMANTIC_CATALOG, SEMANTIC_EXAMPLES } from './semantic-catalog';
 import { corporateInterpretation } from './corporate-questions';
 import { serviceInterpretation } from './service-questions';
+import { freshInterpretation, FRESH_INTENTS, LEGACY_FRESH_BRIDGE } from './fresh-topics';
+import { MOTHER_INTENTS, canonicalMotherIntent } from './mother-routing';
 
 export interface RankedIntent { intent: QueryIntent; score: number }
 export const MATCH_THRESHOLD = 0.42;
@@ -53,9 +55,14 @@ const entityOf = (input: string): string | undefined => {
 
 /** Exact operations stay in the deterministic parser. The model only selects factual question categories. */
 export function directInterpretation(input: string, context: QueryContext): Interpretation | undefined {
+  if (context.scenarioVersion==='1.0') {
+    const ordinary=freshInterpretation(input,context);if(ordinary)return {...ordinary,provider:'browser-ai'};
+    const revised=classify(input,context);
+    if(revised.intent.startsWith('q_case_'))return {...revised,provider:'browser-ai'};
+  }
   const service = serviceInterpretation(input, context);
   if (service) return { ...service, provider: 'browser-ai' };
-  const corporate = corporateInterpretation(input, context);
+  const corporate = /corporation.*keep paying|visit planned by meridian/i.test(input) ? undefined : corporateInterpretation(input, context);
   if (corporate) return { ...corporate, provider: 'browser-ai' };
   const text = recognitionText(input);
   const direct = classify(text, context);
@@ -94,7 +101,15 @@ export function directInterpretation(input: string, context: QueryContext): Inte
 export function selectMeaning(input: string, context: QueryContext, ranked: readonly RankedIntent[]): Interpretation {
   const direct = directInterpretation(input, context);
   if (direct) return { ...direct, method: 'deterministic' };
-  const first = ranked[0]; const second = ranked[1];
+  // The old broad labels retain their references for prototype sessions. In fresh semantic
+  // retrieval their authored replacements compete directly; generic parents must not drown
+  // out narrower current topics. Existing exact rules and public facts still run first.
+  const narrowPublicBridges=new Set(['q_personhood','q_functions','q_designation','q_source','q_repeat','q_plain','q_mistakes','q_funding','q_trust','q_lie']);
+  const eligible=context.scenarioVersion==='1.0'?[...ranked.filter(item=>MOTHER_INTENTS.has(item.intent)||FRESH_INTENTS.has(item.intent)||narrowPublicBridges.has(item.intent)||item.intent==='ask_service_status'||item.intent==='unknown').reduce((groups,item)=>{
+    const intent=canonicalMotherIntent(item.intent)??item.intent;
+    if(!groups.has(intent)||groups.get(intent)!.score<item.score)groups.set(intent,{...item,intent});return groups;
+  },new Map<QueryIntent,RankedIntent>()).values()].sort((a,b)=>b.score-a.score):ranked.filter(item=>!item.intent.startsWith('q_fresh_')&&!MOTHER_INTENTS.has(item.intent));
+  const first = eligible[0]; const second = eligible[1];
   if (!first || !Number.isFinite(first.score) || first.intent === 'unknown' || first.score < .35) return { intent: 'unknown', needsClarification: false, provider: 'browser-ai' };
   if (first.score < MATCH_THRESHOLD) {
     const aboutRecords = /\b(record|records|paperwork|reading|file|files|service|call|office|staff|terminal|company|backup|receipt|date|clock|phone|monitor|archive|handover)\b/.test(recognitionText(input));
@@ -108,7 +123,8 @@ export function selectMeaning(input: string, context: QueryContext, ranked: read
   if (first.intent === 'ask_recovery_process' && /\b(another|spare|copy|copies|backup|duplicate)\b/.test(recognitionText(input))) return { intent: first.intent, entityId: entityOf(input) ?? context.lastTopic, needsClarification: false, confidence: first.score, provider: 'browser-ai' };
   if (first.intent === 'ask_transfer' && /\boriginal\b/.test(recognitionText(input))) return { intent: first.intent, entityId: entityOf(input) ?? context.lastTopic, needsClarification: false, confidence: first.score, provider: 'browser-ai' };
   const compatible: readonly (readonly string[])[] = [['ask_calls','q_call_repeat'], ['ask_company','q_products'], ['ask_identity','q_personhood'], ['ask_transfer','q_original'], ['ask_recovery_process','q_backup_reliable']];
-  if (second && first.score - second.score < MATCH_MARGIN && !(equivalent.has(first.intent) && equivalent.has(second.intent)) && !compatible.some(pair => pair.includes(first.intent) && pair.includes(second.intent))) {
+  const freshEquivalent=context.scenarioVersion==='1.0'&&second&&((canonicalMotherIntent(first.intent)&&canonicalMotherIntent(first.intent)===canonicalMotherIntent(second.intent))||(LEGACY_FRESH_BRIDGE[first.intent]??first.intent.replace('q_fresh_',''))===(LEGACY_FRESH_BRIDGE[second.intent]??second.intent.replace('q_fresh_','')));
+  if (second && first.score - second.score < MATCH_MARGIN && !freshEquivalent && !(equivalent.has(first.intent) && equivalent.has(second.intent)) && !compatible.some(pair => pair.includes(first.intent) && pair.includes(second.intent))) {
     const label = (intent: QueryIntent): string => SEMANTIC_CATALOG.find(group => group.intent === intent)?.label ?? 'another subject';
     return { intent: 'unknown', needsClarification: true, clarification: `Do you mean ${label(first.intent)}, or ${label(second.intent)}?`, choices: [{ intent: first.intent, label: label(first.intent) }, { intent: second.intent, label: label(second.intent) }], confidence: first.score, provider: 'browser-ai' };
   }

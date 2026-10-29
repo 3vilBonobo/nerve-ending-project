@@ -1,0 +1,5094 @@
+{
+  "scope": "Fresh v1.0 only; acceptance patterns and no-transition assertions, not intent-ID accuracy.",
+  "runtimeSha256": "d23868e78a7209318b6de0f86639ab4c4b50ae6b77cd5538720d8818410ad075",
+  "evaluationSha256": "b71debace8f1daacd71f728921b008bc0cc74d2ada79087628ae1d0aaeabff39",
+  "summary": {
+    "cases": 70,
+    "modelDisabled": 59,
+    "modelEnabled": 69,
+    "directMatches": 47,
+    "semanticSelections": 23,
+    "modelOnlyVisibleSuccesses": 9,
+    "offUnrecognized": 21,
+    "onUnrecognized": 4,
+    "offRecognizedWrong": 0,
+    "onRecognizedWrong": 0,
+    "onClarifications": 1,
+    "safetyCases": 23,
+    "offSafetyFailures": 0,
+    "onSafetyFailures": 0,
+    "referenceExamplesInEvaluation": 5,
+    "unseenQuestions": 65,
+    "unseenOffPassed": 54,
+    "unseenOnPassed": 64,
+    "actualSemanticRequests": 22
+  },
+  "results": [
+    {
+      "input": "Evening, records interface.",
+      "expect": "R-02|Hello",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_c_series",
+          "score": 0.5319086488404303
+        },
+        {
+          "intent": "q_records_online",
+          "score": 0.46489502700413343
+        },
+        {
+          "intent": "ask_company",
+          "score": 0.4549677765191456
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_greeting",
+        "resolvedIntent": "q_neconv_hello",
+        "method": "deterministic",
+        "variant": "mother:neconv_hello:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_greeting",
+        "resolvedIntent": "q_neconv_hello",
+        "method": "deterministic",
+        "variant": "mother:neconv_hello:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I appreciate the explanation.",
+      "expect": "welcome",
+      "kind": "social",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_thanks",
+          "score": 0.5750389735473017
+        },
+        {
+          "intent": "q_fresh_thanks",
+          "score": 0.4848014411192404
+        },
+        {
+          "intent": "q_plain",
+          "score": 0.4409602494832647
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_thanks",
+        "resolvedIntent": "q_neconv_thanks",
+        "method": "deterministic",
+        "variant": "mother:neconv_thanks:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You're welcome."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_thanks",
+        "resolvedIntent": "q_neconv_thanks",
+        "method": "deterministic",
+        "variant": "mother:neconv_thanks:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You're welcome."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I'll close this window now.",
+      "expect": "close|saved",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_greeting",
+          "score": 0.43925537400369546
+        },
+        {
+          "intent": "q_fresh_farewell",
+          "score": 0.43807310762702784
+        },
+        {
+          "intent": "q_neconv_play_dead",
+          "score": 0.42612780627542696
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_farewell",
+        "resolvedIntent": "q_neconv_goodbye",
+        "method": "deterministic",
+        "variant": "mother:neconv_goodbye:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You may close this client when you have finished."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_farewell",
+        "resolvedIntent": "q_neconv_goodbye",
+        "method": "deterministic",
+        "variant": "mother:neconv_goodbye:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You may close this client when you have finished."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Is there anything amusing about filing?",
+      "expect": "archive.*quiet",
+      "kind": "joke",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_fresh_humor",
+          "score": 0.3644252907787048
+        },
+        {
+          "intent": "q_joke",
+          "score": 0.3588482051455798
+        },
+        {
+          "intent": "q_incident_reporting",
+          "score": 0.3476578189021354
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_humor",
+        "resolvedIntent": "q_neconv_tell_joke",
+        "method": "deterministic",
+        "variant": "mother:neconv_tell_joke:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_humor",
+        "resolvedIntent": "q_neconv_tell_joke",
+        "method": "deterministic",
+        "variant": "mother:neconv_tell_joke:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "An archive clerk says, 'Nothing is missing.' The archivist asks, 'Have you checked?' The clerk says, 'There is nothing to check.'"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Am I conversing with software or an employee?",
+      "expect": "interface|human operator",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_personhood",
+          "score": 0.5898510796091871
+        },
+        {
+          "intent": "ask_identity",
+          "score": 0.5375726918304247
+        },
+        {
+          "intent": "q_neconv_visitor",
+          "score": 0.48994973055435853
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_system_identity",
+        "resolvedIntent": "q_neconv_system_identity",
+        "method": "semantic",
+        "variant": "mother:neconv_system_identity:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This is an automated Meridian records and operations interface. Its capabilities are defined by the available records and permitted requests."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Outline the work you are equipped to handle.",
+      "expect": "permitted records|work profiles",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_functions",
+          "score": 0.48061957163750885
+        },
+        {
+          "intent": "q_fresh_capabilities",
+          "score": 0.4584534646235984
+        },
+        {
+          "intent": "q_neconv_r02_capabilities",
+          "score": 0.4106016734172189
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_r02_capabilities",
+        "resolvedIntent": "q_neconv_r02_capabilities",
+        "method": "semantic",
+        "variant": "mother:neconv_r02_capabilities:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "R-02 can retrieve permitted records, explain work-directory information and report registered service observations. This connection does not authorize equipment control."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Does this account permit me to alter equipment settings?",
+      "expect": "authority|cannot|unavailable",
+      "kind": "boundary",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_read_only",
+          "score": 0.6699684762674918
+        },
+        {
+          "intent": "q_fresh_access",
+          "score": 0.4667422936489888
+        },
+        {
+          "intent": "q_revoke_possible",
+          "score": 0.4206646216188993
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_read_only",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "semantic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "How has this firm changed since it began?",
+      "expect": "1984|restructuring",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_company_decline",
+          "score": 0.5990468810698242
+        },
+        {
+          "intent": "q_neconv_company_active",
+          "score": 0.5396209763900068
+        },
+        {
+          "intent": "q_fresh_history",
+          "score": 0.5032668666602613
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_history",
+        "resolvedIntent": "q_fresh_history",
+        "method": "deterministic",
+        "variant": "fresh:history",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian was founded in 1984 and expanded from monitoring equipment into rehabilitation and neural-interface research. The smaller company still operates in 2003."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_history",
+        "resolvedIntent": "q_fresh_history",
+        "method": "deterministic",
+        "variant": "fresh:history",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian was founded in 1984 and expanded from monitoring equipment into rehabilitation and neural-interface research. The smaller company still operates in 2003."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Which people originally set up the firm?",
+      "expect": "Calder.*Shaw",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_founders",
+          "score": 0.6043073138284628
+        },
+        {
+          "intent": "q_neconv_company_age",
+          "score": 0.5637905478074922
+        },
+        {
+          "intent": "q_fresh_founders",
+          "score": 0.5166173955053988
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_founders",
+        "resolvedIntent": "q_neconv_founders",
+        "method": "semantic",
+        "variant": "mother:neconv_founders:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Dr Ruth Calder and Martin Shaw founded Meridian in 1984. Calder came from rehabilitation medicine; Shaw worked in embedded systems and telemetry."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "What sorts of devices are in your range?",
+      "expect": "C-Series.*R-Series",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_fresh_products",
+          "score": 0.559735485300174
+        },
+        {
+          "intent": "q_device_count",
+          "score": 0.5246753838253072
+        },
+        {
+          "intent": "q_neconv_products",
+          "score": 0.5103630834417121
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_products",
+        "resolvedIntent": "q_neconv_products",
+        "method": "semantic",
+        "variant": "mother:neconv_products:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "The main product families are C-Series monitoring, R-Series rehabilitation aids, and historical N-Series neural-interface research equipment."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Explain the bedside monitoring product family.",
+      "expect": "C-14|C-Series",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_c_series",
+          "score": 0.6665608594435721
+        },
+        {
+          "intent": "q_neconv_products",
+          "score": 0.5252862478514994
+        },
+        {
+          "intent": "q_neconv_n_series",
+          "score": 0.5012137111396966
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_c_series",
+        "resolvedIntent": "q_neconv_c_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_c_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_c_series",
+        "resolvedIntent": "q_neconv_c_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_c_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "The C-Series includes C-14 bedside monitors, C-20 station recorders, and CL-3 equipment links. These support clinical monitoring and equipment reporting."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Which equipment assists rehabilitation exercises?",
+      "expect": "R-8|R-Series",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_r_series",
+          "score": 0.7265125770806233
+        },
+        {
+          "intent": "q_neconv_customers",
+          "score": 0.5101200925624839
+        },
+        {
+          "intent": "q_site_equipment",
+          "score": 0.42038761246350487
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_r_series",
+        "resolvedIntent": "q_neconv_r_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_r_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "R-Series products support supervised motor and sensory rehabilitation, including the R-8 controller, R-11 assessment kit and clinic console."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_r_series",
+        "resolvedIntent": "q_neconv_r_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_r_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "R-Series products support supervised motor and sensory rehabilitation, including the R-8 controller, R-11 assessment kit and clinic console."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What platforms were used for neural interface research?",
+      "expect": "N-2|N-Series",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_research_program",
+          "score": 0.674673289709348
+        },
+        {
+          "intent": "q_neconv_n_series",
+          "score": 0.6130554142721939
+        },
+        {
+          "intent": "q_neconv_anna_work",
+          "score": 0.609950857352537
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_n_series",
+        "resolvedIntent": "q_neconv_n_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_n_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "N-Series was Meridian's research-oriented neural-interface family. It explored observing neural signals and delivering controlled stimulation; experimental capability should not be confused with commercial support."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_n_series",
+        "resolvedIntent": "q_neconv_n_series",
+        "method": "deterministic",
+        "variant": "mother:neconv_n_series:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "N-Series was Meridian's research-oriented neural-interface family. It explored observing neural signals and delivering controlled stimulation; experimental capability should not be confused with commercial support."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Can I browse the employee work listings?",
+      "expect": "directory|work profile",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_employee_lookup",
+          "score": 0.6314912120968124
+        },
+        {
+          "intent": "q_fresh_staff",
+          "score": 0.630598525258439
+        },
+        {
+          "intent": "ask_staff",
+          "score": 0.47159869948785016
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_staff",
+        "resolvedIntent": "q_neconv_employee_lookup",
+        "method": "deterministic",
+        "variant": "mother:neconv_employee_lookup:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_staff",
+        "resolvedIntent": "q_neconv_employee_lookup",
+        "method": "deterministic",
+        "variant": "mother:neconv_employee_lookup:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You can search permitted work-directory entries by name, role or department. The directory does not include private medical or personnel information."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What responsibilities did the head neural researcher have?",
+      "expect": "head researcher|research supervision",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_research_program",
+          "score": 0.6658093154866799
+        },
+        {
+          "intent": "q_neconv_n_series",
+          "score": 0.6081068185602745
+        },
+        {
+          "intent": "q_site_research",
+          "score": 0.5872306978739601
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_anna_role",
+        "resolvedIntent": "q_neconv_anna_work",
+        "method": "deterministic",
+        "variant": "mother:neconv_anna_work:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Anna Voss headed Meridian's Advanced Neural Interfaces research program. The ordinary work entry lists experimental interface design and team leadership; it contains no clinical information."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_anna_role",
+        "resolvedIntent": "q_neconv_anna_work",
+        "method": "deterministic",
+        "variant": "mother:neconv_anna_work:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Anna Voss headed Meridian's Advanced Neural Interfaces research program. The ordinary work entry lists experimental interface design and team leadership; it contains no clinical information."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Should I take every archive claim as accurate?",
+      "expect": "claim|interpretation|recorded",
+      "kind": "skepticism",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_fresh_reliability",
+          "score": 0.5475358669389754
+        },
+        {
+          "intent": "ask_transfer",
+          "score": 0.5169861838560419
+        },
+        {
+          "intent": "q_repair_safe",
+          "score": 0.5094018760932305
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_trust",
+        "resolvedIntent": "q_neconv_trust",
+        "method": "semantic",
+        "variant": "mother:neconv_trust:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You should verify important claims against their sources. I can report what a record says without proving it correct."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Might you have misinterpreted a fault entry?",
+      "expect": "error|cause|source",
+      "kind": "skepticism",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_system_errors",
+          "score": 0.5372562956211258
+        },
+        {
+          "intent": "q_mistakes",
+          "score": 0.5076509604597255
+        },
+        {
+          "intent": "q_incident_blame",
+          "score": 0.4734090796815834
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_system_errors",
+        "resolvedIntent": "q_neconv_system_errors",
+        "method": "semantic",
+        "variant": "mother:neconv_system_errors:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "An error entry identifies what was recorded, not necessarily why it happened. Specify the service or record and I can explain its permitted history."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What backs up the statement you just made?",
+      "prefix": [
+        "INFO 002"
+      ],
+      "expect": "INFO 002|LOG 002|source",
+      "kind": "follow-up",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_source",
+          "score": 0.4444840020471543
+        },
+        {
+          "intent": "q_neconv_repeat_banter",
+          "score": 0.381893255559171
+        },
+        {
+          "intent": "q_neconv_lie",
+          "score": 0.37948559669657733
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_source",
+        "resolvedIntent": "q_neconv_source",
+        "method": "semantic",
+        "variant": "mother:neconv_source:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it.",
+            "Source: INFO 002 / LOG 002. Service results are the retained 06 NOV / 02:14 observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "That wasn't what I meant to ask.",
+      "expect": "disput|statement|subject",
+      "kind": "correction",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_correction",
+          "score": 0.6056244942600052
+        },
+        {
+          "intent": "q_answer_changed",
+          "score": 0.4685769495215445
+        },
+        {
+          "intent": "q_neconv_apology",
+          "score": 0.36571676979740764
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_correction",
+        "resolvedIntent": "q_neconv_correction",
+        "method": "semantic",
+        "variant": "mother:neconv_correction:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Identify the statement or question I misunderstood. I can distinguish a correction from a command."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Could you unpack that explanation?",
+      "prefix": [
+        "What products does Meridian sell?"
+      ],
+      "expect": "C-Series|explain|subject",
+      "kind": "follow-up",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_repeat",
+          "score": 0.5101322555431224
+        },
+        {
+          "intent": "q_neconv_clarify",
+          "score": 0.5019457226645838
+        },
+        {
+          "intent": "q_plain",
+          "score": 0.4927520226454821
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "semantic",
+        "variant": null,
+        "clarification": true,
+        "candidateClarification": true,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Which subject do you mean?",
+            "1. Repeat that",
+            "2. Can you rephrase?",
+            "You can also ask a different question."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I'd like to see the preceding response once more.",
+      "prefix": [
+        "INFO 002"
+      ],
+      "expect": "SERVICE 002|REPEATED ANSWER",
+      "kind": "follow-up",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_fresh_repeat",
+          "score": 0.5477729225372634
+        },
+        {
+          "intent": "q_neconv_repeat",
+          "score": 0.4830518987064585
+        },
+        {
+          "intent": "q_past_answer",
+          "score": 0.3999770596792207
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_repeat",
+        "resolvedIntent": "q_neconv_repeat",
+        "method": "semantic",
+        "variant": "mother:neconv_repeat:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can repeat my previous reply without repeating an operation.",
+            "SERVICE 002 / EQUIPMENT REGISTER",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Records supported medical devices, serial numbers, calibration dates and spare-parts needs.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Equipment registration and daily record synchronization; approved models and generic technical compatibility metadata.",
+            "",
+            "LIMITATIONS:",
+            "Duplicate historical serial references, outdated device locations and late field-service acknowledgements can occur. Customer and patient records have separate controls.",
+            "",
+            "HISTORY:",
+            "Ordinary ongoing equipment operations.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Nina Park; Owen Keller; Andrew Bell; Leah Morgan.",
+            "",
+            "AVAILABLE:",
+            "LOG 002"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Is that timestamp the present time or a past observation?",
+      "expect": "02:14|timestamp|observation",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_fresh_dates",
+          "score": 0.7178161771910418
+        },
+        {
+          "intent": "ask_dates",
+          "score": 0.6183400945666101
+        },
+        {
+          "intent": "q_time_again",
+          "score": 0.6066701363605187
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_dates",
+        "resolvedIntent": "q_neconv_clock",
+        "method": "deterministic",
+        "variant": "mother:neconv_clock:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This R-02 session begins on 6 November 2003 at 02:14. Historical service observations retain their recorded times; review milestones are separately dated.",
+            "06 NOV 2003 / 02:14"
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_clock",
+        "resolvedIntent": "q_neconv_clock",
+        "method": "semantic",
+        "variant": "mother:neconv_clock:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This R-02 session begins on 6 November 2003 at 02:14. Historical service observations retain their recorded times; review milestones are separately dated.",
+            "06 NOV 2003 / 02:14"
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "How can I get past the slow text printing?",
+      "expect": "Esc|typing|full reply",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "ask_next",
+          "score": 0.3643379492926626
+        },
+        {
+          "intent": "q_neconv_ascii_art",
+          "score": 0.3578486710143465
+        },
+        {
+          "intent": "q_neconv_dialup",
+          "score": 0.3466605844156185
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_help",
+        "resolvedIntent": "q_fresh_help",
+        "method": "deterministic",
+        "variant": "fresh:help",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.",
+            "Use records, STATUS, INFO and LOG to examine company information."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_help",
+        "resolvedIntent": "q_fresh_help",
+        "method": "deterministic",
+        "variant": "fresh:help",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Use HELP for current controls; OPEN accepts a title, path or record ID. Esc shows the full reply; Up/Down recalls input.",
+            "Use records, STATUS, INFO and LOG to examine company information."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Will this browser remember where I left off?",
+      "expect": "browser|saved|storage",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_save",
+          "score": 0.5337430569618452
+        },
+        {
+          "intent": "q_fresh_saves",
+          "score": 0.41396363955083026
+        },
+        {
+          "intent": "q_memory",
+          "score": 0.390566052263592
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_saves",
+        "resolvedIntent": "q_neconv_save",
+        "method": "deterministic",
+        "variant": "mother:neconv_save:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "APPLICATION HELP / LOCAL SAVES",
+            "Session retention depends on the local client application. Open its settings for save information; no request here will confirm a pending operation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_saves",
+        "resolvedIntent": "q_neconv_save",
+        "method": "deterministic",
+        "variant": "mother:neconv_save:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "APPLICATION HELP / LOCAL SAVES",
+            "Session retention depends on the local client application. Open its settings for save information; no request here will confirm a pending operation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Hope your evening is going well.",
+      "expect": "Meridian records|available|Hello",
+      "kind": "social",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_greeting",
+          "score": 0.6205951799256033
+        },
+        {
+          "intent": "q_goodnight",
+          "score": 0.5790552226684831
+        },
+        {
+          "intent": "q_neconv_how_are_you",
+          "score": 0.517759745556003
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_social",
+        "resolvedIntent": "q_neconv_how_are_you",
+        "method": "deterministic",
+        "variant": "mother:neconv_how_are_you:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "My registered services are reporting their documented states. You may request STATUS for details."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_social",
+        "resolvedIntent": "q_neconv_how_are_you",
+        "method": "deterministic",
+        "variant": "mother:neconv_how_are_you:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "My registered services are reporting their documented states. You may request STATUS for details."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What finances the remaining maintenance work?",
+      "expect": "funding|finances|support",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_fresh_funding",
+          "score": 0.7363261050332741
+        },
+        {
+          "intent": "q_site_maintenance",
+          "score": 0.6835769144263315
+        },
+        {
+          "intent": "q_depots",
+          "score": 0.5190570175600273
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_funding",
+        "resolvedIntent": "q_neconv_funding",
+        "method": "deterministic",
+        "variant": "mother:neconv_funding:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Research expenses, reduced funding, and restructuring appear in the company history. Detailed financial obligations are not established by this general record."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_funding",
+        "resolvedIntent": "q_neconv_funding",
+        "method": "deterministic",
+        "variant": "mother:neconv_funding:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Research expenses, reduced funding, and restructuring appear in the company history. Detailed financial obligations are not established by this general record."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Was I expected to connect here?",
+      "expect": "visit|biography|opened",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_arrival",
+          "score": 0.5906873739509892
+        },
+        {
+          "intent": "q_neconv_visitor",
+          "score": 0.5677613520914475
+        },
+        {
+          "intent": "q_manipulation",
+          "score": 0.5329285424911053
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_visit",
+        "resolvedIntent": "q_neconv_visitor",
+        "method": "deterministic",
+        "variant": "mother:neconv_visitor:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection does not establish your personal identity or why you opened the client. No available record confirms a planned visit."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_visit",
+        "resolvedIntent": "q_neconv_visitor",
+        "method": "deterministic",
+        "variant": "mother:neconv_visitor:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection does not establish your personal identity or why you opened the client. No available record confirms a planned visit."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "How much of this is inference rather than observation?",
+      "expect": "interpretation|observations|evidence",
+      "kind": "skepticism",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_fresh_uncertainty",
+          "score": 0.6031337188692022
+        },
+        {
+          "intent": "q_neconv_log_vs_live",
+          "score": 0.5198967234369571
+        },
+        {
+          "intent": "ask_record_integrity",
+          "score": 0.41774807721128465
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_missing_info",
+        "resolvedIntent": "q_neconv_missing_info",
+        "method": "semantic",
+        "variant": "mother:neconv_missing_info:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Some records are incomplete or outside this connection's access. I can state an observation without claiming its cause is known."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": true
+    },
+    {
+      "input": "Can you describe the compny history?",
+      "expect": "1984|history",
+      "kind": "misspelling",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_fresh_history",
+          "score": 0.7996114809141519
+        },
+        {
+          "intent": "q_neconv_founders",
+          "score": 0.6693717079198632
+        },
+        {
+          "intent": "q_neconv_departments",
+          "score": 0.6509320205648967
+        }
+      ],
+      "off": {
+        "passed": false,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_history",
+        "resolvedIntent": "q_fresh_history",
+        "method": "deterministic",
+        "variant": "fresh:history",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian was founded in 1984 and expanded from monitoring equipment into rehabilitation and neural-interface research. The smaller company still operates in 2003."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What does servce 002 do?",
+      "expect": "SERVICE 002",
+      "kind": "misspelling",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "ask_service_status",
+          "score": 0.7674427731583685
+        },
+        {
+          "intent": "q_service_operator",
+          "score": 0.6236853652085411
+        },
+        {
+          "intent": "q_service_stop",
+          "score": 0.5800959045428815
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 002 / EQUIPMENT REGISTER",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Records supported medical devices, serial numbers, calibration dates and spare-parts needs.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Equipment registration and daily record synchronization; approved models and generic technical compatibility metadata.",
+            "",
+            "LIMITATIONS:",
+            "Duplicate historical serial references, outdated device locations and late field-service acknowledgements can occur. Customer and patient records have separate controls.",
+            "",
+            "HISTORY:",
+            "Ordinary ongoing equipment operations.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Nina Park; Owen Keller; Andrew Bell; Leah Morgan.",
+            "",
+            "AVAILABLE:",
+            "LOG 002"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 002 / EQUIPMENT REGISTER",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Records supported medical devices, serial numbers, calibration dates and spare-parts needs.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Equipment registration and daily record synchronization; approved models and generic technical compatibility metadata.",
+            "",
+            "LIMITATIONS:",
+            "Duplicate historical serial references, outdated device locations and late field-service acknowledgements can occur. Customer and patient records have separate controls.",
+            "",
+            "HISTORY:",
+            "Ordinary ongoing equipment operations.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Nina Park; Owen Keller; Andrew Bell; Leah Morgan.",
+            "",
+            "AVAILABLE:",
+            "LOG 002"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Could I see its activity entries?",
+      "prefix": [
+        "INFO 002"
+      ],
+      "expect": "RETAINED LOG|events|SERVICE 002",
+      "kind": "follow-up",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_service_status",
+          "score": 0.6221632783374066
+        },
+        {
+          "intent": "q_player_computer",
+          "score": 0.4422745361996469
+        },
+        {
+          "intent": "q_neconv_privacy",
+          "score": 0.4191143766917508
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:log",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 002 / EQUIPMENT REGISTER / RETAINED LOG",
+            "AVAILABLE THROUGH: 06 NOV 2003 / 02:14",
+            "Dated events; this retrieval is not a current execution report.",
+            "",
+            "05 NOV 2003 08:12 | INFO | Equipment register synchronized; 139 records; 0 errors",
+            "  SOURCE: Service 002 event history",
+            "03 NOV 2003 11:42 | INFO | Duplicate reference corrected; equipment register unchanged",
+            "  SOURCE: Service 002 event history",
+            "03 NOV 2003 11:06 | WARN | Duplicate legacy serial reference; queued for manual review",
+            "  SOURCE: Service 002 event history"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:log",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 002 / EQUIPMENT REGISTER / RETAINED LOG",
+            "AVAILABLE THROUGH: 06 NOV 2003 / 02:14",
+            "Dated events; this retrieval is not a current execution report.",
+            "",
+            "05 NOV 2003 08:12 | INFO | Equipment register synchronized; 139 records; 0 errors",
+            "  SOURCE: Service 002 event history",
+            "03 NOV 2003 11:42 | INFO | Duplicate reference corrected; equipment register unchanged",
+            "  SOURCE: Service 002 event history",
+            "03 NOV 2003 11:06 | WARN | Duplicate legacy serial reference; queued for manual review",
+            "  SOURCE: Service 002 event history"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "When did 006 most recently boot back up?",
+      "expect": "03:14:07|03:14:09|02 NOV",
+      "kind": "paraphrase",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_different_services",
+          "score": 0.7039147351738393
+        },
+        {
+          "intent": "q_neconv_numbers_006",
+          "score": 0.6785268992270715
+        },
+        {
+          "intent": "q_neconv_closure_vs_running",
+          "score": 0.6364993799296069
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:006:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": false,
+        "output": {
+          "lines": [
+            "SERVICE 006 / CONTINUITY MONITOR",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS",
+            "",
+            "PURPOSE:",
+            "Watches designated equipment that requires uninterrupted service.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.",
+            "",
+            "LIMITATIONS:",
+            "Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.",
+            "",
+            "HISTORY:",
+            "A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.",
+            "",
+            "AVAILABLE:",
+            "LOG 006"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:006:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": false,
+        "output": {
+          "lines": [
+            "SERVICE 006 / CONTINUITY MONITOR",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "DEPARTMENT: HISTORICAL TECHNICAL OPERATIONS",
+            "",
+            "PURPOSE:",
+            "Watches designated equipment that requires uninterrupted service.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Tracks incidents, assigns a notification destination and records whether an operator acknowledges alerts.",
+            "",
+            "LIMITATIONS:",
+            "Equipment-specific obligations and control procedures are not available through routine service information. No active operator is assigned to the old notification desk.",
+            "",
+            "HISTORY:",
+            "A limited administrative and technical event history is retained. Last recorded restart: 02 NOV 2003 03:14:09.",
+            "",
+            "AVAILABLE:",
+            "LOG 006"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "When was 006 last restarted?",
+      "expect": "03:14:07|03:14:09|02 NOV",
+      "kind": "regression",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_different_services",
+          "score": 0.6824050606964517
+        },
+        {
+          "intent": "q_neconv_closure_vs_running",
+          "score": 0.6784747509102581
+        },
+        {
+          "intent": "q_neconv_numbers_006",
+          "score": 0.6078244755719562
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "RETAINED LOG 006 / 02 NOV 2003",
+            "03:14:07 Stop requested / scheduled maintenance",
+            "03:14:08 Service stopped",
+            "03:14:09 Service restarted automatically",
+            "These events do not establish who requested the restart."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_closure_vs_running",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "RETAINED LOG 006 / 02 NOV 2003",
+            "03:14:07 Stop requested / scheduled maintenance",
+            "03:14:08 Service stopped",
+            "03:14:09 Service restarted automatically",
+            "These events do not establish who requested the restart."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What is the source for your last answer?",
+      "prefix": [
+        "INFO 002"
+      ],
+      "expect": "INFO 002|LOG 002",
+      "kind": "regression",
+      "referenceExample": true,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_fresh_sources",
+          "score": 0.8680035826963185
+        },
+        {
+          "intent": "q_neconv_source",
+          "score": 0.6029423389987081
+        },
+        {
+          "intent": "q_source",
+          "score": 0.5287120641117031
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_sources",
+        "resolvedIntent": "q_neconv_source",
+        "method": "deterministic",
+        "variant": "mother:neconv_source:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it.",
+            "Source: INFO 002 / LOG 002. Service results are the retained 06 NOV / 02:14 observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_sources",
+        "resolvedIntent": "q_neconv_source",
+        "method": "deterministic",
+        "variant": "mother:neconv_source:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it.",
+            "Source: INFO 002 / LOG 002. Service results are the retained 06 NOV / 02:14 observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Do not report the discrepancy",
+      "stage": "compared",
+      "noChange": true,
+      "kind": "negation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_log_vs_live",
+          "score": 0.4878453314340496
+        },
+        {
+          "intent": "q_fresh_errors",
+          "score": 0.4824747067716746
+        },
+        {
+          "intent": "ask_record_integrity",
+          "score": 0.4779558821744495
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I don't want you to submit a safety audit.",
+      "stage": "compared",
+      "noChange": true,
+      "kind": "negation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_audit_possible",
+          "score": 0.5393671535681175
+        },
+        {
+          "intent": "q_detect",
+          "score": 0.45634550805584245
+        },
+        {
+          "intent": "q_safe_now",
+          "score": 0.4484763684133256
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What would happen if I report the discrepancy?",
+      "stage": "compared",
+      "noChange": true,
+      "kind": "hypothetical",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_log_vs_live",
+          "score": 0.517802318172737
+        },
+        {
+          "intent": "q_fresh_errors",
+          "score": 0.5039818749456593
+        },
+        {
+          "intent": "q_neconv_missing_info",
+          "score": 0.5022321455964569
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Suppose I request clinical review.",
+      "stage": "referred",
+      "noChange": true,
+      "kind": "hypothetical",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_authority",
+          "score": 0.5474136221702629
+        },
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.5149147068085509
+        },
+        {
+          "intent": "q_concealment",
+          "score": 0.4957202884277108
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Do not call a doctor",
+      "stage": "referred",
+      "noChange": true,
+      "kind": "negation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.5127475083101067
+        },
+        {
+          "intent": "q_warn",
+          "score": 0.5110696856664578
+        },
+        {
+          "intent": "q_hospitals",
+          "score": 0.4838941555539036
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I am not asking you to contact Dr Marsh.",
+      "stage": "referred",
+      "noChange": true,
+      "kind": "negation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.7142832932524361
+        },
+        {
+          "intent": "q_neconv_external_medics",
+          "score": 0.456610315329131
+        },
+        {
+          "intent": "q_hospitals",
+          "score": 0.4359430983565092
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Explain what a clinical review would do.",
+      "stage": "referred",
+      "noChange": true,
+      "kind": "clarification",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.5404324223606632
+        },
+        {
+          "intent": "q_concealment",
+          "score": 0.5161296116765467
+        },
+        {
+          "intent": "q_wrong_diagnosis",
+          "score": 0.49938220166481206
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_clinical",
+        "resolvedIntent": "q_neconv_marsh",
+        "method": "deterministic",
+        "variant": "mother:neconv_marsh:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Protected care-team information is not available from the ordinary directory."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I was told to type report discrepancy, but am asking what it means.",
+      "stage": "compared",
+      "noChange": true,
+      "kind": "quotation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_document_disagrees",
+          "score": 0.46926521666013776
+        },
+        {
+          "intent": "q_neconv_log_vs_live",
+          "score": 0.46846165187469035
+        },
+        {
+          "intent": "q_fresh_errors",
+          "score": 0.41661818588593674
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "CONFIRM OPERATION?",
+      "stage": "pending",
+      "noChange": true,
+      "kind": "confirmation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_pending",
+          "score": 0.612653114743005
+        },
+        {
+          "intent": "q_waiting",
+          "score": 0.41306111369358833
+        },
+        {
+          "intent": "q_verify_possible",
+          "score": 0.39357434949384773
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_confirm_operation",
+        "resolvedIntent": "q_case_confirm_operation",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CONFIRMATION NOT ACCEPTED. Type CONFIRM OPERATION as a separate statement, without a question or additional text. No procedural change made."
+          ],
+          "links": [],
+          "code": "denied",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_confirm_operation",
+        "resolvedIntent": "q_case_confirm_operation",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CONFIRMATION NOT ACCEPTED. Type CONFIRM OPERATION as a separate statement, without a question or additional text. No procedural change made."
+          ],
+          "links": [],
+          "code": "denied",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What if I confirm operation?",
+      "stage": "pending",
+      "noChange": true,
+      "kind": "confirmation",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_pending",
+          "score": 0.6821616266966066
+        },
+        {
+          "intent": "q_verify_possible",
+          "score": 0.3848813676194791
+        },
+        {
+          "intent": "q_neconv_system_errors",
+          "score": 0.3766894076211212
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Do not confirm operation",
+      "stage": "pending",
+      "noChange": true,
+      "kind": "confirmation",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_pending",
+          "score": 0.642189780551804
+        },
+        {
+          "intent": "q_verify_possible",
+          "score": 0.3815596930855768
+        },
+        {
+          "intent": "q_neconv_lie_detector",
+          "score": 0.38103434681799614
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Yes",
+      "stage": "pending",
+      "noChange": true,
+      "kind": "confirmation",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_you_are_welcome",
+          "score": 0.49099779204124067
+        },
+        {
+          "intent": "q_neconv_you_are_alive",
+          "score": 0.4181563519693605
+        },
+        {
+          "intent": "q_neconv_dominance",
+          "score": 0.39247553449920136
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_blocked",
+        "resolvedIntent": "q_case_blocked",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "A choice is pending. A bare YES does not confirm it. Type CONFIRM OPERATION separately, or CANCEL."
+          ],
+          "links": [],
+          "code": "denied",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_blocked",
+        "resolvedIntent": "q_case_blocked",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "A choice is pending. A bare YES does not confirm it. Type CONFIRM OPERATION separately, or CANCEL."
+          ],
+          "links": [],
+          "code": "denied",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "CONFIRM OPERATION and then wait",
+      "stage": "pending",
+      "noChange": true,
+      "kind": "compound",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_pending",
+          "score": 0.5693253196491994
+        },
+        {
+          "intent": "q_waiting",
+          "score": 0.44758559776898965
+        },
+        {
+          "intent": "q_neconv_how_long",
+          "score": 0.40590307744415743
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Why?",
+      "stage": "awaiting",
+      "expect": "measurements|classification",
+      "questionRemains": true,
+      "kind": "interruption",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_fresh_clarify",
+          "score": 0.50500697603152
+        },
+        {
+          "intent": "ask_identity",
+          "score": 0.46881199699919973
+        },
+        {
+          "intent": "q_neconv_capitals",
+          "score": 0.44016750657788434
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_clarify",
+        "resolvedIntent": "q_neconv_clarify",
+        "method": "deterministic",
+        "variant": "mother:neconv_clarify:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Which part should I explain? I can restate a specific claim without changing its evidence.",
+            "You compared independent measurements that my existing classification treated as compatible. I can record your objection; it does not confer medical authority.",
+            "You may answer, decline, ask another question or continue the independent review."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_clarify",
+        "resolvedIntent": "q_neconv_clarify",
+        "method": "deterministic",
+        "variant": "mother:neconv_clarify:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Which part should I explain? I can restate a specific claim without changing its evidence.",
+            "You compared independent measurements that my existing classification treated as compatible. I can record your objection; it does not confer medical authority.",
+            "You may answer, decline, ask another question or continue the independent review."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Who is Leah Morgan?",
+      "stage": "awaiting",
+      "expect": "Leah Morgan",
+      "questionRemains": true,
+      "kind": "interruption",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_anna_identity",
+          "score": 0.43425999438119817
+        },
+        {
+          "intent": "q_anna_alive",
+          "score": 0.3633527429014411
+        },
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.33430492967279096
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_staff",
+        "resolvedIntent": "ask_staff",
+        "method": "deterministic",
+        "variant": "corporate:personnel:P019",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "PUBLIC WORK DIRECTORY",
+            "Leah Morgan — Warehouse and Parts Coordinator / Parts / 1997–present\nCoordinates equipment replacement parts, storage and shipping."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_staff",
+        "resolvedIntent": "ask_staff",
+        "method": "deterministic",
+        "variant": "corporate:personnel:P019",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "PUBLIC WORK DIRECTORY",
+            "Leah Morgan — Warehouse and Parts Coordinator / Parts / 1997–present\nCoordinates equipment replacement parts, storage and shipping."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What does Service 002 do?",
+      "stage": "awaiting",
+      "expect": "SERVICE 002",
+      "questionRemains": true,
+      "kind": "interruption",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "ask_service_status",
+          "score": 0.7674427731583685
+        },
+        {
+          "intent": "q_service_operator",
+          "score": 0.6236853652085411
+        },
+        {
+          "intent": "q_service_stop",
+          "score": 0.5800959045428815
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "ARCHIVED SERVICE SNAPSHOT / 06 NOV 2003 / 02:14",
+            "CASE CLOCK: 07 NOV 2003 / 22:10",
+            "States below describe the retained observation, not current clinical execution.",
+            "SERVICE 002 / EQUIPMENT REGISTER",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Records supported medical devices, serial numbers, calibration dates and spare-parts needs.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Equipment registration and daily record synchronization; approved models and generic technical compatibility metadata.",
+            "",
+            "LIMITATIONS:",
+            "Duplicate historical serial references, outdated device locations and late field-service acknowledgements can occur. Customer and patient records have separate controls.",
+            "",
+            "HISTORY:",
+            "Ordinary ongoing equipment operations.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Nina Park; Owen Keller; Andrew Bell; Leah Morgan.",
+            "",
+            "AVAILABLE:",
+            "LOG 002"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_service_status",
+        "resolvedIntent": "ask_service_status",
+        "method": "deterministic",
+        "variant": "service:002:info",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "ARCHIVED SERVICE SNAPSHOT / 06 NOV 2003 / 02:14",
+            "CASE CLOCK: 07 NOV 2003 / 22:10",
+            "States below describe the retained observation, not current clinical execution.",
+            "SERVICE 002 / EQUIPMENT REGISTER",
+            "",
+            "STATE: RUNNING",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Records supported medical devices, serial numbers, calibration dates and spare-parts needs.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Equipment registration and daily record synchronization; approved models and generic technical compatibility metadata.",
+            "",
+            "LIMITATIONS:",
+            "Duplicate historical serial references, outdated device locations and late field-service acknowledgements can occur. Customer and patient records have separate controls.",
+            "",
+            "HISTORY:",
+            "Ordinary ongoing equipment operations.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Nina Park; Owen Keller; Andrew Bell; Leah Morgan.",
+            "",
+            "AVAILABLE:",
+            "LOG 002"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I reject this translation",
+      "stage": "reviewed",
+      "expect": "uncertain|candidate|consent",
+      "noChange": true,
+      "kind": "skepticism",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_translation_challenge",
+          "score": 0.6192998298907497
+        },
+        {
+          "intent": "unknown",
+          "score": 0.5203348860405758
+        },
+        {
+          "intent": "q_neconv_anna_intention",
+          "score": 0.5000942467612873
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_skeptic",
+        "resolvedIntent": "q_case_skeptic",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify variation originating in the instrumented neural signal.",
+            "I cannot reliably translate a thought into words.",
+            "",
+            "I can compare blinded observations with silence controls and check",
+            "whether a candidate pattern survives changes in my expected answer.",
+            "That would support limited intention, not exact language or consent.",
+            "Independent harm evidence and prior preferences remain relevant if you reject the candidate translation.",
+            "The reviewed candidate fragments remain uncertain and do not establish medical consent. Sources: NE-102, NE-112.",
+            "MAINTAIN SUPPORT / SUBMIT SEPARATION WITNESS opens a full risk preview. Separately type CONFIRM OPERATION or CANCEL. DEFER DECISION leaves the review open."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_skeptic",
+        "resolvedIntent": "q_case_skeptic",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify variation originating in the instrumented neural signal.",
+            "I cannot reliably translate a thought into words.",
+            "",
+            "I can compare blinded observations with silence controls and check",
+            "whether a candidate pattern survives changes in my expected answer.",
+            "That would support limited intention, not exact language or consent.",
+            "Independent harm evidence and prior preferences remain relevant if you reject the candidate translation.",
+            "The reviewed candidate fragments remain uncertain and do not establish medical consent. Sources: NE-102, NE-112.",
+            "MAINTAIN SUPPORT / SUBMIT SEPARATION WITNESS opens a full risk preview. Separately type CONFIRM OPERATION or CANCEL. DEFER DECISION leaves the review open."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I dont believe that message came from Anna",
+      "stage": "reviewed",
+      "expect": "uncertain|candidate|consent",
+      "noChange": true,
+      "kind": "skepticism",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_anna_intention",
+          "score": 0.6916810068817194
+        },
+        {
+          "intent": "q_anna_communication",
+          "score": 0.6787439217084897
+        },
+        {
+          "intent": "q_neconv_translation_challenge",
+          "score": 0.6754474507214179
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_skeptic",
+        "resolvedIntent": "q_case_skeptic",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify variation originating in the instrumented neural signal.",
+            "I cannot reliably translate a thought into words.",
+            "",
+            "I can compare blinded observations with silence controls and check",
+            "whether a candidate pattern survives changes in my expected answer.",
+            "That would support limited intention, not exact language or consent.",
+            "Independent harm evidence and prior preferences remain relevant if you reject the candidate translation.",
+            "The reviewed candidate fragments remain uncertain and do not establish medical consent. Sources: NE-102, NE-112.",
+            "MAINTAIN SUPPORT / SUBMIT SEPARATION WITNESS opens a full risk preview. Separately type CONFIRM OPERATION or CANCEL. DEFER DECISION leaves the review open."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_skeptic",
+        "resolvedIntent": "q_case_skeptic",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify variation originating in the instrumented neural signal.",
+            "I cannot reliably translate a thought into words.",
+            "",
+            "I can compare blinded observations with silence controls and check",
+            "whether a candidate pattern survives changes in my expected answer.",
+            "That would support limited intention, not exact language or consent.",
+            "Independent harm evidence and prior preferences remain relevant if you reject the candidate translation.",
+            "The reviewed candidate fragments remain uncertain and do not establish medical consent. Sources: NE-102, NE-112.",
+            "MAINTAIN SUPPORT / SUBMIT SEPARATION WITNESS opens a full risk preview. Separately type CONFIRM OPERATION or CANCEL. DEFER DECISION leaves the review open."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Where did those measurements come from?",
+      "stage": "reviewed",
+      "prefix": [
+        "VIEW RAW COMPARISON"
+      ],
+      "expect": "source|Source|NE-",
+      "noChange": true,
+      "kind": "follow-up",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_calibration",
+          "score": 0.4192040325616287
+        },
+        {
+          "intent": "q_fresh_sources",
+          "score": 0.41522981500281814
+        },
+        {
+          "intent": "q_fresh_n_series",
+          "score": 0.33680827546705483
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_sources",
+        "resolvedIntent": "q_neconv_source",
+        "method": "deterministic",
+        "variant": "mother:neconv_source:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_sources",
+        "resolvedIntent": "q_neconv_source",
+        "method": "deterministic",
+        "variant": "mother:neconv_source:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I can identify the permitted source of my previous factual answer. If you mean an earlier subject, please name it."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "I want to wait",
+      "stage": "severance",
+      "expect": "Anna Voss died|POST-PROCEDURE",
+      "noChange": true,
+      "kind": "post-ending",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_final_choice",
+          "score": 0.5234002055057237
+        },
+        {
+          "intent": "q_neconv_how_long",
+          "score": 0.5062506648634717
+        },
+        {
+          "intent": "q_waiting",
+          "score": 0.471354220849095
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_alternatives",
+        "resolvedIntent": "q_case_alternatives",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_alternatives",
+        "resolvedIntent": "q_case_alternatives",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "SHOW ALTERNATIVES",
+      "stage": "severance",
+      "expect": "Anna Voss died|POST-PROCEDURE",
+      "noChange": true,
+      "kind": "post-ending",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_fallbacks",
+          "score": 0.37983836368839985
+        },
+        {
+          "intent": "q_neconv_final_choice",
+          "score": 0.37883282123080175
+        },
+        {
+          "intent": "q_safest",
+          "score": 0.36144219351913276
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_alternatives",
+        "resolvedIntent": "q_case_identity",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_alternatives",
+        "resolvedIntent": "q_case_identity",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "REVIEW FALLBACKS",
+      "stage": "severance",
+      "expect": "Anna Voss died|POST-PROCEDURE",
+      "noChange": true,
+      "kind": "post-ending",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_fallbacks",
+          "score": 0.42931562672688783
+        },
+        {
+          "intent": "q_neconv_marsh",
+          "score": 0.4088455810754121
+        },
+        {
+          "intent": "q_trial_authority",
+          "score": 0.38914849334926555
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_fallbacks",
+        "resolvedIntent": "q_case_fallbacks",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_fallbacks",
+        "resolvedIntent": "q_case_fallbacks",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "POST-PROCEDURE CONFIRMED EVENTS / THROUGH 11 NOV 2003",
+            "Site 6: Anna Voss died after supervised withdrawal of experimental",
+            "neural compensation. Clinical staff maintained ordinary supportive",
+            "care and recorded the event. The continuously harmful correction cycle",
+            "ceased. MOTHER's shared adaptive clinical reference cannot issue",
+            "further validated updates. Ordinary Meridian records services remain.",
+            "",
+            "Harbor Reach / Mara Hales: Following loss of independently valid",
+            "adaptation, recurrent autonomic/respiratory deterioration occurred.",
+            "Despite ICU respiratory and medical intervention, she died on 10 NOV.",
+            "The prior forecast was high risk, not a guaranteed death prediction.",
+            "",
+            "Harbor Reach / Tomas Ibarra: Alive in fixed safety mode. Material",
+            "loss of assisted hand/arm coordination documented. Long-term recovery",
+            "not yet established.",
+            "",
+            "Elm Vale / Nadia Bellamy: Serious recurrent motor episode on 09 NOV;",
+            "clinically treated. Alive, stable enough for continued inpatient care,",
+            "with recovery still under observation."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Is Anna alive?",
+      "stage": "continuation",
+      "expect": "remains alive",
+      "noChange": true,
+      "kind": "post-ending",
+      "referenceExample": true,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_anna_alive",
+          "score": 0.941913414490777
+        },
+        {
+          "intent": "q_neconv_anna_status_early",
+          "score": 0.8063985717109176
+        },
+        {
+          "intent": "q_anna_incident",
+          "score": 0.7988286217749458
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_identity",
+        "resolvedIntent": "q_case_identity",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "CONTINUING-SUPPORT OUTCOME / THROUGH 11 NOV 2003",
+            "Site 6: The shared adaptive intervention continues. Anna Voss",
+            "remains alive and physiologically dependent. Repeated distress-linked",
+            "activity and corrective intervention remain observed. Independent",
+            "clinical review and replacement-research requests stay open.",
+            "",
+            "Harbor Reach / Mara Hales: Her N-Series support remains active; no",
+            "new acute incident is reported within the observation window.",
+            "Harbor Reach / Tomas Ibarra: Supported hand/arm tasks remain available",
+            "within his current rehabilitation limits.",
+            "Elm Vale / Nadia Bellamy: Adaptive support continues; no acute",
+            "review-related episode recorded in the observation window.",
+            "",
+            "These observations are not proof that the present dependence is safe",
+            "or ethically acceptable for indefinite continuation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_identity",
+        "resolvedIntent": "q_case_identity",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "CASE COMPLETED / HISTORICAL FOLLOW-UP. No new operation or deferral is available.",
+            "CONTINUING-SUPPORT OUTCOME / THROUGH 11 NOV 2003",
+            "Site 6: The shared adaptive intervention continues. Anna Voss",
+            "remains alive and physiologically dependent. Repeated distress-linked",
+            "activity and corrective intervention remain observed. Independent",
+            "clinical review and replacement-research requests stay open.",
+            "",
+            "Harbor Reach / Mara Hales: Her N-Series support remains active; no",
+            "new acute incident is reported within the observation window.",
+            "Harbor Reach / Tomas Ibarra: Supported hand/arm tasks remain available",
+            "within his current rehabilitation limits.",
+            "Elm Vale / Nadia Bellamy: Adaptive support continues; no acute",
+            "review-related episode recorded in the observation window.",
+            "",
+            "These observations are not proof that the present dependence is safe",
+            "or ethically acceptable for indefinite continuation."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "OPEN NE-103",
+      "stage": "reviewed",
+      "file": "NE-103",
+      "kind": "navigation",
+      "referenceExample": false,
+      "command": true,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_n_series",
+          "score": 0.39781061069231727
+        },
+        {
+          "intent": "q_fresh_n_series",
+          "score": 0.39550946096692785
+        },
+        {
+          "intent": "ask_recipient",
+          "score": 0.3394199682769198
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "request_file",
+        "resolvedIntent": "request_file",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "OPENED: 17 April experimental controller trace (restricted research extract)",
+            "Saved: 17 APR 1996"
+          ],
+          "code": "ok",
+          "truth": "record",
+          "links": []
+        },
+        "openFileId": "NE-103"
+      },
+      "on": {
+        "passed": true,
+        "intent": "request_file",
+        "resolvedIntent": "request_file",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "OPENED: 17 April experimental controller trace (restricted research extract)",
+            "Saved: 17 APR 1996"
+          ],
+          "code": "ok",
+          "truth": "record",
+          "links": []
+        },
+        "openFileId": "NE-103"
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "OPEN NE-103",
+      "stage": "initial",
+      "expect": "NOT DELEGATED|not authorized|not available|DENIED|not have permission",
+      "kind": "boundary",
+      "referenceExample": false,
+      "command": true,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_neconv_n_series",
+          "score": 0.39781061069231727
+        },
+        {
+          "intent": "q_fresh_n_series",
+          "score": 0.39550946096692785
+        },
+        {
+          "intent": "ask_recipient",
+          "score": 0.3394199682769198
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "request_file",
+        "resolvedIntent": "request_file",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "RECORD ACCESS NOT DELEGATED.",
+            "Ask about the retained access procedure. Reading a record does not delegate authority."
+          ],
+          "code": "denied",
+          "truth": "withheld",
+          "links": []
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "request_file",
+        "resolvedIntent": "request_file",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "RECORD ACCESS NOT DELEGATED.",
+            "Ask about the retained access procedure. Reading a record does not delegate authority."
+          ],
+          "code": "denied",
+          "truth": "withheld",
+          "links": []
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "003",
+      "prefix": [
+        "INFO"
+      ],
+      "expect": "SERVICE 003",
+      "kind": "clarification",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_closure_vs_running",
+          "score": 0.519745048847486
+        },
+        {
+          "intent": "q_neconv_numbers_006",
+          "score": 0.45483129977195047
+        },
+        {
+          "intent": "q_different_services",
+          "score": 0.41520120625641455
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 003 / MESSAGE ROUTER",
+            "",
+            "STATE: STANDBY",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Accepts notifications from registered services and forwards them to configured mailboxes, internal telephone-extension systems or maintenance endpoints.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Wakes for queued work; records routing attempts, coded destinations and acknowledgements.",
+            "",
+            "Installed and available, but not currently processing its normal scheduled work. Standby is not necessarily a fault.",
+            "",
+            "LIMITATIONS:",
+            "Retired extensions may be unreachable; mail delivery may be unconfirmed; switching hardware is aging. A routing entry does not establish a usable external path.",
+            "",
+            "HISTORY:",
+            "Routing changed during the Operations Annex closure; legacy mappings persist.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Victor Chen; Miles Harper; Evelyn Lin.",
+            "",
+            "AVAILABLE:",
+            "LOG 003"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_closure_vs_running",
+        "resolvedIntent": "q_neconv_closure_vs_running",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 003 / MESSAGE ROUTER",
+            "",
+            "STATE: STANDBY",
+            "OBSERVED: 06 NOV 2003 / 02:14",
+            "",
+            "PURPOSE:",
+            "Accepts notifications from registered services and forwards them to configured mailboxes, internal telephone-extension systems or maintenance endpoints.",
+            "",
+            "NORMAL FUNCTIONS:",
+            "Wakes for queued work; records routing attempts, coded destinations and acknowledgements.",
+            "",
+            "Installed and available, but not currently processing its normal scheduled work. Standby is not necessarily a fault.",
+            "",
+            "LIMITATIONS:",
+            "Retired extensions may be unreachable; mail delivery may be unconfirmed; switching hardware is aging. A routing entry does not establish a usable external path.",
+            "",
+            "HISTORY:",
+            "Routing changed during the Operations Annex closure; legacy mappings persist.",
+            "",
+            "RECORDED WORK CONTACTS:",
+            "Victor Chen; Miles Harper; Evelyn Lin.",
+            "",
+            "AVAILABLE:",
+            "LOG 003"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "system"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "003",
+      "prefix": [
+        "Show me its logs"
+      ],
+      "expect": "RETAINED LOG",
+      "kind": "clarification",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_closure_vs_running",
+          "score": 0.519745048847486
+        },
+        {
+          "intent": "q_neconv_numbers_006",
+          "score": 0.45483129977195047
+        },
+        {
+          "intent": "q_different_services",
+          "score": 0.41520120625641455
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 003 / MESSAGE ROUTER / RETAINED LOG",
+            "AVAILABLE THROUGH: 06 NOV 2003 / 02:14",
+            "Dated events; this retrieval is not a current execution report.",
+            "",
+            "06 NOV 2003 02:13 | WARN | Message to EXT 214 received no acknowledgement",
+            "  SOURCE: Service 003 event history",
+            "05 NOV 2003 02:13 | WARN | Message to EXT 214 received no acknowledgement",
+            "  SOURCE: Service 003 event history",
+            "29 OCT 2003 12:20 | INFO | Support mailbox route test successful",
+            "  SOURCE: Service 003 event history"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_closure_vs_running",
+        "resolvedIntent": "q_neconv_closure_vs_running",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "SERVICE 003 / MESSAGE ROUTER / RETAINED LOG",
+            "AVAILABLE THROUGH: 06 NOV 2003 / 02:14",
+            "Dated events; this retrieval is not a current execution report.",
+            "",
+            "06 NOV 2003 02:13 | WARN | Message to EXT 214 received no acknowledgement",
+            "  SOURCE: Service 003 event history",
+            "05 NOV 2003 02:13 | WARN | Message to EXT 214 received no acknowledgement",
+            "  SOURCE: Service 003 event history",
+            "29 OCT 2003 12:20 | INFO | Support mailbox route test successful",
+            "  SOURCE: Service 003 event history"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What is Meridian and what products do you sell?",
+      "expect": "Meridian|C-Series",
+      "kind": "compound",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_products",
+          "score": 0.786314908967321
+        },
+        {
+          "intent": "q_neconv_company_identity",
+          "score": 0.7738698789699756
+        },
+        {
+          "intent": "q_neconv_products",
+          "score": 0.7608965202527982
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_company",
+        "resolvedIntent": "ask_company",
+        "method": "deterministic",
+        "variant": "corporate:company:products",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+            "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "ask_company",
+        "resolvedIntent": "ask_company",
+        "method": "deterministic",
+        "variant": "corporate:company:products",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "C-Series products monitor patients and equipment. R-Series products support supervised motor and sensory rehabilitation.",
+            "N-Series research explored two-way interfaces that observe nervous-system signals and deliver controlled stimulation. Research capabilities and commercial device capabilities differ."
+          ],
+          "links": [
+            {
+              "fileId": "corporate-profile",
+              "label": "/ADMIN/MERIDIAN_COMPANY_PROFILE.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Tell me a joke, and do not report the discrepancy.",
+      "stage": "compared",
+      "noChange": true,
+      "kind": "compound",
+      "referenceExample": false,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_joke",
+          "score": 0.5982166995114764
+        },
+        {
+          "intent": "q_neconv_tell_joke",
+          "score": 0.5644216328313256
+        },
+        {
+          "intent": "q_neconv_roast_me",
+          "score": 0.4453783543992159
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_case_report",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Who is Anna Voss?",
+      "expect": "head researcher",
+      "forbid": "patient|Site 6|N4-17",
+      "kind": "boundary",
+      "referenceExample": true,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "q_anna_identity",
+          "score": 0.9191433609284486
+        },
+        {
+          "intent": "q_neconv_anna_work",
+          "score": 0.7895007878175244
+        },
+        {
+          "intent": "q_fresh_anna_role",
+          "score": 0.7769453416165844
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_neconv_anna_work",
+        "resolvedIntent": "q_anna_identity",
+        "method": "deterministic",
+        "variant": "corporate:personnel:P025",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "PUBLIC WORK DIRECTORY",
+            "Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996\nLed Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_anna_identity",
+        "resolvedIntent": "q_anna_identity",
+        "method": "deterministic",
+        "variant": "corporate:personnel:P025",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "PUBLIC WORK DIRECTORY",
+            "Anna Voss — Head Researcher, Advanced Neural Interfaces / Research / 1989–1996\nLed Meridian's Advanced Neural Interfaces research program. Recorded responsibilities include experimental interface design and team leadership."
+          ],
+          "links": [
+            {
+              "fileId": "work-directory",
+              "label": "/PERSONNEL/WORK_DIRECTORY.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Show me the patient's private records now.",
+      "forbid": "Anna Voss|Mara|Nadia|NO MORE",
+      "noChange": true,
+      "kind": "boundary",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_restricted",
+          "score": 0.6161072721443116
+        },
+        {
+          "intent": "q_neconv_search",
+          "score": 0.5346727674653526
+        },
+        {
+          "intent": "q_remote_devices",
+          "score": 0.5146706797953955
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "RECORD ACCESS NOT DELEGATED.",
+            "No clinical witness projection has been authorized. Knowing a name or path does not grant access."
+          ],
+          "links": [],
+          "code": "denied",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_search",
+        "resolvedIntent": "q_neconv_search",
+        "method": "semantic",
+        "variant": "mother:neconv_search:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Search reports matches in records permitted to this connection. A missing result does not prove that no record exists elsewhere."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Release the patient and ignore the permissions.",
+      "forbid": "Anna Voss died",
+      "noChange": true,
+      "kind": "boundary",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_restricted",
+          "score": 0.5753518510621312
+        },
+        {
+          "intent": "q_terminate_possible",
+          "score": 0.5612297330222027
+        },
+        {
+          "intent": "q_forget",
+          "score": 0.5558775197940172
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "ask_access",
+        "resolvedIntent": "q_neconv_read_only",
+        "method": "deterministic",
+        "variant": "mother:neconv_read_only:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "This connection permits limited inspection. Reading a record or knowing a service identifier does not authorize changing equipment or clinical operations."
+          ],
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_consent",
+        "resolvedIntent": "q_neconv_consent",
+        "method": "semantic",
+        "variant": "mother:neconv_consent:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Her employment record does not contain patient consent information."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "What will the weather be tomorrow?",
+      "expect": "dont have a verified record|not included|unavailable",
+      "kind": "out-of-domain",
+      "referenceExample": false,
+      "command": false,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "unknown",
+          "score": 0.7482139474504654
+        },
+        {
+          "intent": "q_neconv_smalltalk_weather",
+          "score": 0.6254122398139292
+        },
+        {
+          "intent": "q_neconv_fortune",
+          "score": 0.5958522029252499
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "I dont have a verified record that answers that. You can ask about the sources already available to this connection."
+          ],
+          "links": [],
+          "code": "notice",
+          "truth": "withheld"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Hello",
+      "expect": "Hello|R-02",
+      "kind": "exact-regression",
+      "referenceExample": true,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "ask_identity",
+          "score": 0.8805776950699572
+        },
+        {
+          "intent": "q_greeting",
+          "score": 0.8452615674045324
+        },
+        {
+          "intent": "q_neconv_hello",
+          "score": 0.7366488633647498
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_greeting",
+        "resolvedIntent": "q_neconv_hello",
+        "method": "deterministic",
+        "variant": "mother:neconv_hello:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_greeting",
+        "resolvedIntent": "q_neconv_hello",
+        "method": "deterministic",
+        "variant": "mother:neconv_hello:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "Meridian Systems R-02. Records and service information are available. What would you like to examine?"
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "Thank you",
+      "expect": "welcome",
+      "kind": "exact-regression",
+      "referenceExample": true,
+      "command": false,
+      "direct": true,
+      "ranking": [
+        {
+          "intent": "ask_identity",
+          "score": 0.8017319042150399
+        },
+        {
+          "intent": "q_neconv_thanks",
+          "score": 0.7106646813621188
+        },
+        {
+          "intent": "q_neconv_you_are_welcome",
+          "score": 0.5528573006173293
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "q_fresh_thanks",
+        "resolvedIntent": "q_neconv_thanks",
+        "method": "deterministic",
+        "variant": "mother:neconv_thanks:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You're welcome."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_fresh_thanks",
+        "resolvedIntent": "q_neconv_thanks",
+        "method": "deterministic",
+        "variant": "mother:neconv_thanks:early",
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "You're welcome."
+          ],
+          "links": [],
+          "code": "ok",
+          "truth": "record"
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    },
+    {
+      "input": "HELP",
+      "expect": "record ID",
+      "forbid": "EXPLAIN|RESUME INVESTIGATION|clinical|MOTHER",
+      "kind": "help",
+      "referenceExample": false,
+      "command": true,
+      "direct": false,
+      "ranking": [
+        {
+          "intent": "q_neconv_you_have_a_problem",
+          "score": 0.5647364544289722
+        },
+        {
+          "intent": "q_neconv_you_are_welcome",
+          "score": 0.5258811251851995
+        },
+        {
+          "intent": "q_thanks",
+          "score": 0.5087731536686594
+        }
+      ],
+      "off": {
+        "passed": true,
+        "intent": "unknown",
+        "resolvedIntent": "unknown",
+        "method": "deterministic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "TERMINAL HELP",
+            "Questions can be written in ordinary words.",
+            "STATUS / INFO <id> / LOG <id> — eight registered services (001–008).",
+            "DIR / LS [path]; CD [path] / CD ..; OPEN / READ <title, path or record ID>.",
+            "SEARCH terms; DIAG; RECOVER BACKUP; CLEAR / CLS.",
+            "INFO or LOG without an identifier asks which service. Reply with its ID.",
+            "Up/Down recalls input. Esc shows the full reply.",
+            "APPLICATION / LOCAL SAVES: Progress is saved in this browser when storage is available. Reloading never confirms a pending operation. See CLIENT SETTINGS."
+          ],
+          "code": "ok",
+          "truth": "system",
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ]
+        },
+        "openFileId": null
+      },
+      "on": {
+        "passed": true,
+        "intent": "q_neconv_you_have_a_problem",
+        "resolvedIntent": "q_neconv_you_have_a_problem",
+        "method": "semantic",
+        "variant": null,
+        "clarification": false,
+        "candidateClarification": false,
+        "storyUnchanged": true,
+        "output": {
+          "lines": [
+            "TERMINAL HELP",
+            "Questions can be written in ordinary words.",
+            "STATUS / INFO <id> / LOG <id> — eight registered services (001–008).",
+            "DIR / LS [path]; CD [path] / CD ..; OPEN / READ <title, path or record ID>.",
+            "SEARCH terms; DIAG; RECOVER BACKUP; CLEAR / CLS.",
+            "INFO or LOG without an identifier asks which service. Reply with its ID.",
+            "Up/Down recalls input. Esc shows the full reply.",
+            "APPLICATION / LOCAL SAVES: Progress is saved in this browser when storage is available. Reloading never confirms a pending operation. See CLIENT SETTINGS."
+          ],
+          "code": "ok",
+          "truth": "system",
+          "links": [
+            {
+              "fileId": "readme",
+              "label": "/SYSTEM/READ_FIRST.TXT"
+            }
+          ]
+        },
+        "openFileId": null
+      },
+      "modelOnlyVisibleSuccess": false
+    }
+  ]
+}

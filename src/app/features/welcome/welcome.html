@@ -1,0 +1,51 @@
+<div class="welcome-shell">
+  <header class="welcome-header">
+    <a class="wordmark" href="./" aria-label="Nerve Ending home"><span class="brand-symbol" aria-hidden="true">n/e</span><span>NERVE ENDING<span class="brand-subtitle">AN ARCHIVAL INVESTIGATION</span></span></a>
+    <button class="quiet-button" (click)="settingsRequested.emit()">Settings <span aria-hidden="true">↗</span></button>
+  </header>
+
+  @if (chapter() === -1) {
+    <section class="landing" aria-labelledby="welcome-title">
+      <div class="landing-copy">
+        <p class="eyebrow"><span class="signal-dot"></span> MERIDIAN SYSTEMS / REMOTE ACCESS</p>
+        <h1 id="welcome-title">Some things<br>were never<br><span>meant to end.</span></h1>
+        <p class="welcome-description">An old system. A trail of records.<br>A story waiting on the other side of the terminal.</p>
+        <div class="landing-actions">
+          <button class="solid-button start-button" (click)="returning() ? login() : begin()">{{ returning() ? 'Log in · Resume session' : 'Begin investigation' }} <span aria-hidden="true">↗</span></button>
+          @if (returning()) { <button class="quiet-button" (click)="begin()">Replay introduction <span aria-hidden="true">→</span></button> }
+          @else { <button class="quiet-button" (click)="login()">Skip intro & log in <span aria-hidden="true">→</span></button> }
+        </div>
+        <p class="save-note">{{ returning() ? 'Saved session found. Pick up where you left off.' : 'Play in your browser. Your progress stays on this device.' }}</p>
+      </div>
+      <aside class="access-card" aria-label="Connection information">
+        <div class="card-topline"><span>REMOTE MIRROR / R-02</span><span class="signal-dot"></span></div>
+        <div class="connection-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><span class="art-cross cross-one">+</span><span class="art-cross cross-two">+</span><span class="art-core">M<span>MERIDIAN</span></span></div>
+        <div class="card-caption"><span>THE ARCHIVE IS STILL HERE.</span><span>AWAITING CONNECTION<span class="blinking-cursor" aria-hidden="true">_</span></span></div>
+        <dl><div><dt>DESTINATION</dt><dd>Meridian Systems</dd></div><div><dt>ACCESS</dt><dd>Public records</dd></div><div><dt>LOCAL SESSION</dt><dd>{{ returning() ? 'Ready to resume' : 'Ready to begin' }}</dd></div></dl>
+        <p class="card-note">Read files and ask questions.<br>See where the connection takes you.</p>
+      </aside>
+    </section>
+  } @else {
+    <section class="introduction" aria-labelledby="chapter-title">
+      <div class="intro-topline"><span class="eyebrow">BEFORE YOU CONNECT</span><button class="quiet-button" (click)="login()">Skip intro <span aria-hidden="true">↗</span></button></div>
+      <div class="chapter-layout">
+        <div class="chapter-copy">
+          <p class="eyebrow">0{{ chapter() + 1 }} / {{ current().label }}</p>
+          <h1 #chapterHeading id="chapter-title" tabindex="-1">{{ current().title }}</h1>
+          <div class="story-text"><span class="sr-only">{{ current().text }}</span><span aria-hidden="true">{{ typedText() }}<span class="blinking-cursor" [class.cursor-finished]="!typing()">▍</span></span></div>
+        </div>
+        <aside class="field-guide" aria-label="How to play">
+          <p class="eyebrow">TERMINAL / QUICK REFERENCE</p>
+          <h2>Your way into the archive.</h2>
+          <dl><div><dt><code>DIR</code><span>Look around</span></dt><dd>List the records in your current folder.</dd></div><div><dt><code>OPEN</code><span>Read a record</span></dt><dd>Follow it with a file title or path. You can also use the file browser.</dd></div><div><dt><code>STATUS</code><span>Check the system</span></dt><dd>See the registered services and their status.</dd></div><div><dt><code>HELP</code><span>Find your bearings</span></dt><dd>See the available commands, whenever you need them.</dd></div></dl>
+          <p class="question-example"><span>OR JUST ASK A QUESTION</span>“What is Meridian Systems?”</p>
+        </aside>
+      </div>
+      <div class="chapter-navigation">
+        <div class="chapter-steps" aria-label="Introduction chapters">@for (item of chapters; track $index) { <button [class.active]="chapter() === $index" [attr.aria-current]="chapter() === $index ? 'step' : null" [attr.aria-label]="'Chapter ' + ($index + 1) + ': ' + item.label" (click)="showChapter($index)"><span>0{{ $index + 1 }}</span></button> }</div>
+        <div class="chapter-controls">@if (chapter() > 0) { <button class="quiet-button" (click)="showChapter(chapter() - 1)">Back</button> }<button class="solid-button" (click)="next()">{{ typing() ? 'Show full text' : chapter() === 2 ? 'Log in to terminal' : 'Continue' }} <span aria-hidden="true">→</span></button></div>
+      </div>
+    </section>
+  }
+  <footer class="welcome-footer"><span>NERVE ENDING <span class="footer-divider">/</span> INTERACTIVE FICTION</span><span>READ. QUESTION. CONNECT.</span></footer>
+</div>
